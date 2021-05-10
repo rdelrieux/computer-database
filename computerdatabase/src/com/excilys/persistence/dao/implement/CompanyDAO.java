@@ -17,6 +17,30 @@ public class CompanyDAO extends DAO{
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	
+	public Company find(String name) {
+		Company company = new Company(); 
+		
+		 try {
+			//this.connection.setAutoCommit(false);
+			
+			PreparedStatement statementFind = this.connection.prepareStatement("SELECT * FROM company WHERE name = ?");
+			statementFind.setString(1, name);
+			ResultSet result = statementFind.executeQuery();
+			
+			if(result.first()) {
+				company = new Company(result.getInt("id"), result.getString("name") );
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		    return company;
+	}
+	
+	
+	
 	@Override
 	public Company find(int id) {
 		Company company = new Company(); 

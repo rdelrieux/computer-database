@@ -8,9 +8,9 @@ public class Computer {
 	
 	private String name = "";
 	
-	private LocalDate introduced = LocalDate.of(0, 1, 1);
+	private LocalDate introduced = null;
 	
-	private LocalDate discontinued = LocalDate.of(0, 1, 3);
+	private LocalDate discontinued = null;
 	
 	private int companyId = 0;
 	
@@ -29,9 +29,16 @@ public class Computer {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
-		if (introduced.isBefore(discontinued) ) {
+		
+		if (introduced == null || discontinued == null) {	
 			this.discontinued = discontinued;
 		}
+		else {
+			if (introduced.isBefore(discontinued) ) {
+				this.discontinued = discontinued;
+			}
+		}
+	
 		this.companyId = companyId;
 	}
 
