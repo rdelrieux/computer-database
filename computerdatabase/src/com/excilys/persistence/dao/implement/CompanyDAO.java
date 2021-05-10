@@ -1,4 +1,4 @@
-package persistence.dao.implement;
+package com.excilys.persistence.dao.implement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Company;
-import persistence.dao.DAO;
+import com.excilys.model.Company;
+import com.excilys.persistence.dao.DAO;
 
 public class CompanyDAO extends DAO{
 

@@ -1,4 +1,4 @@
-package test;
+package com.excilys.test;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 
-import connection.CdbConnection;
-import model.Company;
-import model.Computer;
-import persistence.dao.DAO;
-import persistence.dao.DAOFactory;
-import vue.Vue;
+import com.excilys.connection.CdbConnection;
+import com.excilys.model.Company;
+import com.excilys.model.Computer;
+import com.excilys.persistence.dao.DAO;
+import com.excilys.persistence.dao.DAOFactory;
+import com.excilys.vue.Vue;
 
 public class Test {
 

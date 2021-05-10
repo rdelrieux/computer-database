@@ -1,14 +1,14 @@
-package vue;
+package com.excilys.vue;
 
 import java.util.List;
 import java.util.Scanner;
 
-import connection.CdbConnection;
-import model.Company;
-import model.Computer;
-import persistence.dao.DAO;
-import persistence.dao.DAOFactory;
-import persistence.dao.implement.CompanyDAO;
+import com.excilys.connection.CdbConnection;
+import com.excilys.model.Company;
+import com.excilys.model.Computer;
+import com.excilys.persistence.dao.DAO;
+import com.excilys.persistence.dao.DAOFactory;
+import com.excilys.persistence.dao.implement.CompanyDAO;
 
 public class Vue {
 

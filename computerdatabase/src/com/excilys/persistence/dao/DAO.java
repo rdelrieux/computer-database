@@ -1,9 +1,9 @@
-package persistence.dao;
+package com.excilys.persistence.dao;
 
 import java.sql.Connection;
 import java.util.List;
 
-import model.Computer;
+import com.excilys.model.Computer;
 
 public abstract class DAO<T> {
 
