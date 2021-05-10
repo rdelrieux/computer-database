@@ -9,8 +9,6 @@ public class CdbConnection {
 
 	// URL de connexion
 	private String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-	
-
 	// Nom du user
 	private String user = "admincdb";
 	// Mot de passe de l'utilisateur
