@@ -7,37 +7,52 @@ import java.sql.SQLException;
 //singleton
 public class CdbConnection {
 
-	// URL de connexion
-	private String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-	// Nom du user
-	private String user = "admincdb";
-	// Mot de passe de l'utilisateur
-	private String password = "qwerty1234";
+	private final static String URL = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
+	private String url;
+	private static CdbConnection instance;
 
-	// Objet Connection
-	private static Connection connect;
+	private String user = "";
+	private String password = "";
+	private Connection connect;
 
-	// Constructeur privé
 	private CdbConnection() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager.getConnection(url, user, password);
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
+		url = URL;
+	}
+	
+	
+	public static CdbConnection getInstance() {
+		if (instance == null) {
+			instance = new CdbConnection();
 		}
+		return instance;
 	}
 
-	// Méthode qui va nous retourner notre instance et la créer si elle n'existe pas
-	public static Connection getInstance() {
+	public void connection(String user, String password) throws SQLException, ClassNotFoundException {
+
+		this.user = user;
+		this.password = password;
+		Class.forName("com.mysql.jdbc.Driver");
+		connect = DriverManager.getConnection(url, this.user, this.password);
+
+	}
+
+	public Connection getConnection(String user, String password) throws ClassNotFoundException, SQLException {
 		if (connect == null) {
-			new CdbConnection();
+			connection(user, password);
 		}
 		return connect;
 	}
 	
-	
-	
-	
-	
-	
+	public Connection getConnection() {
+		if (connect == null) {
+			try {
+				connection(user, password);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return connect;
+	}
+
 }

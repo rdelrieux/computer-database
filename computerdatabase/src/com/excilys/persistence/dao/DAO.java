@@ -1,6 +1,7 @@
 package com.excilys.persistence.dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 
 import com.excilys.model.Computer;
@@ -13,8 +14,8 @@ public abstract class DAO<T> {
 		this.connection = conn;
 	}
 
-	public abstract T find(int id);
+	public abstract ResultSet find(int id);
 
-	public abstract List<T> findAll();
+	public abstract ResultSet findAll();
 	
 }

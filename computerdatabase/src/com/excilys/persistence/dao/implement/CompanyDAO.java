@@ -10,21 +10,20 @@ import java.util.List;
 import com.excilys.model.Company;
 import com.excilys.persistence.dao.DAO;
 
-public class CompanyDAO extends DAO{
+public class CompanyDAO extends DAO<Company>{
 
+	protected static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
+
+	
 	public CompanyDAO(Connection conn) {
 		super(conn);
-		// TODO Auto-generated constructor stub
 	}
 
-	
-	
 	public Company find(String name) {
 		Company company = new Company(); 
 		
 		 try {
 			//this.connection.setAutoCommit(false);
-			
 			PreparedStatement statementFind = this.connection.prepareStatement("SELECT * FROM company WHERE name = ?");
 			statementFind.setString(1, name);
 			ResultSet result = statementFind.executeQuery();
@@ -42,7 +41,7 @@ public class CompanyDAO extends DAO{
 	
 	
 	@Override
-	public Company find(int id) {
+	public ResultSet find(int id) {
 		Company company = new Company(); 
 		
 		 try {
@@ -55,31 +54,26 @@ public class CompanyDAO extends DAO{
 			if(result.first()) {
 				company = new Company(result.getInt("id"), result.getString("name") );
 			}
+			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		    return company;
+		    return null;
 	}
 	
 	@Override
-	public List<Company> findAll() {
-		ArrayList<Company> res = new ArrayList<Company>();
-		
+	public  ResultSet findAll() {
 		 try {
 				//this.connection.setAutoCommit(false);
-				PreparedStatement statementFind = this.connection.prepareStatement("SELECT * FROM company");
+				PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
 				ResultSet result = statementFind.executeQuery();
 				
-				while(result.next()) {
-					Company company = new Company(result.getInt("id"), result.getString("name") );
-					res.add(company);		
-				}
+				return result;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		return  res;
+		return  null;
 	}
 	
 	

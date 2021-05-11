@@ -12,7 +12,7 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.persistence.dao.DAO;
 
-public class ComputerDAO extends DAO {
+public class ComputerDAO extends DAO<Computer> {
 
 	public ComputerDAO(Connection conn) {
 		super(conn);
@@ -20,7 +20,7 @@ public class ComputerDAO extends DAO {
 	}
 
 	@Override
-	public Object find(int id) {
+	public Computer find(int id) {
 		Computer computer = new Computer();
 
 		try {

@@ -1,5 +1,6 @@
 package com.excilys.vue;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,7 +24,15 @@ public class Vue {
 		System.out.println("Bienvenue sur CDB \n");
 
 		System.out.println("Connection ...  ");
-		CdbConnection.getInstance();
+		try {
+			CdbConnection.getInstance("admincdb" , "azerty1234");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("vous etes connecte ");
 
 		String res;
