@@ -20,6 +20,14 @@ public class Vue {
 	}
 
 	public void start() {
+		/*
+		while(result.next()){
+		    for(int i = 1; i <=  7; i++)
+		    	if (result.getObject(i)!= null) {
+			        System.out.println(result.getObject(i).toString()+" "+i);
+		    	}
+		}
+		*/
 		
 		System.out.println("Bienvenue sur CDB \n");
 

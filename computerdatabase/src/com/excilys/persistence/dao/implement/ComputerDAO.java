@@ -1,22 +1,50 @@
 package com.excilys.persistence.dao.implement;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.model.Company;
+import com.excilys.mapping.ComputerMapping;
 import com.excilys.model.Computer;
 import com.excilys.persistence.dao.DAO;
 
 public class ComputerDAO extends DAO<Computer> {
 
-	public ComputerDAO(Connection conn) {
+	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM computer";
+	private static final String REQUET_TROUVER_COMPANY_FROM_ID = "SELECT *\n"
+			+ "FROM computer\n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			+ "WHERE computer.id = ? ";
+
+	private static final String REQUET_ADD_COMPANIES = "INSERT INTO computer (name,introduced,discontinued,company_id)\n"
+			+ " VALUES (?,?,?,?);";
+
+	private static final String REQUET_UPDATE_COMPANIES =" UPDATE computer \n"
+			+ "SET name = ? , \n"
+			+ "introduced = ? , \n"
+			+ "discontinued = ?, \n"
+			+ "company_id = ?  \n"
+			+ "WHERE computer.id = ? ;";
+	
+	private static ComputerDAO instance ;	
+	private ComputerMapping computerMapping;
+	
+	private  ComputerDAO(Connection conn) {
 		super(conn);
-		// TODO Auto-generated constructor stub
+		computerMapping = ComputerMapping.getInstance();
+		}
+
+	
+	public static ComputerDAO getInstance(Connection conn)  {
+		if (instance == null) {
+			instance = new ComputerDAO(conn);
+		}
+		return instance;
 	}
 
 	@Override
@@ -26,30 +54,12 @@ public class ComputerDAO extends DAO<Computer> {
 		try {
 			// this.connection.setAutoCommit(false);
 
-			PreparedStatement statementFind = this.connection.prepareStatement("SELECT * FROM computer WHERE id = ?");
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_ID);
 			statementFind.setInt(1, id);
 			ResultSet result = statementFind.executeQuery();
-
-			if (result.first()) {
-
-				int idRes = result.getInt("id");
-				String name = result.getString("name");
-				LocalDate introduced = null;
-				LocalDate discontinued = null;
-				int companyId = 0 ;
-				
-				if (result.getDate("introduced") != null) {
-					introduced = result.getDate("introduced").toLocalDate();
-				}
-				if (result.getDate("discontinued") != null) {
-					discontinued = result.getDate("discontinued").toLocalDate();
-				}
-				if (result.getInt("company_id") != 0) {
-					companyId = result.getInt("company_id");
-				} 
-				
-				computer = new Computer(idRes , name, introduced, discontinued , companyId );
-			}
+			
+			computer = this.computerMapping.toComputerFull(result);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,17 +69,14 @@ public class ComputerDAO extends DAO<Computer> {
 
 	@Override
 	public List<Computer> findAll() {
-		ArrayList<Computer> res = new ArrayList<Computer>();
+		List<Computer> res = new ArrayList<Computer>();
 
 		try {
 			// this.connection.setAutoCommit(false);
-			PreparedStatement statementFind = this.connection.prepareStatement("SELECT * FROM computer");
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
 			ResultSet result = statementFind.executeQuery();
-
-			while (result.next()) {
-				Computer computer = new Computer(result.getInt("id"), result.getString("name"));
-				res.add(computer);
-			}
+			res = this.computerMapping.toListComputer(result);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,4 +84,88 @@ public class ComputerDAO extends DAO<Computer> {
 		return res;
 	}
 
+	
+	public void addComputer(Computer computer) {
+		try {
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_ADD_COMPANIES);
+			
+			statementFind.setString(1, computer.getName());
+			
+			if (computer.getIntroduced() == null){
+				statementFind.setNull(2, Types.NULL);
+				
+			}else {
+				statementFind.setDate(2, Date.valueOf(computer.getIntroduced()));
+			}
+			
+			if (computer.getIntroduced() == null){
+				statementFind.setNull(3, Types.NULL);
+			}else {
+				statementFind.setDate(3, Date.valueOf(computer.getDiscontinued()));
+			}
+			
+			
+			if ( computer.getCompany().getId() == 0){
+				statementFind.setNull(4, Types.NULL);
+				
+			}else {
+				statementFind.setInt(4, computer.getCompany().getId());
+			}
+			
+		
+			
+			statementFind.execute();
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+
+
+	public void updateComputer(Computer computer) {
+		try {
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_UPDATE_COMPANIES);
+			
+			statementFind.setString(1, computer.getName());
+			
+			if (computer.getIntroduced() == null){
+				statementFind.setNull(2, Types.NULL);
+				
+			}else {
+				statementFind.setDate(2, Date.valueOf(computer.getIntroduced()));
+			}
+			
+			if (computer.getIntroduced() == null){
+				statementFind.setNull(3, Types.NULL);
+			}else {
+				statementFind.setDate(3, Date.valueOf(computer.getDiscontinued()));
+			}
+			
+			
+			if (computer.getCompany() == null ){
+				statementFind.setNull(4, Types.NULL);
+				
+			}else if(computer.getCompany().getId() != 0) {
+				statementFind.setInt(4, computer.getCompany().getId());
+			}
+			statementFind.setInt(5, computer.getId());
+			
+			System.out.println(statementFind);
+			//statementFind.execute();
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+	
+	
+	
 }

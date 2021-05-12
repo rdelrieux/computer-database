@@ -17,11 +17,11 @@ public class DAOFactory {
 	 * @return DAO
 	 */
 	public static DAO<Company> getCompanyDAO() {
-		return new CompanyDAO(cdbconnection.getConnection());
+		return CompanyDAO.getInstance(cdbconnection.getConnection());
 	}
 
-	public static DAO<Computer> getComputer() {
-		return new ComputerDAO(cdbconnection.getConnection());
+	public static DAO<Computer> getComputerDAO() {
+		return ComputerDAO.getInstance(cdbconnection.getConnection());
 	}
 
 } 

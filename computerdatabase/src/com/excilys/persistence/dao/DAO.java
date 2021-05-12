@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 
+import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 public abstract class DAO<T> {
@@ -14,8 +15,10 @@ public abstract class DAO<T> {
 		this.connection = conn;
 	}
 
-	public abstract ResultSet find(int id);
+	public abstract T find(int id);
 
-	public abstract ResultSet findAll();
+	public abstract List<T> findAll();
+
+	
 	
 }
