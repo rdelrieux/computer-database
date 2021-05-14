@@ -31,6 +31,7 @@ public class StartApplication extends CLI {
 		connectionCli.messageConnectionReussi();
 		
 	}
+	
 	public void playMenu() {
 		while (menuCli.isUsed()) {	
 		}

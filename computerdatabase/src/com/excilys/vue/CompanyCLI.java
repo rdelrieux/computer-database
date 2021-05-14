@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.excilys.model.Company;
 
-public class CompanyCLI {
+public class CompanyCLI extends CLI{
 
 	private static CompanyCLI instance ;
 
@@ -22,11 +22,23 @@ public class CompanyCLI {
 
 	public void showListCompany(List<Company> listCompany) {
 		for (Company company : listCompany) {
-			System.out.println(company.getId() + " \t " + company.getName());
+			System.out.println(company.getName());
 		}
 		System.out.println("");
 		
 	}
+
+	public void showCompany(Company company) {
+		if (company == null) {
+			System.out.println(CLI.COMPANY_NOT_FOUND_MESSAGE);
+		}else {
+			System.out.println("ID = "+company.getId() +", "+company.getName());
+		}
+		
+		
+	}
+
+	
 
 	
 	

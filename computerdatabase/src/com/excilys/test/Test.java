@@ -1,27 +1,18 @@
 package com.excilys.test;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-
-import com.excilys.connection.CdbConnection;
-import com.excilys.model.Company;
-import com.excilys.model.Computer;
-import com.excilys.persistence.dao.DAO;
-import com.excilys.persistence.dao.DAOFactory;
 import com.excilys.vue.StartApplication;
-import com.excilys.vue.Vue;
 
 public class Test {
 
 	public static void main(String[] args) throws SQLException {
 
+		
+	
 		//Vue v = new Vue();
 		//v.start();
 	
-		testStart();
+	testStart();
 		
 		
 		// CdbConnection.getInstance();

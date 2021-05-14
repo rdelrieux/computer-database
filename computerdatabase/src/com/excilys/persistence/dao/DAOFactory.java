@@ -16,11 +16,11 @@ public class DAOFactory {
 	 * Retourne un objet Company interagissant avec la BDD
 	 * @return DAO
 	 */
-	public static DAO<Company> getCompanyDAO() {
+	public static CompanyDAO getCompanyDAO() {
 		return CompanyDAO.getInstance(cdbconnection.getConnection());
 	}
 
-	public static DAO<Computer> getComputerDAO() {
+	public static ComputerDAO getComputerDAO() {
 		return ComputerDAO.getInstance(cdbconnection.getConnection());
 	}
 

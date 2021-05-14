@@ -1,13 +1,11 @@
 package com.excilys.service;
 
 import java.util.List;
-
-import com.excilys.mapping.ComputerMapping;
+import com.excilys.binding.dto.ComputerDTOInput;
+import com.excilys.binding.mapping.ComputerMapping;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.persistence.dao.DAO;
 import com.excilys.persistence.dao.DAOFactory;
-import com.excilys.persistence.dao.implement.ComputerDAO;
 
 public class ComputerService {
 
@@ -28,28 +26,43 @@ private ComputerMapping computerMapping;
 	
 	
 	public List<Computer> getListComputer() {
-		DAO<Computer> computerDao = DAOFactory.getComputerDAO();
-		List<Computer> listCompany = computerDao.findAll();		
-		return listCompany;
+		List<Computer> listComputer = computerMapping.toListComputer(
+				DAOFactory.getComputerDAO().findAll()
+				);
+		
+		return listComputer;
 	}
 
-	public Computer getComputerDetail(int id) {
-		DAO<Computer> computerDao = DAOFactory.getComputerDAO();
-		Computer computer = computerDao.find(id);
-		return computer;
+	public Computer getComputer(int id) {
+		return computerMapping.toComputer(
+				DAOFactory.getComputerDAO().find(id)
+				);	
 	}
 
-	public void addComputer(String[] computerInformation, Company company) {
-		DAO<Computer> computerDao = DAOFactory.getComputerDAO();
-		((ComputerDAO) computerDao).addComputer(computerMapping.toComputer(computerInformation, company));
+	public void addComputer(ComputerDTOInput computerDTOInput, Company company) {
+		Computer computer = computerMapping.toComputer(computerDTOInput , company);
+		if (computer != null) {
+			DAOFactory.getComputerDAO().addComputer(computer);
+		}else {
+			System.out.println("Logg ComputerService add : Model Company not valid");
+		}
 	}
 
-	public void updateComputer(String[] computerInformation, Company company, int id) {
-		DAO<Computer> computerDao = DAOFactory.getComputerDAO();
-		Computer computer =  getComputerDetail(id) ;
-		((ComputerDAO) computerDao).updateComputer(computerMapping.toComputer(computer ,computerInformation, company));
+	public void updateComputer( ComputerDTOInput computerDTOInput, Company company) {
+		Computer computer = computerMapping.toComputer( computerDTOInput , company);
+		System.out.println("Logg ComputerService update :"+ computer);
+
+		if (computer != null) {
+			DAOFactory.getComputerDAO().updateComputer(computer);
+		}else {
+			System.out.println("Logg ComputerService update : Model Company not valid");
+		}
+		
 	}
-	
+
+	public void deletComputer(int id) {
+		DAOFactory.getComputerDAO().deletComputer(id);
+	}
 	
 	
 }

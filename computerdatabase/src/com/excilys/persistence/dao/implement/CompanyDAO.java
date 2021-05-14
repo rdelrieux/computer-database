@@ -7,22 +7,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.mapping.CompanyMapping;
+import com.excilys.binding.dto.CompanyDTOSQL;
+import com.excilys.binding.mapping.CompanyMapping;
 import com.excilys.model.Company;
-import com.excilys.persistence.dao.DAO;
 import com.excilys.service.CompanyService;
 
-public class CompanyDAO extends DAO<Company>{
+public class CompanyDAO {
 
+	
+	
 	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
 	private static final String REQUET_TROUVER_COMPANY_FROM_ID = "SELECT * FROM company WHERE id = ?";
 	private static final String REQUET_TROUVER_COMPANY_FROM_NAME = "SELECT * FROM company WHERE name = ?";
 
 	private static CompanyDAO instance ;	
 	private CompanyMapping companyMapping;
+	private Connection connection;
 	
 	private  CompanyDAO(Connection conn) {
-		super(conn);
+		this.connection = conn;
 		companyMapping = CompanyMapping.getInstance();
 		}
 
@@ -35,58 +38,51 @@ public class CompanyDAO extends DAO<Company>{
 	}
 	
 	
-	public Company find(String name) {
-		Company company = new Company(); 
+	public CompanyDTOSQL find(int id) {
 		
 		 try {
 			//this.connection.setAutoCommit(false);
-			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_NAME);
-			statementFind.setString(1, name);
-			ResultSet result = statementFind.executeQuery();
-			company = this.companyMapping.toCompany(result);
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		    return company;
-	}
-	
-	
-	
-	@Override
-	public Company find(int id) {
-		Company company = new Company(); 
-		
-		 try {
-			//this.connection.setAutoCommit(false);
-			
 			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_ID);
 			statementFind.setInt(1, id);
 			ResultSet result = statementFind.executeQuery();
-			company = this.companyMapping.toCompany(result);
+			return this.companyMapping.toCompanyDTOSQL(result);
 			
-		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		    return company;
+		    return null;
 	}
 	
-	@Override
-	public  List<Company> findAll() {
-		List<Company> listCompany = new ArrayList<Company>();
+	
+	
+	
+	public CompanyDTOSQL find(String name) {
+		 try {
+			//this.connection.setAutoCommit(false);
+			
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_NAME);
+			statementFind.setString(1, name);
+			ResultSet result = statementFind.executeQuery();
+			return this.companyMapping.toCompanyDTOSQL(result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		    return null;
+	}
+	
+	public  List<CompanyDTOSQL> findAll() {
 		try {
 				//this.connection.setAutoCommit(false);
 				PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
 				ResultSet result = statementFind.executeQuery();
-				listCompany = this.companyMapping.toListCompany(result);
+				return  this.companyMapping.toListCompanyDTOSQL(result);
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		return  listCompany;
+		return null;
 	}
 	
 	

@@ -1,24 +1,21 @@
 package com.excilys.service;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.excilys.mapping.CompanyMapping;
+import com.excilys.binding.mapping.CompanyMapping;
 import com.excilys.model.Company;
-import com.excilys.persistence.dao.DAO;
 import com.excilys.persistence.dao.DAOFactory;
-import com.excilys.persistence.dao.implement.CompanyDAO;
-import com.excilys.vue.CLI;
 
 
 
 public class CompanyService {
 
 	private static CompanyService instance ;	
+	private CompanyMapping companyMapping ;
 	
 	private CompanyService() {
-		
+		companyMapping = CompanyMapping.getInstance();
 	}
 
 	public static CompanyService getInstance()  {
@@ -28,24 +25,25 @@ public class CompanyService {
 		return instance;
 	}
 	
-	
-	
+
 	public List<Company> getListCompany() {
-		DAO<Company> companyDao = DAOFactory.getCompanyDAO();
-		List<Company> listCompany = companyDao.findAll();		
+		List<Company> listCompany = companyMapping.toListCompany(
+				DAOFactory.getCompanyDAO().findAll()
+				);
+		Collections.sort(listCompany);
+		
 		return listCompany;
 	}
 
 	public Company getCompany(String name) {
-		DAO<Company> companyDao = DAOFactory.getCompanyDAO();
-		Company company = null;
-		if ( ! name.equals(CLI.UNCHANGED) ) {
-			company =((CompanyDAO)companyDao).find(name);
-		}
-		 
-		return company;
-		
+		return companyMapping.toCompany(
+				DAOFactory.getCompanyDAO().find(name)
+				);	
 	}
+
+
+
+	
 
 	
 	

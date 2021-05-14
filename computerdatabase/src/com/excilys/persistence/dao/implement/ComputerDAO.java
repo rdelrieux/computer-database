@@ -6,20 +6,29 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.mapping.ComputerMapping;
+import com.excilys.binding.dto.ComputerDTOSQL;
+import com.excilys.binding.mapping.ComputerMapping;
 import com.excilys.model.Computer;
-import com.excilys.persistence.dao.DAO;
 
-public class ComputerDAO extends DAO<Computer> {
 
-	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM computer";
+
+public class ComputerDAO {
+
+	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT *\n"
+			+ "FROM computer \n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n";
+	
 	private static final String REQUET_TROUVER_COMPANY_FROM_ID = "SELECT *\n"
 			+ "FROM computer\n"
 			+ "LEFT JOIN company ON company.id = computer.company_id\n"
 			+ "WHERE computer.id = ? ";
+	
+	private static final String REQUET_TROUVER_COMPANY_FROM_NAME = "SELECT *\n"
+			+ "FROM computer\n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			+ "WHERE computer.name = ? ";
 
 	private static final String REQUET_ADD_COMPANIES = "INSERT INTO computer (name,introduced,discontinued,company_id)\n"
 			+ " VALUES (?,?,?,?);";
@@ -31,11 +40,17 @@ public class ComputerDAO extends DAO<Computer> {
 			+ "company_id = ?  \n"
 			+ "WHERE computer.id = ? ;";
 	
+	
+	private static final String REQUET_DELET_COMPANIES = "DELETE FROM computer\n"
+			+ "WHERE computer.id = ? ";
+
+	
 	private static ComputerDAO instance ;	
 	private ComputerMapping computerMapping;
+	private Connection connection;
 	
 	private  ComputerDAO(Connection conn) {
-		super(conn);
+		this.connection = conn;
 		computerMapping = ComputerMapping.getInstance();
 		}
 
@@ -46,44 +61,54 @@ public class ComputerDAO extends DAO<Computer> {
 		}
 		return instance;
 	}
-
-	@Override
-	public Computer find(int id) {
-		Computer computer = new Computer();
-
-		try {
-			// this.connection.setAutoCommit(false);
-
+	
+	
+	public ComputerDTOSQL find(int id) {
+		
+		 try {
+			//this.connection.setAutoCommit(false);
 			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_ID);
 			statementFind.setInt(1, id);
 			ResultSet result = statementFind.executeQuery();
-			
-			computer = this.computerMapping.toComputerFull(result);
+			return this.computerMapping.toComputerDTOSQL(result);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return computer;
+		    return null;
 	}
-
-	@Override
-	public List<Computer> findAll() {
-		List<Computer> res = new ArrayList<Computer>();
-
-		try {
-			// this.connection.setAutoCommit(false);
-			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
+	
+	public ComputerDTOSQL find(String name) {
+		 try {
+			//this.connection.setAutoCommit(false);
+			
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_NAME);
+			statementFind.setString(1, name);
 			ResultSet result = statementFind.executeQuery();
-			res = this.computerMapping.toListComputer(result);
+			return this.computerMapping.toComputerDTOSQL(result);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return res;
+		    return null;
 	}
-
+	
+	public  List<ComputerDTOSQL> findAll() {
+		try {
+				//this.connection.setAutoCommit(false);
+				PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
+				ResultSet result = statementFind.executeQuery();
+				return  this.computerMapping.toListComputerDTOSQL(result);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	
+	
+	
 	
 	public void addComputer(Computer computer) {
 		try {
@@ -104,16 +129,13 @@ public class ComputerDAO extends DAO<Computer> {
 				statementFind.setDate(3, Date.valueOf(computer.getDiscontinued()));
 			}
 			
-			
-			if ( computer.getCompany().getId() == 0){
+			if ( computer.getCompany() == null){
 				statementFind.setNull(4, Types.NULL);
 				
 			}else {
 				statementFind.setInt(4, computer.getCompany().getId());
 			}
-			
-		
-			
+				
 			statementFind.execute();
 		
 		} catch (SQLException e) {
@@ -138,12 +160,11 @@ public class ComputerDAO extends DAO<Computer> {
 				statementFind.setDate(2, Date.valueOf(computer.getIntroduced()));
 			}
 			
-			if (computer.getIntroduced() == null){
+			if (computer.getDiscontinued() == null){
 				statementFind.setNull(3, Types.NULL);
 			}else {
 				statementFind.setDate(3, Date.valueOf(computer.getDiscontinued()));
 			}
-			
 			
 			if (computer.getCompany() == null ){
 				statementFind.setNull(4, Types.NULL);
@@ -153,13 +174,29 @@ public class ComputerDAO extends DAO<Computer> {
 			}
 			statementFind.setInt(5, computer.getId());
 			
-			System.out.println(statementFind);
-			//statementFind.execute();
+			//System.out.println(statementFind);
+			statementFind.execute();
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+
+
+	public void deletComputer(int id) {
+		PreparedStatement statementFind;
+		try {
+			statementFind = this.connection.prepareStatement(REQUET_DELET_COMPANIES);
+			statementFind.setInt(1, id);
+			statementFind.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 		
 	}
 

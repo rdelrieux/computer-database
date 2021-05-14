@@ -7,6 +7,7 @@ public class MenuCLI extends CLI {
 	
 	private static final String MENU = "\n\n\t Menu \n\n"
 			+ "Pour voir la liste des Companies tapez "+MENU_SHOW_LIST_COMPANY
+			+ "\nPour voir l'identifiant d'une Company tapez "+MENU_SHOW_COMPANY
 			+ "\nPour voir la liste des Computers tapez "+ MENU_SHOW_LIST_COMPUTER
 			+ "\nPour voir les details d'un Computer tapez "+ MENU_SHOW_COMPUTER
 			+ "\nPour ajouter un Computer tapez "+ MENU_ADD_COMPUTER
@@ -53,30 +54,28 @@ public class MenuCLI extends CLI {
 				companyCtr.showListCompany();
 					
 				break;
+			case CLI.MENU_SHOW_COMPANY:
+				companyCtr.showCompany();
+					
+				break;
 			case CLI.MENU_SHOW_LIST_COMPUTER:
-				computerCtr.showListComputer();;
+				computerCtr.showListComputer();
 				
 				break;
 			case CLI.MENU_SHOW_COMPUTER:
-				computerCtr.showComputerDetail(this.choixComputerId());
+				computerCtr.showComputer();
 				
 				break;
 			case CLI.MENU_ADD_COMPUTER:
-				if(this.computerCtr.addComputer()) {
-					this.addReussi();
-				}
-				
+				this.computerCtr.addComputer();
 				
 				break;
 			case CLI.MENU_UPDATE_COMPUTER:
-				int choixComputerId = this.choixComputerId();
-				if (computerCtr.showComputerDetail(choixComputerId)) {
-					this.computerCtr.updateComputer(choixComputerId);
-				}
+				this.computerCtr.updateComputer();
 				
 				break;
 			case CLI.MENU_DELETE_COMPUTER:
-				this.notImplemented();
+				this.computerCtr.deletComputer();
 				
 				break;
 			case CLI.MENU_EXIT:
@@ -90,7 +89,7 @@ public class MenuCLI extends CLI {
 					System.out.println(MENU);
 				}else {
 					
-					System.out.println(IMPUT_ERREUR);
+					System.out.println(CLI.INPUT_ERREUR);
 					numberQuery++;
 				}
 				
@@ -106,11 +105,7 @@ public class MenuCLI extends CLI {
 
 
 	
-	private void addReussi() {
-		System.out.println(ADD_REUSSI_MESSAGE);
-		
-	}
-
+	
 	private int choixComputerId() {
 		System.out.println(ENTER_ID_MESSAGE);
 		String id = this.sc.typeString();
