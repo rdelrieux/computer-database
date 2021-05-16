@@ -1,4 +1,4 @@
-package com.excilys.binding.mapping;
+package com.excilys.binding.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,20 +10,20 @@ import com.excilys.binding.builder.CompanyDTOSQLBuilder;
 import com.excilys.binding.dto.CompanyDTOSQL;
 import com.excilys.model.Company;
 
-public class CompanyMapping {
+public class CompanyMapper {
 
 	private static final String COLONNE_ID = "id";
 	private static final String COLONNE_NAME = "name";
 
-	private static CompanyMapping instance;
+	private static CompanyMapper instance;
 
-	private CompanyMapping() {
+	private CompanyMapper() {
 
 	}
 
-	public static CompanyMapping getInstance() {
+	public static CompanyMapper getInstance() {
 		if (instance == null) {
-			instance = new CompanyMapping();
+			instance = new CompanyMapper();
 		}
 		return instance;
 	}

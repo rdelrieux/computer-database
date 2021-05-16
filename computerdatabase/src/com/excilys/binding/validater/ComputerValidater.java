@@ -22,16 +22,17 @@ public class ComputerValidater {
 
 	public boolean validate(ComputerDTOInput computerDTOInput) {
 		return  this.validateName(computerDTOInput.getName())
-				&& this.validateDate(computerDTOInput.getIntroduced()) && this.validateDate(computerDTOInput.getDiscontinued())
+				&& this.validateDate(computerDTOInput.getIntroduced())
+				&& this.validateDate(computerDTOInput.getDiscontinued())
 				&& this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued())
+				&& this.validateCompanyName(computerDTOInput.getCompanyName())
 				;
-
 	}
 
-	private boolean validateCompany(String id, String name) {
+	private boolean validateCompanyName(String name) {
 		//System.out.println("Logg Service : introduced >= discontinued valid ");
 
-		return name.equals("") || this.validateId(id) && this.validateName(name);
+		return name.equals("") ||  this.validateName(name);
 
 	}
 

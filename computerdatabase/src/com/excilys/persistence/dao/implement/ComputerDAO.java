@@ -9,7 +9,7 @@ import java.sql.Types;
 import java.util.List;
 
 import com.excilys.binding.dto.ComputerDTOSQL;
-import com.excilys.binding.mapping.ComputerMapping;
+import com.excilys.binding.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 
 
@@ -46,12 +46,12 @@ public class ComputerDAO {
 
 	
 	private static ComputerDAO instance ;	
-	private ComputerMapping computerMapping;
+	private ComputerMapper computerMapping;
 	private Connection connection;
 	
 	private  ComputerDAO(Connection conn) {
 		this.connection = conn;
-		computerMapping = ComputerMapping.getInstance();
+		computerMapping = ComputerMapper.getInstance();
 		}
 
 	

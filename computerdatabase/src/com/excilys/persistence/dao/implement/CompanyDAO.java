@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.binding.dto.CompanyDTOSQL;
-import com.excilys.binding.mapping.CompanyMapping;
+import com.excilys.binding.mapper.CompanyMapper;
 import com.excilys.model.Company;
 import com.excilys.service.CompanyService;
 
@@ -21,12 +21,12 @@ public class CompanyDAO {
 	private static final String REQUET_TROUVER_COMPANY_FROM_NAME = "SELECT * FROM company WHERE name = ?";
 
 	private static CompanyDAO instance ;	
-	private CompanyMapping companyMapping;
+	private CompanyMapper companyMapper;
 	private Connection connection;
 	
 	private  CompanyDAO(Connection conn) {
 		this.connection = conn;
-		companyMapping = CompanyMapping.getInstance();
+		this.companyMapper = CompanyMapper.getInstance();
 		}
 
 	
@@ -45,7 +45,7 @@ public class CompanyDAO {
 			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_ID);
 			statementFind.setInt(1, id);
 			ResultSet result = statementFind.executeQuery();
-			return this.companyMapping.toCompanyDTOSQL(result);
+			return this.companyMapper.toCompanyDTOSQL(result);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -64,7 +64,7 @@ public class CompanyDAO {
 			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_NAME);
 			statementFind.setString(1, name);
 			ResultSet result = statementFind.executeQuery();
-			return this.companyMapping.toCompanyDTOSQL(result);
+			return this.companyMapper.toCompanyDTOSQL(result);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public class CompanyDAO {
 				//this.connection.setAutoCommit(false);
 				PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
 				ResultSet result = statementFind.executeQuery();
-				return  this.companyMapping.toListCompanyDTOSQL(result);
+				return  this.companyMapper.toListCompanyDTOSQL(result);
 				
 			} catch (SQLException e) {
 				e.printStackTrace();

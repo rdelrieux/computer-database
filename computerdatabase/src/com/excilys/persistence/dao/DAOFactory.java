@@ -1,10 +1,6 @@
 package com.excilys.persistence.dao;
 
-import java.sql.Connection;
-
 import com.excilys.connection.CdbConnection;
-import com.excilys.model.Company;
-import com.excilys.model.Computer;
 import com.excilys.persistence.dao.implement.CompanyDAO;
 import com.excilys.persistence.dao.implement.ComputerDAO;
 

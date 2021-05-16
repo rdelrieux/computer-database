@@ -4,8 +4,6 @@ import com.excilys.binding.dto.ComputerDTOInput;
 
 public class ComputerDTOInputBuilder {
 
-	private String id = "";
-
 	private String name = "";
 
 	private String introduced = "";
@@ -13,7 +11,7 @@ public class ComputerDTOInputBuilder {
 	private String discontinued = "";
 
 	private String companyName = "";
-
+	
 	public ComputerDTOInputBuilder() {
 
 	}
@@ -26,26 +24,11 @@ public class ComputerDTOInputBuilder {
 		this.companyName = companyName;
 	}
 
-	public ComputerDTOInputBuilder(String id, String name, String introduced, String discontinued, String companyName) {
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.companyName = companyName;
-	}
-
 	public ComputerDTOInput build() {
-		return new ComputerDTOInput(this.id , this.name, this.introduced, this.discontinued, this.companyName);
+		return new ComputerDTOInput(this.name, this.introduced, this.discontinued, this.companyName);
 	}
 	
-	public String getId() {
-		return id;
-	}
 
-	public ComputerDTOInputBuilder setId(String id) {
-		this.id = id;
-		return this;
-	}
 	public String getName() {
 		return name;
 	}
@@ -72,7 +55,7 @@ public class ComputerDTOInputBuilder {
 		this.discontinued = discontinued;
 		return this;
 	}
-
+	
 	public String getCompanyName() {
 		return companyName;
 	}

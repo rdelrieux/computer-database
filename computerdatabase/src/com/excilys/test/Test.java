@@ -1,27 +1,32 @@
 package com.excilys.test;
 
-import java.sql.SQLException;
+
+import com.excilys.binding.dto.ComputerDTOInput;
+import com.excilys.binding.mapper.ComputerMapper;
 import com.excilys.vue.StartApplication;
 
 public class Test {
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) {
 
-		
+		ComputerDTOInput computerVide  = new ComputerDTOInput("computerVide","","","");
+		ComputerMapper cm = ComputerMapper.getInstance();
+		System.out.println( cm.toComputer(computerVide,"1","" ) );
 	
 		//Vue v = new Vue();
 		//v.start();
 	
-	testStart();
+		//testStart();
 		
 		
-		// CdbConnection.getInstance();
+		//CdbConnection.getInstance();
 
 		// testConnection();
 		//testRequestCompany();
 
-		//Computer c  = new Computer(1,"c",LocalDate.of(2018, 1, 1),LocalDate.of(2019, 1, 1),1 );
-		//System.out.println(c.getId() + ", " +c.getName() + ","+c.getIntroduced() + ","+c.getDiscontinued() + ","+c.getCompanyId());
+		//Computer computerTeset  = new Computer(1,"computerTest" );
+		//System.out.println(computerTeset.getId() + ", " +computerTeset.getName() + ","+computerTeset.getIntroduced() +
+		//		","+computerTeset.getDiscontinued() + ","+computerTeset.getCompany());
 	
 		//testRequestComputer();
 	

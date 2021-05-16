@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-//singleton
+
 public class CdbConnection {
 
 	private final static String URL = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-	private String url;
+	
 	private static CdbConnection instance;
 
 	private String user = "";
@@ -16,7 +16,7 @@ public class CdbConnection {
 	private Connection connect;
 
 	private CdbConnection() {
-		url = URL;
+		
 	}
 	
 	
@@ -31,8 +31,8 @@ public class CdbConnection {
 
 		this.user = user;
 		this.password = password;
-		Class.forName("com.mysql.jdbc.Driver");
-		connect = DriverManager.getConnection(url, this.user, this.password);
+		//Class.forName("com.mysql.jdbc.Driver");
+		connect = DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
 
 	}
 

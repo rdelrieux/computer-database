@@ -60,7 +60,7 @@ public class ChoixUtilisateur extends CLI{
 		
 			.setIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE))
 		
-			.setDiscontinued(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE))
+			.setDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE))
 		
 			.setCompanyName( this.choixName(CLI.ENTER_COMPANY_NAME_MESSAGE) )	
 		
@@ -69,9 +69,7 @@ public class ChoixUtilisateur extends CLI{
 
 	public ComputerDTOInput choixParametreUpdateComputer(Computer computer) {
 		ComputerDTOInputBuilder ComputerDTOInputBuilder = new ComputerDTOInputBuilder();
-		
-		ComputerDTOInputBuilder.setId( ""+computer.getId() );
-		
+				
 		if (needUpdate(CHANGER_NOM_MESSAGE)) {
 			ComputerDTOInputBuilder.setName( this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE) );
 		}else {
@@ -83,10 +81,9 @@ public class ChoixUtilisateur extends CLI{
 			ComputerDTOInputBuilder.setIntroduced(computer.getIntroduced()== null ? "" : computer.getIntroduced().toString());
 		}
 		if (needUpdate(CHANGER_DATE_DISCONTINUD_MESSAGE)) {
-			ComputerDTOInputBuilder.setDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUD_MESSAGE));
+			ComputerDTOInputBuilder.setDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE));
 		}else {
 			ComputerDTOInputBuilder.setDiscontinued(computer.getDiscontinued()== null ? "" : computer.getDiscontinued().toString());
-
 		}
 		if (needUpdate(CHANGER_COMPANY_NAME_MESSAGE)) {
 			ComputerDTOInputBuilder.setCompanyName( this.choixName(CLI.ENTER_COMPANY_NAME_MESSAGE) );	

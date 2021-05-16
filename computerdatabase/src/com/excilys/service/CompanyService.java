@@ -3,7 +3,7 @@ package com.excilys.service;
 import java.util.Collections;
 import java.util.List;
 
-import com.excilys.binding.mapping.CompanyMapping;
+import com.excilys.binding.mapper.CompanyMapper;
 import com.excilys.model.Company;
 import com.excilys.persistence.dao.DAOFactory;
 
@@ -12,10 +12,10 @@ import com.excilys.persistence.dao.DAOFactory;
 public class CompanyService {
 
 	private static CompanyService instance ;	
-	private CompanyMapping companyMapping ;
+	private CompanyMapper companyMapper ;
 	
 	private CompanyService() {
-		companyMapping = CompanyMapping.getInstance();
+		this.companyMapper = CompanyMapper.getInstance();
 	}
 
 	public static CompanyService getInstance()  {
@@ -27,7 +27,7 @@ public class CompanyService {
 	
 
 	public List<Company> getListCompany() {
-		List<Company> listCompany = companyMapping.toListCompany(
+		List<Company> listCompany = this.companyMapper.toListCompany(
 				DAOFactory.getCompanyDAO().findAll()
 				);
 		Collections.sort(listCompany);
@@ -36,7 +36,7 @@ public class CompanyService {
 	}
 
 	public Company getCompany(String name) {
-		return companyMapping.toCompany(
+		return this.companyMapper.toCompany(
 				DAOFactory.getCompanyDAO().find(name)
 				);	
 	}

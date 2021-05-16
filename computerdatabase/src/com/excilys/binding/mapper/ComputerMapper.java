@@ -1,4 +1,4 @@
-package com.excilys.binding.mapping;
+package com.excilys.binding.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 
-public class ComputerMapping {
+public class ComputerMapper {
 
 	private static final String COLONNE_ID = "id";
 	private static final String COLONNE_NAME = "name";
@@ -25,16 +25,16 @@ public class ComputerMapping {
 	private static final String COLONNE_COMPANY_ID = "company_id";
 	private static final String COLONNE_COMPANY_NAME = "company.name";
 
-	private static ComputerMapping instance;
+	private static ComputerMapper instance;
 	private ComputerValidater computerValidater;
 	
-	private ComputerMapping() {
-		computerValidater = ComputerValidater.getInstance();
+	private ComputerMapper() {
+		this.computerValidater = ComputerValidater.getInstance();
 		}
 
-	public static ComputerMapping getInstance() {
+	public static ComputerMapper getInstance() {
 		if (instance == null) {
-			instance = new ComputerMapping();
+			instance = new ComputerMapper();
 		}
 		return instance;
 	}
@@ -111,14 +111,14 @@ public class ComputerMapping {
 		return res;
 	}
 
-	public Computer toComputer(ComputerDTOInput computerDTOInput , Company company ) {
+	public Computer toComputer(ComputerDTOInput computerDTOInput, String id , String companyId) {
 		if ( ! computerValidater.validate(computerDTOInput)) {
 			return null;
 		}
 		
 		return new ComputerBuilder()
 				
-				.setId(Integer.parseInt(computerDTOInput.getId()))
+				.setId(Integer.parseInt(id))
 				
 				.setName(computerDTOInput.getName())
 				
@@ -126,8 +126,7 @@ public class ComputerMapping {
 				
 				.setDiscontinued(computerDTOInput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOInput.getDiscontinued()))
 				
-				
-				.setCompany(company == null ? null : company)
+				.setCompany(companyId == "" ? null : new Company (Integer.parseInt(companyId), computerDTOInput.getCompanyName()) )
 				
 				.build();
 	}

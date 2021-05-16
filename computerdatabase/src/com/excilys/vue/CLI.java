@@ -6,6 +6,14 @@ public abstract class  CLI {
 	protected static final String BIENVENUE_MESSAGE = "Bienvenue sur CDB \n";
 	protected static final String BYE_MESSAGE = "Bye \n";
 	
+	protected static final String ATTENTE_CONNECTION_MESSAGE = "Connection ...\n";
+	protected static final String CONNECTION_REUSSI_MESSAGE = "Vous etes connecte\n";
+	protected static final String CONNECTION_ECHOUE_MESSAGE = "Erreur de connection\n";
+	protected static final String IDENTIFIANT = "Entez votre identifant";
+	protected static final String MOT_DE_PASSE = "Entez votre password";
+
+	
+	
 	
 	protected static final String INPUT_ERREUR = "Invalid input try again "; 
 	protected static final String TO_MUCH_UNVALID_TRY = "Vous avez fait trop d'erreur \n"; 
@@ -23,7 +31,7 @@ public abstract class  CLI {
 	public static final String ENTER_ID_MESSAGE = "Entrez l'identifiant"; 
 	public static final String ENTER_COMPUTER_NAME_MESSAGE = "Entrez le nom du Computer"; 
 	protected static final String ENTER_DATE_INTRODUCED_MESSAGE = "Entrez la date Introduced (yyyy-mm-dd) "; 
-	protected static final String ENTER_DATE_DISCONTINUD_MESSAGE = "Entrez la date Discontined (yyyy-mm-dd) "; 
+	protected static final String ENTER_DATE_DISCONTINUED_MESSAGE = "Entrez la date Discontined (yyyy-mm-dd) "; 
 	public static final String ENTER_COMPANY_NAME_MESSAGE = "Entrez le nom de la Company"; 
 
 	

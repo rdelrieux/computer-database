@@ -12,80 +12,83 @@ import com.excilys.vue.ComputerCLI;
 
 public class ComputerCtr {
 
-	private static ComputerCtr instance ;
+	private static ComputerCtr instance;
 	private ComputerService computerService;
 	private ComputerCLI computerCLI;
 	private CompanyService companyService;
 	private ChoixUtilisateur choixutilisateur;
-	
-	
+
 	private ComputerCtr() {
 		this.computerService = ComputerService.getInstance();
 		this.computerCLI = ComputerCLI.getInstance();
 		this.companyService = CompanyService.getInstance();
 		this.choixutilisateur = ChoixUtilisateur.getInstance();
-		
+
 	}
 
-	public static ComputerCtr getInstance()  {
+	public static ComputerCtr getInstance() {
 		if (instance == null) {
 			instance = new ComputerCtr();
 		}
 		return instance;
 	}
-	
+
 	public void showListComputer() {
-		computerCLI.showListComputer(computerService.getListComputer());
+		this.computerCLI.showListComputer(
+				this.computerService.getListComputer()
+				);
 	}
 
 	public void showComputer() {
-		Computer computer = computerService.getComputer(choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
-		computerCLI.showComputer(computer);
+		Computer computer = this.computerService.getComputer(
+				this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE)
+				);
+		this.computerCLI.showComputer(computer);
 	}
-	
-	
 
 	public void addComputer() {
-		ComputerDTOInput computerDTOInput = choixutilisateur.choixParametreAddComputer();
+		ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreAddComputer();
 		if (computerDTOInput.getCompanyName().isEmpty()) {
-			this.computerService.addComputer(computerDTOInput , null );
-		}else {
+			this.computerService.addComputer(computerDTOInput,"" );
+		} else {
 			Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
 			if (company != null) {
-				this.computerService.addComputer(computerDTOInput , company );
-			}else {
-				System.out.println("logg ComputerCtr : "+CLI.COMPANY_NOT_FOUND_MESSAGE);
+				this.computerService.addComputer(computerDTOInput, ""+company.getId());
+			} else {
+				System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
 			}
-			
+
 		}
-		}
+	}
 
 	public void updateComputer() {
-		Computer computer = computerService.getComputer(choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
+		Computer computer = this.computerService.getComputer(
+				this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE)
+				);
 		if (computer == null) {
-			System.out.println("logg ComputerCtr : "+CLI.COMPUTER_NOT_FOUND_MESSAGE);
-		}else {
-			computerCLI.showComputer(computer);
-			ComputerDTOInput computerDTOInput = choixutilisateur.choixParametreUpdateComputer(computer);	
-			System.out.println("logg ComputerCtr update : "+computerDTOInput);
+			System.out.println("logg ComputerCtr : " + CLI.COMPUTER_NOT_FOUND_MESSAGE);
+		} else {
+			
+			this.computerCLI.showComputer(computer);
+			ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreUpdateComputer(computer);
 
-		if (computerDTOInput.getCompanyName().isEmpty()) {
-			this.computerService.updateComputer(computerDTOInput,null );
-			System.out.println("logg ComputerCtr : UPDATE successfull");
-
-		}else {
-			Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
-			if (company != null) {
-				this.computerService.updateComputer( computerDTOInput , company );
+			 
+			if (computerDTOInput.getCompanyName().isEmpty()) {
+				this.computerService.updateComputer(computerDTOInput, ""+computer.getId(), "");
 				System.out.println("logg ComputerCtr : UPDATE successfull");
 
-			}else {
-				System.out.println("logg ComputerCtr : "+CLI.COMPANY_NOT_FOUND_MESSAGE);
+			} else {
+				Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
+				if (company != null) {
+					this.computerService.updateComputer(computerDTOInput, ""+computer.getId(), ""+company.getId());
+					System.out.println("logg ComputerCtr : UPDATE successfull");
+				} else {
+					System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
+				}
+
 			}
-			
 		}
-		}
-		
+
 	}
 
 	public void deletComputer() {
@@ -95,23 +98,10 @@ public class ComputerCtr {
 			this.computerService.deletComputer(id);
 			System.out.println("logg ComputerCtr : DELET successfull");
 
-		}else {
+		} else {
 			System.out.println("logg ComputerCtr : DELET cancel");
 		}
-		
-		
+
 	}
-	
-	
-	
 
-	
-
-	
-	
-	
-	
-
-	
-	
 }
