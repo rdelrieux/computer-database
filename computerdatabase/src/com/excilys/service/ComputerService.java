@@ -5,6 +5,7 @@ import com.excilys.binding.dto.ComputerDTOInput;
 import com.excilys.binding.mapper.ComputerMapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.Page;
 import com.excilys.persistence.dao.DAOFactory;
 
 public class ComputerService {
@@ -26,11 +27,9 @@ private ComputerMapper computerMapper;
 	
 	
 	public List<Computer> getListComputer() {
-		List<Computer> listComputer = this.computerMapper.toListComputer(
+		return this.computerMapper.toListComputer(
 				DAOFactory.getComputerDAO().findAll()
 				);
-		
-		return listComputer;
 	}
 
 	public Computer getComputer(int id) {
@@ -62,6 +61,17 @@ private ComputerMapper computerMapper;
 
 	public void deletComputer(int id) {
 		DAOFactory.getComputerDAO().deletComputer(id);
+	}
+
+	public List<Computer>  searchComputer(String search, Page page) {
+		
+		return this.computerMapper.toListComputer(
+				DAOFactory.getComputerDAO().search(search, page)
+				);		
+	}
+	
+	public int searchNombreElement(String search){
+		return DAOFactory.getComputerDAO().searchNombreElement(search);
 	}
 	
 	

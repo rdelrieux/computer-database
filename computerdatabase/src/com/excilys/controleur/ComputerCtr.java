@@ -3,6 +3,7 @@ package com.excilys.controleur;
 import com.excilys.binding.dto.ComputerDTOInput;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.model.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.vue.CLI;
@@ -50,10 +51,12 @@ public class ComputerCtr {
 		ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreAddComputer();
 		if (computerDTOInput.getCompanyName().isEmpty()) {
 			this.computerService.addComputer(computerDTOInput,"" );
+			System.out.println("logg ComputerCtr : "+CLI.ADD_REUSSI_MESSAGE);
 		} else {
 			Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
 			if (company != null) {
 				this.computerService.addComputer(computerDTOInput, ""+company.getId());
+				System.out.println("logg ComputerCtr : "+CLI.ADD_REUSSI_MESSAGE);
 			} else {
 				System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
 			}
@@ -75,13 +78,13 @@ public class ComputerCtr {
 			 
 			if (computerDTOInput.getCompanyName().isEmpty()) {
 				this.computerService.updateComputer(computerDTOInput, ""+computer.getId(), "");
-				System.out.println("logg ComputerCtr : UPDATE successfull");
+				System.out.println("logg ComputerCtr : "+CLI.UPDATE_REUSSI_MESSAGE);
 
 			} else {
 				Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
 				if (company != null) {
 					this.computerService.updateComputer(computerDTOInput, ""+computer.getId(), ""+company.getId());
-					System.out.println("logg ComputerCtr : UPDATE successfull");
+					System.out.println("logg ComputerCtr : "+CLI.UPDATE_REUSSI_MESSAGE);
 				} else {
 					System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
 				}
@@ -96,12 +99,49 @@ public class ComputerCtr {
 		computerCLI.showComputer(computerService.getComputer(id));
 		if (choixutilisateur.messageVerificationAction()) {
 			this.computerService.deletComputer(id);
-			System.out.println("logg ComputerCtr : DELET successfull");
-
+			System.out.println("logg ComputerCtr : " + CLI.DELET_REUSSI_MESSAGE);
 		} else {
-			System.out.println("logg ComputerCtr : DELET cancel");
+			System.out.println("logg ComputerCtr : " + CLI.DELET_CANCELED_MESSAGE);
 		}
-
 	}
+
+	public void searchComputer() {
+		String search = this.choixutilisateur.choixNameNotEmpty(CLI.ENTER_SEARCH_MESSAGE);
+		Page page = new Page();	
+		page.setNombreElementPage(10);
+		page.setNumPage(1);
+		page.setNombreElementRequet(this.computerService.searchNombreElement(search));
+		String choix = ""; 
+		while ( ! choix.equals("exit")) {
+			
+			
+			
+			if (choix.equals("next")) {
+				page.setPageAfter();
+			}else if (choix.equals("before")){
+				page.setPageBefore();
+			}
+			else {
+				try {
+					if (page.getNumPage()>0 
+							&& page.getNumPage()< page.getNombreElementRequet()/page.getNombreElementPage()+1) {
+						page.setNumPage(Integer.parseInt(choix));
+					}
+				}catch(Exception c) {
+					
+				}
+				
+			}
+			System.out.println(page);
+			this.computerCLI.showListComputer(
+					this.computerService.searchComputer(search,page)
+					);
+			choix = this.choixutilisateur.choixName(CLI.ENTER_PAGE_MESSAGE);
+
+		}
+						
+	}
+	
+	
 
 }

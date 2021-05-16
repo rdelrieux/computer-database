@@ -13,12 +13,12 @@ public class MenuCLI extends CLI {
 			+ "\nPour ajouter un Computer tapez "+ MENU_ADD_COMPUTER
 			+ "\nPour mettre a jour un Computer tapez "+MENU_UPDATE_COMPUTER
 			+ "\nPour supprimer un Computer tapez "+MENU_DELETE_COMPUTER
+			+ "\nPour faire un recherche de Computer tapez "+MENU_SEARCH_COMPUTERS
 			+ "\nPour partir tapez "+MENU_EXIT;
 	
 	private static final String NOT_IMPLEMENTED = "option en cour de developpement \n";
 	private static final String ENTER_ID_MESSAGE = "Entez l'identifiant du Computer: ";
 	private static final String IDENTIFIANT_NOT_VALID_MESSAGE = "identifiant non valid ";
-	private static final String ADD_REUSSI_MESSAGE = "Computer ajoute a la list";
 	
 	private static MenuCLI instance ;
 	private CompanyCtr companyCtr;
@@ -51,19 +51,19 @@ public class MenuCLI extends CLI {
 			
 			switch (imput) {
 			case CLI.MENU_SHOW_LIST_COMPANY:
-				companyCtr.showListCompany();
+				this.companyCtr.showListCompany();
 					
 				break;
 			case CLI.MENU_SHOW_COMPANY:
-				companyCtr.showCompany();
+				this.companyCtr.showCompany();
 					
 				break;
 			case CLI.MENU_SHOW_LIST_COMPUTER:
-				computerCtr.showListComputer();
+				this.computerCtr.showListComputer();
 				
 				break;
 			case CLI.MENU_SHOW_COMPUTER:
-				computerCtr.showComputer();
+				this.computerCtr.showComputer();
 				
 				break;
 			case CLI.MENU_ADD_COMPUTER:
@@ -77,6 +77,10 @@ public class MenuCLI extends CLI {
 			case CLI.MENU_DELETE_COMPUTER:
 				this.computerCtr.deletComputer();
 				
+				break;
+			case CLI.MENU_SEARCH_COMPUTERS:
+				this.computerCtr.searchComputer();
+					
 				break;
 			case CLI.MENU_EXIT:
 				return false;

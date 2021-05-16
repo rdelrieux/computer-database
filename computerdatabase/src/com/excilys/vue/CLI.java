@@ -26,6 +26,7 @@ public abstract class  CLI {
 	protected static final String MENU_ADD_COMPUTER = "5"; 
 	protected static final String MENU_UPDATE_COMPUTER = "6"; 
 	protected static final String MENU_DELETE_COMPUTER = "7"; 
+	public static final String MENU_SEARCH_COMPUTERS = "8"; 
 	protected static final String MENU_EXIT = "exit"; 
 	
 	public static final String ENTER_ID_MESSAGE = "Entrez l'identifiant"; 
@@ -33,6 +34,8 @@ public abstract class  CLI {
 	protected static final String ENTER_DATE_INTRODUCED_MESSAGE = "Entrez la date Introduced (yyyy-mm-dd) "; 
 	protected static final String ENTER_DATE_DISCONTINUED_MESSAGE = "Entrez la date Discontined (yyyy-mm-dd) "; 
 	public static final String ENTER_COMPANY_NAME_MESSAGE = "Entrez le nom de la Company"; 
+	public static final String ENTER_SEARCH_MESSAGE = "Entrez la recherche :"; 
+	public static final String ENTER_PAGE_MESSAGE = "Page ? enter : next , before , exit";
 
 	
 	protected static final String INVALID_DATE_MESSAGE = "Date Invalide"; 
@@ -51,8 +54,12 @@ public abstract class  CLI {
 	protected static final String CHANGER_COMPANY_NAME_MESSAGE = "Voulez vous changer le Name de la Company (y/n)";
 
 	public static final String COMPANY_NOT_FOUND_MESSAGE = "Cette company n'existe pas dans la base de donnee "; 
-	public static final String COMPUTER_NOT_FOUND_MESSAGE = "Ce Computer n'existe pas dans la base de donnee "; 
+	public static final String COMPUTER_NOT_FOUND_MESSAGE = "Ce Computer n'existe pas dans la base de donnee ";
 
+	public static final String ADD_REUSSI_MESSAGE = "Computer ajoute a la db";
+	public static final String UPDATE_REUSSI_MESSAGE = "Computer updated";
+	public static final String DELET_REUSSI_MESSAGE = "Computer supprime de la db";
+	public static final String DELET_CANCELED_MESSAGE = "la suppresion est annule";
 
 	
 	protected ScannerVerification sc = ScannerVerification.getInstance() ;

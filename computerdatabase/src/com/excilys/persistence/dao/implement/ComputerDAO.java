@@ -11,6 +11,7 @@ import java.util.List;
 import com.excilys.binding.dto.ComputerDTOSQL;
 import com.excilys.binding.mapper.ComputerMapper;
 import com.excilys.model.Computer;
+import com.excilys.model.Page;
 
 
 
@@ -19,6 +20,21 @@ public class ComputerDAO {
 	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT *\n"
 			+ "FROM computer \n"
 			+ "LEFT JOIN company ON company.id = computer.company_id\n";
+	
+	private static final String REQUET_NOMBRE_ELEMENT_SEARCH  = "SELECT COUNT(computer.id) AS count\n"
+			+ "FROM computer \n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			+"WHERE computer.name LIKE ? "
+			;
+	
+	private static final String REQUET_AFFICHER_SOME_COMPANIES_SEARCH = "SELECT *\n"
+			+"FROM computer \n"
+			+"LEFT JOIN company ON company.id = computer.company_id\n"
+			+"WHERE computer.name LIKE ? \n"
+			+"LIMIT ? , ?"
+			;
+	
+	
 	
 	private static final String REQUET_TROUVER_COMPANY_FROM_ID = "SELECT *\n"
 			+ "FROM computer\n"
@@ -106,7 +122,40 @@ public class ComputerDAO {
 			}
 		return null;
 	}
-	
+	public  List<ComputerDTOSQL> search(String search, Page page) {
+		try {
+				PreparedStatement statementFind = this.connection.prepareStatement(REQUET_AFFICHER_SOME_COMPANIES_SEARCH);
+				
+				
+				statementFind.setString(1, "%"+search+"%");
+				statementFind.setInt(2,(page.getNumPage()-1)*page.getNombreElementPage());
+				statementFind.setInt(3,page.getNombreElementPage());
+
+				//System.out.println(statementFind);
+
+				ResultSet result = statementFind.executeQuery();
+				return  this.computerMapping.toListComputerDTOSQL(result);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+
+	public int searchNombreElement(String search) {
+		try {
+			PreparedStatement statementFind = this.connection.prepareStatement(REQUET_NOMBRE_ELEMENT_SEARCH);
+			statementFind.setString(1, "%"+search+"%");
+			ResultSet result = statementFind.executeQuery();
+			result.next();
+
+			return  result.getInt("count");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	return 0;
+	}
 	
 	
 	
@@ -199,6 +248,9 @@ public class ComputerDAO {
 		
 		
 	}
+
+
+	
 
 
 
