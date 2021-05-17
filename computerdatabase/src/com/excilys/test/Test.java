@@ -20,7 +20,7 @@ public class Test {
 		//Vue v = new Vue();
 		//v.start();
 	
-		//testStart();
+		testStart();
 		
 		
 		//CdbConnection.getInstance();
