@@ -6,15 +6,15 @@ import com.excilys.computerDatabase.controleur.ComputerCtr;
 public class MenuCLI extends CLI {
 	
 	private static final String MENU = "\n\n\t Menu \n\n"
-			+ "Pour voir la liste des Companies tapez "+MENU_SHOW_LIST_COMPANY
-			+ "\nPour voir l'identifiant d'une Company tapez "+MENU_SHOW_COMPANY
-			+ "\nPour voir la liste des Computers tapez "+ MENU_SHOW_LIST_COMPUTER
-			+ "\nPour voir les details d'un Computer tapez "+ MENU_SHOW_COMPUTER
-			+ "\nPour ajouter un Computer tapez "+ MENU_ADD_COMPUTER
-			+ "\nPour mettre a jour un Computer tapez "+MENU_UPDATE_COMPUTER
-			+ "\nPour supprimer un Computer tapez "+MENU_DELETE_COMPUTER
-			+ "\nPour faire un recherche de Computer tapez "+MENU_SEARCH_COMPUTERS
-			+ "\nPour partir tapez "+MENU_EXIT;
+			+ "Pour voir la liste des Companies tapez "+Menu.MENU_SHOW_LIST_COMPANY
+			+ "\nPour voir l'identifiant d'une Company tapez "+Menu.MENU_SHOW_COMPANY
+			+ "\nPour voir la liste des Computers tapez "+ Menu.MENU_SHOW_LIST_COMPUTER
+			+ "\nPour voir les details d'un Computer tapez "+ Menu.MENU_SHOW_COMPUTER
+			+ "\nPour ajouter un Computer tapez "+ Menu.MENU_ADD_COMPUTER
+			+ "\nPour mettre a jour un Computer tapez "+Menu.MENU_UPDATE_COMPUTER
+			+ "\nPour supprimer un Computer tapez "+Menu.MENU_DELETE_COMPUTER
+			+ "\nPour faire un recherche de Computer tapez "+Menu.MENU_SEARCH_COMPUTERS
+			+ "\nPour partir tapez "+Menu.MENU_EXIT;
 	
 	private static final String NOT_IMPLEMENTED = "option en cour de developpement \n";
 	private static final String ENTER_ID_MESSAGE = "Entez l'identifiant du Computer: ";
@@ -47,42 +47,42 @@ public class MenuCLI extends CLI {
 		while ( ! isValidImput  ) {
 			isValidImput = true;
 			String imput = this.sc.typeString();
-			
-			
-			switch (imput) {
-			case CLI.MENU_SHOW_LIST_COMPANY:
+		
+			switch (Menu.getMenu(imput)) {
+			case MENU_SHOW_LIST_COMPANY:
 				this.companyCtr.showListCompany();
 					
 				break;
-			case CLI.MENU_SHOW_COMPANY:
+				
+			case MENU_SHOW_COMPANY:
 				this.companyCtr.showCompany();
 					
 				break;
-			case CLI.MENU_SHOW_LIST_COMPUTER:
+			case MENU_SHOW_LIST_COMPUTER:
 				this.computerCtr.showListComputer();
 				
 				break;
-			case CLI.MENU_SHOW_COMPUTER:
+			case MENU_SHOW_COMPUTER:
 				this.computerCtr.showComputer();
 				
 				break;
-			case CLI.MENU_ADD_COMPUTER:
+			case MENU_ADD_COMPUTER:
 				this.computerCtr.addComputer();
 				
 				break;
-			case CLI.MENU_UPDATE_COMPUTER:
+			case MENU_UPDATE_COMPUTER:
 				this.computerCtr.updateComputer();
 				
 				break;
-			case CLI.MENU_DELETE_COMPUTER:
+			case MENU_DELETE_COMPUTER:
 				this.computerCtr.deletComputer();
 				
 				break;
-			case CLI.MENU_SEARCH_COMPUTERS:
+			case MENU_SEARCH_COMPUTERS:
 				this.computerCtr.searchComputer();
 					
 				break;
-			case CLI.MENU_EXIT:
+			case MENU_EXIT:
 				return false;
 
 			
