@@ -1,15 +1,12 @@
 package com.excilys.computerDatabase.vue;
 
-import com.excilys.computerDatabase.controleur.ConnectionCtr;
 
 public class StartApplication extends CLI {
 	
 	private static StartApplication instance ;
-	private ConnectionCLI connectionCli  ;
 	private MenuCLI menuCli;
 
 	private StartApplication() {
-		this.connectionCli = ConnectionCLI.getInstance();
 		this.menuCli = MenuCLI.getInstance();
 	}
 	
@@ -23,14 +20,6 @@ public class StartApplication extends CLI {
 	public void start() {
 		System.out.println(CLI.BIENVENUE_MESSAGE);
 	}
-
-	public void connect() {
-		while ( !this.connectionCli.isConnected()) {
-			this.connectionCli.messageConnection();
-		}
-		this.connectionCli.messageConnectionReussi();
-		
-	}
 	
 	public void playMenu() {
 		while (this.menuCli.isUsed()) {	
@@ -42,9 +31,6 @@ public class StartApplication extends CLI {
 		this.sc.close();
 	}
 
-	public void connectRapid() {
-		ConnectionCtr.getInstance().connect("admincdb","qwerty1234");
-		this.connectionCli.messageConnectionReussi();
-	}
+	
 
 }

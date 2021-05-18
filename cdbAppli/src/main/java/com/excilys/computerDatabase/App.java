@@ -13,7 +13,6 @@ public class App
     	// connection, enum , optionnal , builder dans la class
     	StartApplication application = StartApplication.getInstance();
 		application.start();
-		application.connectRapid();
 		application.playMenu();
 		application.stop();
 		

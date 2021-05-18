@@ -43,7 +43,7 @@ public class Page {
 	}
 	
 	public void setPageAfter() {
-		int nombrePageTotal =nombreElementRequet /nombreElementPage;
+		int nombrePageTotal =nombreElementRequet /nombreElementPage+1;
 		if (numPage != nombrePageTotal) {
 			this.numPage ++;
 		}
@@ -57,7 +57,7 @@ public class Page {
 
 	@Override
 	public String toString() {
-		return "Page : "+numPage+ "/"+nombreElementRequet/nombreElementPage ;
+		return "Page : "+numPage+ "/"+(nombreElementRequet/nombreElementPage+1) ;
 	}
 	
 

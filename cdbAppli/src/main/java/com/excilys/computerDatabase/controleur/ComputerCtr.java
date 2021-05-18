@@ -107,13 +107,11 @@ public class ComputerCtr {
 	public void searchComputer() {
 		String search = this.choixutilisateur.choixNameNotEmpty(CLI.ENTER_SEARCH_MESSAGE);
 		Page page = new Page();	
-		page.setNombreElementPage(10);
+		page.setNombreElementPage(4);
 		page.setNumPage(1);
 		page.setNombreElementRequet(this.computerService.searchNombreElement(search));
 		String choix = ""; 
 		while ( ! choix.equals("exit")) {
-			
-			
 			
 			if (choix.equals("next")) {
 				page.setPageAfter();
@@ -122,12 +120,15 @@ public class ComputerCtr {
 			}
 			else {
 				try {
-					if (page.getNumPage()>0 
-							&& page.getNumPage()< page.getNombreElementRequet()/page.getNombreElementPage()+1) {
-						page.setNumPage(Integer.parseInt(choix));
+					int choixInt = Integer.parseInt(choix);
+					if (choixInt>0 
+							&& choixInt< (page.getNombreElementRequet()/page.getNombreElementPage()+2) ) {
+						page.setNumPage(choixInt);
 					}
-				}catch(Exception c) {
 					
+					
+				}catch(Exception c) {
+					System.out.println("test page");
 				}
 				
 			}

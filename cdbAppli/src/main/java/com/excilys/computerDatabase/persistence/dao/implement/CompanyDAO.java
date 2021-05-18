@@ -13,82 +13,110 @@ import com.excilys.computerDatabase.connection.CdbConnection;
 
 public class CompanyDAO {
 
-	
-	
 	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
 	private static final String REQUET_TROUVER_COMPANY_FROM_ID = "SELECT * FROM company WHERE id = ?";
 	private static final String REQUET_TROUVER_COMPANY_FROM_NAME = "SELECT * FROM company WHERE name = ?";
 
-	private static CompanyDAO instance ;	
+	private static CompanyDAO instance;
 	private CompanyMapper companyMapper;
 	private CdbConnection cdbConnection;
-	
-	private  CompanyDAO() {
+
+	private CompanyDAO() {
 		this.cdbConnection = CdbConnection.getInstance();
 		this.companyMapper = CompanyMapper.getInstance();
-		}
+	}
 
-	
-	public static CompanyDAO getInstance( )  {
+	public static CompanyDAO getInstance() {
 		if (instance == null) {
 			instance = new CompanyDAO();
 		}
 		return instance;
 	}
-	
-	
-	public CompanyDTOSQL find(int id) {
-		CompanyDTOSQL res= new CompanyDTOSQL();
-		 try {
-			Connection connection = cdbConnection.getConnection();
-			PreparedStatement statementFind = connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_ID);
-			statementFind.setInt(1, id);
-			ResultSet result = statementFind.executeQuery();
-			res =  this.companyMapper.toCompanyDTOSQL(result);
-			connection.close();
 
-			
+	public PreparedStatement creatStatementFind(Connection connection, int id) {
+		try {
+
+			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_ID);
+			preparedStatement.setInt(1, id);
+			return preparedStatement;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+
+		}
+
+	}
+
+	public CompanyDTOSQL find(int id) {
+		CompanyDTOSQL res = new CompanyDTOSQL();
+		try (Connection connection = cdbConnection.getConnection();
+				PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
+				ResultSet result = preparedStatement.executeQuery();) {
+
+			res = this.companyMapper.toCompanyDTOSQL(result);
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		    return res;
+		return res;
 	}
-	
+
+	public PreparedStatement creatStatementFind(Connection connection, String name) {
+		try {
+
+			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_NAME);
+			preparedStatement.setString(1, name);
+			return preparedStatement;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public CompanyDTOSQL find(String name) {
-		CompanyDTOSQL res= new CompanyDTOSQL();
-		 try {
-			Connection connection = cdbConnection.getConnection();
-			PreparedStatement statementFind = connection.prepareStatement(REQUET_TROUVER_COMPANY_FROM_NAME);
-			statementFind.setString(1, name);
-			ResultSet result = statementFind.executeQuery();
-			res =  this.companyMapper.toCompanyDTOSQL(result);
-			connection.close();
-			
+		CompanyDTOSQL res = new CompanyDTOSQL();
+		try (Connection connection = cdbConnection.getConnection();
+				PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
+				ResultSet result = preparedStatement.executeQuery();) {
+
+			res = this.companyMapper.toCompanyDTOSQL(result);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		    return res;
-	}
-	
-	public  List<CompanyDTOSQL> findAll() {
-		List<CompanyDTOSQL> res= new ArrayList<CompanyDTOSQL>();
-		try {
-				Connection connection = cdbConnection.getConnection();	
-				PreparedStatement statementFind = connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
-				ResultSet result = statementFind.executeQuery();
-				res =   this.companyMapper.toListCompanyDTOSQL(result);
-				connection.close();
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		return res;
 	}
-	
-	
-	
-	
-	
+
+	public PreparedStatement creatStatementFindAll(Connection connection) {
+		try {
+
+			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPANIES);
+			return preparedStatement;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<CompanyDTOSQL> findAll() {
+		List<CompanyDTOSQL> res = new ArrayList<CompanyDTOSQL>();
+		try (Connection connection = cdbConnection.getConnection();
+				PreparedStatement preparedStatement = this.creatStatementFindAll(connection);
+				ResultSet result = preparedStatement.executeQuery();) {
+
+			res = this.companyMapper.toListCompanyDTOSQL(result);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 }

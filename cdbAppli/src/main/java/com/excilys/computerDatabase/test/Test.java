@@ -34,7 +34,6 @@ public class Test {
 	private static void testStart() {
 		StartApplication application = StartApplication.getInstance();
 		application.start();
-		application.connect();
 		application.playMenu();
 		application.stop();
 	}

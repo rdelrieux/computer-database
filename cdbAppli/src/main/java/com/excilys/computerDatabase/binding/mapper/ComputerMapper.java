@@ -74,8 +74,9 @@ public class ComputerMapper {
 				}
 			return res;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+			
 			return null;
 		}
 	}

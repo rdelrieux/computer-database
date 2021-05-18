@@ -14,12 +14,10 @@ public class CdbConnection {
 	private String user  = "admincdb";
 	private String password = "qwerty1234";
 	
-	private Connection connect;
-
+	
 	private CdbConnection() {
 		
 	}
-	
 	
 	public static CdbConnection getInstance() {
 		if (instance == null) {
@@ -28,41 +26,17 @@ public class CdbConnection {
 		return instance;
 	}
 
-	public void connection(String user, String password) throws SQLException, ClassNotFoundException {
-
-		this.user = user;
-		this.password = password;
-		//Class.forName("com.mysql.jdbc.Driver");
-		connect = DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
-
-	}
-
-	public Connection getConnection(String user, String password) throws ClassNotFoundException, SQLException {
-		if (connect == null) {
-			connection(user, password);
-		}
-		return connect;
-	}
-	
-	public Connection getConnection() {
-		if (connect == null) {
-			try {
-				connection(user, password);
-			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return connect;
-	}
-	public void closeConnection() {
+	public Connection getConnection(){	
 		try {
-			this.connect.close();
+			//Class.forName("com.mysql.jdbc.Driver");
+			return DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null; 
+
 	}
+
 	
 
 }
