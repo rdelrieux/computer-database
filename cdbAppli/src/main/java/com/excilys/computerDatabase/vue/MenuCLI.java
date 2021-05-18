@@ -6,15 +6,15 @@ import com.excilys.computerDatabase.controleur.ComputerCtr;
 public class MenuCLI extends CLI {
 	
 	private static final String MENU = "\n\n\t Menu \n\n"
-			+ "Pour voir la liste des Companies tapez "+Menu.MENU_SHOW_LIST_COMPANY
-			+ "\nPour voir l'identifiant d'une Company tapez "+Menu.MENU_SHOW_COMPANY
-			+ "\nPour voir la liste des Computers tapez "+ Menu.MENU_SHOW_LIST_COMPUTER
-			+ "\nPour voir les details d'un Computer tapez "+ Menu.MENU_SHOW_COMPUTER
-			+ "\nPour ajouter un Computer tapez "+ Menu.MENU_ADD_COMPUTER
-			+ "\nPour mettre a jour un Computer tapez "+Menu.MENU_UPDATE_COMPUTER
-			+ "\nPour supprimer un Computer tapez "+Menu.MENU_DELETE_COMPUTER
-			+ "\nPour faire un recherche de Computer tapez "+Menu.MENU_SEARCH_COMPUTERS
-			+ "\nPour partir tapez "+Menu.MENU_EXIT;
+			+ "Pour voir la liste des Companies tapez "+Menu.MENU_SHOW_LIST_COMPANY.getValeur()
+			+ "\nPour voir l'identifiant d'une Company tapez "+Menu.MENU_SHOW_COMPANY.getValeur()
+			+ "\nPour voir la liste des Computers tapez "+ Menu.MENU_SHOW_LIST_COMPUTER.getValeur()
+			+ "\nPour voir les details d'un Computer tapez "+ Menu.MENU_SHOW_COMPUTER.getValeur()
+			+ "\nPour ajouter un Computer tapez "+ Menu.MENU_ADD_COMPUTER.getValeur()
+			+ "\nPour mettre a jour un Computer tapez "+Menu.MENU_UPDATE_COMPUTER.getValeur()
+			+ "\nPour supprimer un Computer tapez "+Menu.MENU_DELETE_COMPUTER.getValeur()
+			+ "\nPour faire un recherche de Computer tapez "+Menu.MENU_SEARCH_COMPUTERS.getValeur()
+			+ "\nPour partir tapez "+Menu.MENU_EXIT.getValeur();
 	
 	private static final String NOT_IMPLEMENTED = "option en cour de developpement \n";
 	private static final String ENTER_ID_MESSAGE = "Entez l'identifiant du Computer: ";

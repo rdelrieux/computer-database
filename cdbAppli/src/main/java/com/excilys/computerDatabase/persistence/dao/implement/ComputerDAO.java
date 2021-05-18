@@ -103,9 +103,9 @@ public class ComputerDAO {
 					PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 					ResultSet result= preparedStatement.executeQuery();) {
 			
-		
+			 if (result.isBeforeFirst() ) { 
 			res = this.computerMapping.toComputerDTOSQL(result);
-			
+			 }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -130,9 +130,9 @@ public class ComputerDAO {
 		 try (	Connection connection = cdbConnection.getConnection();
 					PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 					ResultSet result= preparedStatement.executeQuery();) {
-			
+			 if (result.isBeforeFirst() ) { 
 			res = this.computerMapping.toComputerDTOSQL(result);
-
+			 }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -157,9 +157,9 @@ public class ComputerDAO {
 		try (Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementFindAll(connection);
 				ResultSet result = preparedStatement.executeQuery();) {
-		
+			if (result.isBeforeFirst() ) { 
 			res =  this.computerMapping.toListComputerDTOSQL(result);
-
+			}
 		} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -188,9 +188,9 @@ public class ComputerDAO {
 		try (	Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementSearch(connection, search, page);
 				ResultSet result= preparedStatement.executeQuery();) {
-				
+			if (result.isBeforeFirst() ) { 
 			res = this.computerMapping.toListComputerDTOSQL(result) ;
-		
+			}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

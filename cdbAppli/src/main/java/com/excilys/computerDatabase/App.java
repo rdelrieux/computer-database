@@ -10,7 +10,7 @@ public class App
 {
     public static void main( String[] args ) {
     	//System.out.println("hello");
-    	//  enum , optionnal , builder dans la class
+    	//   optionnal , builder dans la class
     	StartApplication application = StartApplication.getInstance();
 		application.start();
 		application.playMenu();

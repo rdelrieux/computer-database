@@ -54,8 +54,11 @@ public class CompanyDAO {
 		try (Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 				ResultSet result = preparedStatement.executeQuery();) {
-
-			res = this.companyMapper.toCompanyDTOSQL(result);
+			
+			if (result.isBeforeFirst() ) { 
+				res = this.companyMapper.toCompanyDTOSQL(result);
+			}
+			
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -84,8 +87,10 @@ public class CompanyDAO {
 				PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 				ResultSet result = preparedStatement.executeQuery();) {
 
+			if (result.isBeforeFirst() ) { 
 			res = this.companyMapper.toCompanyDTOSQL(result);
-
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -110,8 +115,10 @@ public class CompanyDAO {
 		try (Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementFindAll(connection);
 				ResultSet result = preparedStatement.executeQuery();) {
-
-			res = this.companyMapper.toListCompanyDTOSQL(result);
+			
+			if (result.isBeforeFirst() ) { 
+				res = this.companyMapper.toListCompanyDTOSQL(result);
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();

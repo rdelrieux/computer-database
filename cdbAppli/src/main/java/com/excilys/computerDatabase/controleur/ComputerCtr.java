@@ -110,7 +110,7 @@ public class ComputerCtr {
 		page.setNombreElementPage(4);
 		page.setNumPage(1);
 		page.setNombreElementRequet(this.computerService.searchNombreElement(search));
-		String choix = ""; 
+		String choix = "1"; 
 		while ( ! choix.equals("exit")) {
 			
 			if (choix.equals("next")) {
@@ -128,7 +128,7 @@ public class ComputerCtr {
 					
 					
 				}catch(Exception c) {
-					System.out.println("test page");
+					System.out.println(c+"logging erreur choix page Contol Computer");
 				}
 				
 			}

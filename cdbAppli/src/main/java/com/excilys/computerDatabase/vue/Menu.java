@@ -17,8 +17,15 @@ public enum Menu {
 	
 	Menu(String valeur) {
 		this.valeur = valeur;
+	
 	}
 
+	public String getValeur() {
+		
+		return this.valeur;
+	}
+
+	
 	public static Menu getMenu(String valeur) {
 		for (Menu menu : Menu.values()) {
 			if (valeur.equals(menu.valeur)) {
