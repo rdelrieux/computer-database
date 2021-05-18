@@ -26,10 +26,13 @@ private ComputerMapper computerMapper;
 	}
 	
 	
-	public List<Computer> getListComputer() {
+	public List<Computer> getListComputer(Page page) {
 		return this.computerMapper.toListComputer(
-				DAOFactory.getComputerDAO().findAll()
+				DAOFactory.getComputerDAO().findAll(page)
 				);
+	}
+	public int searchNombreElement(){
+		return DAOFactory.getComputerDAO().searchNombreElement();
 	}
 
 	public Computer getComputer(int id) {

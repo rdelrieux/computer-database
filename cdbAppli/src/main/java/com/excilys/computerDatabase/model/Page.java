@@ -3,8 +3,8 @@ package com.excilys.computerDatabase.model;
 public class Page {
 	
 	private int nombreElementRequet = 0;
-	private int nombreElementPage = 0;
-	private int numPage = 0;
+	private int nombreElementPage = 10;
+	private int numPage = 1;
 	
 	public Page(int nombreElementRequet, int nombreElementPage, int numPage) {
 		this.nombreElementRequet = nombreElementRequet;

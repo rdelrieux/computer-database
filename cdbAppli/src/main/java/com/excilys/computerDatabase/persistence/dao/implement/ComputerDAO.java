@@ -21,7 +21,13 @@ public class ComputerDAO {
 
 	private static final String REQUET_AFFICHER_TOUTE_COMPUTERS = "SELECT *\n"
 			+ "FROM computer \n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n";
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			+"LIMIT ? , ?"
+			;
+	private static final String REQUET_NOMBRE_ELEMENT  = "SELECT COUNT(computer.id) AS count\n"
+			+ "FROM computer \n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			;
 	
 	private static final String REQUET_NOMBRE_ELEMENT_SEARCH  = "SELECT COUNT(computer.id) AS count\n"
 			+ "FROM computer \n"
@@ -138,11 +144,39 @@ public class ComputerDAO {
 		}
 		    return res;
 	}
-	
-	public PreparedStatement creatStatementFindAll(Connection connection ) {
+	public PreparedStatement creatStatementSearchNombreElement(Connection connection ) {
+		try {
+		
+		PreparedStatement preparedStatement = connection.prepareStatement(REQUET_NOMBRE_ELEMENT);
+
+		return preparedStatement;
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public int searchNombreElement() {
+		int count = 0;
+		try (	Connection connection = cdbConnection.getConnection();
+				ResultSet result= this.creatStatementSearchNombreElement( connection).executeQuery();
+				){
+			
+			result.next();			
+			count =   result.getInt("count");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	return count;
+	}
+	public PreparedStatement creatStatementFindAll(Connection connection , Page page  ) {
 		try {
 
 		PreparedStatement preparedStatement = connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPUTERS);
+		preparedStatement.setInt(1,(page.getNumPage()-1)*page.getNombreElementPage());
+		preparedStatement.setInt(2,page.getNombreElementPage());
 		return preparedStatement;
 		
 		} catch (SQLException e) {
@@ -152,10 +186,10 @@ public class ComputerDAO {
 		return null;
 	}
 	
-	public  List<ComputerDTOSQL> findAll() {
+	public  List<ComputerDTOSQL> findAll(Page page) {
 		List<ComputerDTOSQL> res = new ArrayList<ComputerDTOSQL>();
 		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementFindAll(connection);
+				PreparedStatement preparedStatement = this.creatStatementFindAll(connection, page);
 				ResultSet result = preparedStatement.executeQuery();) {
 			if (result.isBeforeFirst() ) { 
 			res =  this.computerMapping.toListComputerDTOSQL(result);
