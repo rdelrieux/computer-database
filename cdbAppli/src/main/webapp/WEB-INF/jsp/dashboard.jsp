@@ -78,19 +78,19 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                    <c:forEach var = "item" items = "${listCoyote }">
-                    	<c:out value="${item }"></c:out><br />
+                    <c:forEach var = "computer" items = "${listcomputer }">
+                    	
                     
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick="">MacBook Pro</a>
+                            <a href="editComputer.html" onclick="">${computer.name }</a>
                         </td>
-                        <td>2006-01-10</td>
-                        <td></td>
-                        <td>Apple Inc.</td>
+                        <td>${computer.introduced }</td>
+                        <td>${computer.discontinued }</td>
+                        <td>${computer.company.name }</td>
 
                     </tr>
                    </c:forEach>

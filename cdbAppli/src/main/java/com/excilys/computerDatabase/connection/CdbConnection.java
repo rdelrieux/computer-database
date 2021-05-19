@@ -28,12 +28,14 @@ public class CdbConnection {
 
 	public Connection getConnection(){	
 		try {
-			//Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			return DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
-		} catch (SQLException e) {
+		} catch (SQLException 
+				| ClassNotFoundException e
+				) {
 			e.printStackTrace();
 		}
-		return null; 
+		return null; 	
 
 	}
 

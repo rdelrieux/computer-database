@@ -13,8 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerDatabase.bean.Coyote;
+import com.excilys.computerDatabase.connection.CdbConnection;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.model.Page;
+import com.excilys.computerDatabase.service.ComputerService;
+import com.excilys.computerDatabase.vue.CLI;
 
 /**
  * Servlet implementation class TestingServlet
@@ -31,18 +35,18 @@ public class TestingServlet extends HttpServlet {
 		
 		String message = "Transmission de variables : OK ! " + parametreAuteur;
 		
+		ComputerService computerService = ComputerService.getInstance();
+		System.out.println(CdbConnection.getInstance().getConnection() == null);
+		
+		Page page = new Page();
+		page.setNombreElementRequet(computerService.searchNombreElement());
+		List<Computer> listcomputer = new ArrayList<Computer>(); 
+		listcomputer = computerService.getListComputer( page);
+		
 	
 		
 			
-		/* Création du bean */
-		List<Computer> premierBean = new ArrayList<Computer>();
-		/* Initialisation de ses propriétés */
-		premierBean.add( new Computer(1,"computer1",LocalDate.of(2010, 02, 16), null , new Company (13,"IBM")) );
-		premierBean.add( new Computer(2,"computer2",LocalDate.of(2011, 02, 16), null , new Company (13,"IBM")) );
-			
-		/* Stockage du message et du bean dans l'objet request */
-		request.setAttribute( "message", message );
-		request.setAttribute( "listCoyote", premierBean );
+		request.setAttribute( "listcomputer", listcomputer );
 			
 		/* Transmission de la paire d'objets request/response à notre JSP */
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/jsp/dashboard.jsp" ).forward( request, response );
