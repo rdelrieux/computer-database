@@ -34,7 +34,19 @@ private ComputerMapper computerMapper;
 	public int searchNombreElement(){
 		return DAOFactory.getComputerDAO().searchNombreElement();
 	}
-
+	
+	
+	public List<Computer>  searchComputer(String search, Page page) {
+		
+		return this.computerMapper.toListComputer(
+				DAOFactory.getComputerDAO().search(search, page)
+				);		
+	}
+	public int searchNombreElement(String search){
+		return DAOFactory.getComputerDAO().searchNombreElement(search);
+	}
+	
+	
 	public Computer getComputer(int id) {
 		return this.computerMapper.toComputer(
 				DAOFactory.getComputerDAO().find(id)
@@ -66,16 +78,6 @@ private ComputerMapper computerMapper;
 		DAOFactory.getComputerDAO().deletComputer(id);
 	}
 
-	public List<Computer>  searchComputer(String search, Page page) {
-		
-		return this.computerMapper.toListComputer(
-				DAOFactory.getComputerDAO().search(search, page)
-				);		
-	}
-	
-	public int searchNombreElement(String search){
-		return DAOFactory.getComputerDAO().searchNombreElement(search);
-	}
-	
+
 	
 }

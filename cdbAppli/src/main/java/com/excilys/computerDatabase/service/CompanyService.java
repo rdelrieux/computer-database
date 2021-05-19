@@ -30,7 +30,6 @@ public class CompanyService {
 		List<Company> listCompany = this.companyMapper.toListCompany(
 				DAOFactory.getCompanyDAO().findAll()
 				);
-		Collections.sort(listCompany);
 		
 		return listCompany;
 	}

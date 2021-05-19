@@ -5,9 +5,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.excilys.computerDatabase.binding.builder.CompanyBuilder;
 import com.excilys.computerDatabase.binding.builder.ComputerBuilder;
 import com.excilys.computerDatabase.binding.builder.ComputerDTOSQLBuilder;
+import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOSQL;
 import com.excilys.computerDatabase.binding.validater.ComputerValidater;
@@ -38,24 +41,67 @@ public class ComputerMapper {
 		return instance;
 	}
 
-	public ComputerDTOSQL toComputerDTOSQL(ResultSet result) {
+	public Optional <ComputerDTOSQL> toComputerDTOSQL(ResultSet result) {
 		try {
-			if (result.first()) {
-				return new ComputerDTOSQLBuilder()
+			if (result.next()) {
+				return Optional.of(new ComputerDTOSQLBuilder()
 						.setId(""+result.getInt(COLONNE_ID))
 						.setName(result.getString(COLONNE_NAME))
 						.setIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : result.getDate(COLONNE_DATE_INTRODUCED).toString()   )
 						.setDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : result.getDate(COLONNE_DATE_DISCONTINUED).toString()   )
 						.setCompanyId(result.getInt(COLONNE_COMPANY_ID)== 0 ? "" : ""+result.getInt(COLONNE_COMPANY_ID) )
 						.setCompanyName(result.getString(COLONNE_COMPANY_NAME)== null ? "" : ""+result.getString(COLONNE_COMPANY_NAME) )
-						.build();
+						.build() );
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 		}
-		return null;
+		return Optional.empty();
+	}
+	
+	public Computer toComputer(ComputerDTOSQL computerDTOSQL ) {
+		
+		return new ComputerBuilder()
+				.setId(Integer.parseInt(computerDTOSQL.getId()))
+				
+				.setName(computerDTOSQL.getName())
+				
+				.setIntroduced(computerDTOSQL.getIntroduced() == "" ? null : LocalDate.parse(computerDTOSQL.getIntroduced()))
+				
+				.setDiscontinued(computerDTOSQL.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOSQL.getDiscontinued()))
+				
+				
+				.setCompany(computerDTOSQL.getCompanyId() == "" ? null : new Company (
+						Integer.valueOf(computerDTOSQL.getCompanyId()),
+						computerDTOSQL.getCompanyName()))
+				
+				.build();
+	}
+
+	public Computer toComputer(Optional <ComputerDTOSQL> computerDTOSQL ) {
+		
+		if ( computerDTOSQL.isEmpty() ){
+			return null;
+		}
+		
+		return new ComputerBuilder()
+				.setId(Integer.parseInt(computerDTOSQL.get().getId()))
+				
+				.setName(computerDTOSQL.get().getName())
+				
+				.setIntroduced(computerDTOSQL.get().getIntroduced() == "" ? null : LocalDate.parse(computerDTOSQL.get().getIntroduced()))
+				
+				.setDiscontinued(computerDTOSQL.get().getDiscontinued() == "" ? null :LocalDate.parse(computerDTOSQL.get().getDiscontinued()))
+				
+				
+				.setCompany(computerDTOSQL.get().getCompanyId() == "" ? null : new Company (
+						Integer.valueOf(computerDTOSQL.get().getCompanyId()),
+						computerDTOSQL.get().getCompanyName()))
+				
+				.build();
+		
 	}
 
 	public List<ComputerDTOSQL> toListComputerDTOSQL(ResultSet result) {
@@ -81,26 +127,6 @@ public class ComputerMapper {
 		}
 	}
 	
-	public Computer toComputer(ComputerDTOSQL computerDTOSQL ) {
-		if (computerDTOSQL == null){
-			return null;
-		}
-		return new ComputerBuilder()
-				.setId(Integer.parseInt(computerDTOSQL.getId()))
-				
-				.setName(computerDTOSQL.getName())
-				
-				.setIntroduced(computerDTOSQL.getIntroduced() == "" ? null : LocalDate.parse(computerDTOSQL.getIntroduced()))
-				
-				.setDiscontinued(computerDTOSQL.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOSQL.getDiscontinued()))
-				
-				
-				.setCompany(computerDTOSQL.getCompanyId() == "" ? null : new Company (
-						Integer.valueOf(computerDTOSQL.getCompanyId()),
-						computerDTOSQL.getCompanyName()))
-				
-				.build();
-	}
 	
 	
 	public List<Computer> toListComputer( List<ComputerDTOSQL> listComputerDTOSQL) {

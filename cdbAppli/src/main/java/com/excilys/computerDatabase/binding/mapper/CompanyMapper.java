@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.excilys.computerDatabase.binding.builder.CompanyBuilder;
 import com.excilys.computerDatabase.binding.builder.CompanyDTOSQLBuilder;
@@ -28,22 +29,45 @@ public class CompanyMapper {
 		return instance;
 	}
 
-	public CompanyDTOSQL toCompanyDTOSQL(ResultSet result) {
+	public Optional<CompanyDTOSQL> toCompanyDTOSQL(ResultSet result) {
 		try {
-			if (result.first()) {
-				return new CompanyDTOSQLBuilder()
+			if (result.next()) {
+				return Optional.of(new CompanyDTOSQLBuilder()
 						.setId(""+result.getInt(COLONNE_ID))
 						.setName(result.getString(COLONNE_NAME))
-						.build();
+						.build());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 		}
-		return null;
+		return Optional.empty();
 	}
-
+	
+	public Company toCompany(CompanyDTOSQL companyDTOSQL) {
+		
+		return new CompanyBuilder()
+		.setId(Integer.parseInt(companyDTOSQL.getId()))
+		.setName(companyDTOSQL.getName())
+		.build();
+	}
+	
+	
+	public Company toCompany(Optional <CompanyDTOSQL> companyDTOSQL ) {
+		
+		if ( companyDTOSQL.isEmpty() ){
+			return null;
+		}
+		return new CompanyBuilder()
+				.setId(Integer.parseInt(companyDTOSQL.get().getId()))
+				.setName(companyDTOSQL.get().getName())
+				.build();
+		
+	}
+	
+	
+	
 	public List<CompanyDTOSQL> toListCompanyDTOSQL(ResultSet result) {
 		ArrayList<CompanyDTOSQL> res = new ArrayList<CompanyDTOSQL>();
 
@@ -62,15 +86,6 @@ public class CompanyMapper {
 		}
 	}
 	
-	public Company toCompany(CompanyDTOSQL companyDTOSQL) {
-		if (companyDTOSQL == null){
-			return null;
-		}
-		return new CompanyBuilder()
-		.setId(Integer.parseInt(companyDTOSQL.getId()))
-		.setName(companyDTOSQL.getName())
-		.build();
-	}
 	
 	public List<Company> toListCompany( List<CompanyDTOSQL> listCompanyDTOSQL) {
 		ArrayList<Company> res = new ArrayList<Company>();

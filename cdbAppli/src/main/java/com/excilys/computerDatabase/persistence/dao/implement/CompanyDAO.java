@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
 import com.excilys.computerDatabase.binding.mapper.CompanyMapper;
@@ -44,19 +45,23 @@ public class CompanyDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
-
+			/*
+			catch (MonException e) {
+				   logger.error("{} in {}", e.toString(), e.getStackTrace());
+				}
+			*/
 		}
 
 	}
 
-	public CompanyDTOSQL find(int id) {
-		CompanyDTOSQL res = new CompanyDTOSQL();
+	public Optional<CompanyDTOSQL>  find(int id) {
+		
 		try (Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 				ResultSet result = preparedStatement.executeQuery();) {
 			
 			if (result.isBeforeFirst() ) { 
-				res = this.companyMapper.toCompanyDTOSQL(result);
+				return this.companyMapper.toCompanyDTOSQL(result);
 			}
 			
 
@@ -64,7 +69,7 @@ public class CompanyDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return res;
+		return Optional.empty();
 	}
 
 	public PreparedStatement creatStatementFind(Connection connection, String name) {
@@ -81,20 +86,19 @@ public class CompanyDAO {
 		return null;
 	}
 
-	public CompanyDTOSQL find(String name) {
-		CompanyDTOSQL res = new CompanyDTOSQL();
+	public Optional <CompanyDTOSQL> find(String name) {
 		try (Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 				ResultSet result = preparedStatement.executeQuery();) {
 
 			if (result.isBeforeFirst() ) { 
-			res = this.companyMapper.toCompanyDTOSQL(result);
+			return this.companyMapper.toCompanyDTOSQL(result);
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return res;
+		return Optional.empty();
 	}
 
 	public PreparedStatement creatStatementFindAll(Connection connection) {

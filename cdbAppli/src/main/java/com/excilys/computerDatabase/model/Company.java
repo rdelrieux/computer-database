@@ -1,10 +1,9 @@
 package com.excilys.computerDatabase.model;
 
-public class Company implements  Comparable {
+public class Company  {
 	
-	private int id = 0;
-	
-	private String name = "";
+	private int id;	
+	private String name ;
 	
 	public Company() {
 		
@@ -65,10 +64,6 @@ public class Company implements  Comparable {
 		return "Company [id=" + id + ", name=" + name + "]";
 	}
 
-	@Override
-	public int compareTo(Object company) {
-	return this.name.compareToIgnoreCase(((Company) company).getName());
-	}
 	
 	
 

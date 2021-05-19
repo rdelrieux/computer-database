@@ -97,8 +97,9 @@ public class ComputerCtr {
 
 	public void deletComputer() {
 		int id = choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE);
+		Computer computer = computerService.getComputer(id);
 		computerCLI.showComputer(computerService.getComputer(id));
-		if (choixutilisateur.messageVerificationAction()) {
+		if (computer != null && choixutilisateur.messageVerificationAction()) {
 			this.computerService.deletComputer(id);
 			System.out.println("logg ComputerCtr : " + CLI.DELET_REUSSI_MESSAGE);
 		} else {
@@ -119,7 +120,6 @@ public class ComputerCtr {
 		}
 		
 	}
-
 
 	public Page choixPage(String choix, Page page) {
 		

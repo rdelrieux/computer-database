@@ -1,66 +1,131 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <groupId>com.excilys.computerDatabase</groupId>
-  <artifactId>cdbAppli</artifactId>
-  <packaging>jar</packaging>
-  
-  <version>1.0-SNAPSHOT</version>
-  
-  <name>cdbAppli</name>
-  <url>http://maven.apache.org</url>
-  
-  
-  
-  
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.25</version>
-</dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-<dependency>
-    <groupId>org.mockito</groupId>
-    <artifactId>mockito-core</artifactId>
-    <version>3.10.0</version>
-    <scope>test</scope>
-</dependency>
+	<groupId>com.excilys.computerDatabase</groupId>
+	<artifactId>cdbAppli</artifactId>
+	<packaging>jar</packaging>
 
-<!-- https://mvnrepository.com/artifact/net.reini/slf4-cdi -->
-<dependency>
-    <groupId>net.reini</groupId>
-    <artifactId>slf4-cdi</artifactId>
-    <version>1.0</version>
-</dependency>
+	<version>1.0-SNAPSHOT</version>
+
+	<name>cdbAppli</name>
+	<url>http://maven.apache.org</url>
+
+
+	<properties>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.15</maven.compiler.source>
+		<maven.compiler.target>1.15</maven.compiler.target>
+
+		<spring.version>5.3.5</spring.version>
+		<spring-data.version>2.4.7</spring-data.version>
+		<spring-security.version>5.4.5</spring-security.version>
+		<hibernate.version>5.4.30.Final</hibernate.version>
+		<mysql-connector-java.version>8.0.23</mysql-connector-java.version>
+		<HikariCP.version>3.4.5</HikariCP.version>
+		<junit.version>4.13.2</junit.version>
+		<dbunit.version>2.2</dbunit.version>
+		<log4j.version>1.2.17</log4j.version>
+		<slf4j.version>1.7.30</slf4j.version>
+		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
+		<jsp-api.version>2.2</jsp-api.version>
+		<jstl.version>1.2</jstl.version>
+		<tomcat.version>9.0.43</tomcat.version>
+		<jquery.version>3.5.1</jquery.version>
+		<selenium-java.version>3.141.59</selenium-java.version>
+		<jackson.version>2.12.2</jackson.version>
+		<mockito-all.version>1.10.19</mockito-all.version>
+
+	</properties>
+
+	<dependencies>
+
+
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java.version}</version>
+		</dependency>
+
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+		</dependency>
+		
+
 	
-  </dependencies>
-  
-  
-  <build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.7.0</version>
-            <configuration>
-                <release>11</release>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax-servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 
-  
-  
-  
-  
+
+		<!-- https://mvnrepository.com/artifact/dbunit/dbunit -->
+		<dependency>
+			<groupId>dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+
+
+
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito-all.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+
+
+
 </project>
