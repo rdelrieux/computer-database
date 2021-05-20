@@ -8,9 +8,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+
+<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -22,7 +23,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+                <c:out value="${ nombreComputerTrouve }" /> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -105,32 +106,36 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="?paginationNextPrev=prev" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <li><a href="?addNumPage=-2">${page.numPage -2} </a></li>
+              <li><a href="?addNumPage=-1">${page.numPage -1} </a></li>
+              <li><a href="?addNumPage=0"> ..  </a></li>
+              <li><a href="?addNumPage=1">${page.numPage +1} </a></li>
+              <li><a href="?addNumPage=2">${page.numPage +2} </a></li>
               <li>
-                <a href="#" aria-label="Next">
+                <a href="?paginationNextPrev=next" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+        <form id="nombreElementPage" action="#" method="GET" >
+            <button type="submit" class="btn btn-default" name="nombreElementPage" value="10">10</button>
+            <button type="submit" class="btn btn-default" name="nombreElementPage" value="50">50</button>
+            <button type="submit" class="btn btn-default" name="nombreElementPage" value="100">100</button>
+        </form>
         </div>
-
+	</div>
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+    
+<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+
 
 </body>
 </html>
