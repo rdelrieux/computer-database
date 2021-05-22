@@ -1,6 +1,6 @@
 package com.excilys.computerDatabase.model;
 
-public class Company  {
+public class Company implements Comparable {
 	
 	private int id;	
 	private String name ;
@@ -62,6 +62,12 @@ public class Company  {
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + "]";
+	}
+
+	@Override
+	public int compareTo(Object company) {
+		// TODO Auto-generated method stub
+		 return this.getName().toUpperCase().compareTo(((Company)company).getName().toUpperCase());
 	}
 
 	

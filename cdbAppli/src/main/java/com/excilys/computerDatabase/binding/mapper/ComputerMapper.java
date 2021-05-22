@@ -8,14 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerDatabase.binding.builder.CompanyBuilder;
-import com.excilys.computerDatabase.binding.builder.ComputerBuilder;
-import com.excilys.computerDatabase.binding.builder.ComputerDTOSQLBuilder;
 import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOSQL;
 import com.excilys.computerDatabase.binding.validater.ComputerValidater;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.model.Computer;
+
 
 
 public class ComputerMapper {
@@ -42,17 +41,17 @@ public class ComputerMapper {
 	}
 
 	public Optional <ComputerDTOSQL> toComputerDTOSQL(ResultSet result) {
+	
 		try {
-			if (result.next()) {
-				return Optional.of(new ComputerDTOSQLBuilder()
-						.setId(""+result.getInt(COLONNE_ID))
-						.setName(result.getString(COLONNE_NAME))
-						.setIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : result.getDate(COLONNE_DATE_INTRODUCED).toString()   )
-						.setDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : result.getDate(COLONNE_DATE_DISCONTINUED).toString()   )
-						.setCompanyId(result.getInt(COLONNE_COMPANY_ID)== 0 ? "" : ""+result.getInt(COLONNE_COMPANY_ID) )
-						.setCompanyName(result.getString(COLONNE_COMPANY_NAME)== null ? "" : ""+result.getString(COLONNE_COMPANY_NAME) )
+				return Optional.of( new ComputerDTOSQL.ComputerDTOSQLBuilder(
+						result.getString(COLONNE_ID),result.getString(COLONNE_NAME)
+						)
+						.withIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : result.getDate(COLONNE_DATE_INTRODUCED).toString()   )
+						.withDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : result.getDate(COLONNE_DATE_DISCONTINUED).toString()   )
+						.withCompanyId(result.getString(COLONNE_COMPANY_ID)== null ? "" : ""+result.getInt(COLONNE_COMPANY_ID) )
+						.withCompanyName(result.getString(COLONNE_COMPANY_NAME)== null ? "" : ""+result.getString(COLONNE_COMPANY_NAME) )
 						.build() );
-			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,42 +60,24 @@ public class ComputerMapper {
 		return Optional.empty();
 	}
 	
-	public Computer toComputer(ComputerDTOSQL computerDTOSQL ) {
-		
-		return new ComputerBuilder()
-				.setId(Integer.parseInt(computerDTOSQL.getId()))
-				
-				.setName(computerDTOSQL.getName())
-				
-				.setIntroduced(computerDTOSQL.getIntroduced() == "" ? null : LocalDate.parse(computerDTOSQL.getIntroduced()))
-				
-				.setDiscontinued(computerDTOSQL.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOSQL.getDiscontinued()))
-				
-				
-				.setCompany(computerDTOSQL.getCompanyId() == "" ? null : new Company (
-						Integer.valueOf(computerDTOSQL.getCompanyId()),
-						computerDTOSQL.getCompanyName()))
-				
-				.build();
-	}
 
 	public Computer toComputer(Optional <ComputerDTOSQL> computerDTOSQL ) {
 		
+	
 		if ( computerDTOSQL.isEmpty() ){
 			return null;
 		}
 		
-		return new ComputerBuilder()
-				.setId(Integer.parseInt(computerDTOSQL.get().getId()))
+		return new Computer.ComputerBuilder(
+				Integer.parseInt(computerDTOSQL.get().getId()),computerDTOSQL.get().getName()
+				)
 				
-				.setName(computerDTOSQL.get().getName())
+				.withIntroduced(computerDTOSQL.get().getIntroduced() == "" ? null : LocalDate.parse(computerDTOSQL.get().getIntroduced()))
 				
-				.setIntroduced(computerDTOSQL.get().getIntroduced() == "" ? null : LocalDate.parse(computerDTOSQL.get().getIntroduced()))
-				
-				.setDiscontinued(computerDTOSQL.get().getDiscontinued() == "" ? null :LocalDate.parse(computerDTOSQL.get().getDiscontinued()))
+				.withDiscontinued(computerDTOSQL.get().getDiscontinued() == "" ? null :LocalDate.parse(computerDTOSQL.get().getDiscontinued()))
 				
 				
-				.setCompany(computerDTOSQL.get().getCompanyId() == "" ? null : new Company (
+				.withCompany(computerDTOSQL.get().getCompanyId() == "" ? null : new Company (
 						Integer.valueOf(computerDTOSQL.get().getCompanyId()),
 						computerDTOSQL.get().getCompanyName()))
 				
@@ -106,18 +87,15 @@ public class ComputerMapper {
 
 	public List<ComputerDTOSQL> toListComputerDTOSQL(ResultSet result) {
 		ArrayList<ComputerDTOSQL> res = new ArrayList<ComputerDTOSQL>();
-
+		
 		try {
 			while (result.next()) {
-				res.add(new ComputerDTOSQLBuilder()
-						.setId(""+result.getInt(COLONNE_ID))
-						.setName(result.getString(COLONNE_NAME))
-						.setIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : result.getDate(COLONNE_DATE_INTRODUCED).toString()   )
-						.setDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : result.getDate(COLONNE_DATE_DISCONTINUED).toString()   )
-						.setCompanyId(result.getInt(COLONNE_COMPANY_ID)== 0 ? "" : ""+result.getInt(COLONNE_COMPANY_ID) )
-						.setCompanyName(result.getString(COLONNE_COMPANY_NAME)== null ? "" : result.getString(COLONNE_COMPANY_NAME) )
-						.build());
+				if (this.toComputerDTOSQL(result).isPresent()) {
+					res.add(this.toComputerDTOSQL(result).get());
 				}
+				
+				}
+			
 			return res;
 		} catch (SQLException e) {
 			
@@ -132,28 +110,27 @@ public class ComputerMapper {
 	public List<Computer> toListComputer( List<ComputerDTOSQL> listComputerDTOSQL) {
 		ArrayList<Computer> res = new ArrayList<Computer>();
 		for (ComputerDTOSQL computerDTOSQL : listComputerDTOSQL) {
-			res.add(this.toComputer(computerDTOSQL));
+		
+			res.add(this.toComputer(Optional.of(computerDTOSQL)));
+			
 		}
 		return res;
 	}
 
-	public Computer toComputer(ComputerDTOInput computerDTOInput, String id , String companyId) {
+	public Computer toComputer(ComputerDTOInput computerDTOInput) {
 		if ( ! computerValidater.validate(computerDTOInput)) {
 			return null;
 		}
 		
-		return new ComputerBuilder()
+		return new Computer.ComputerBuilder(0,computerDTOInput.getName())
 				
-				.setId(Integer.parseInt(id))
+				.withIntroduced(computerDTOInput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOInput.getIntroduced()))
 				
-				.setName(computerDTOInput.getName())
+				.withDiscontinued(computerDTOInput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOInput.getDiscontinued()))
 				
-				.setIntroduced(computerDTOInput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOInput.getIntroduced()))
-				
-				.setDiscontinued(computerDTOInput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOInput.getDiscontinued()))
-				
-				.setCompany(companyId == "" ? null : new Company (Integer.parseInt(companyId), computerDTOInput.getCompanyName()) )
-				
+				.withCompany(computerDTOInput.getCompanyId() == "" ? null : new Company (
+						Integer.parseInt(computerDTOInput.getCompanyId()),""
+						))
 				.build();
 	}
 

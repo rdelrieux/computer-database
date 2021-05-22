@@ -33,6 +33,8 @@ public class Page {
 	public int getNombreElementRequet() {
 		return nombreElementRequet;
 	}
+	
+	
 
 	public int getNombreElementPage() {
 		return nombreElementPage;
@@ -41,13 +43,19 @@ public class Page {
 	public int getNumPage() {
 		return numPage;
 	}
+	public int getNombrePageMax() {
+		return nombreElementRequet /nombreElementPage + 
+				(nombreElementRequet%nombreElementPage == 0? 0 : 1);
+		
+	}
 	
 	public void setPageAfter() {
-		int nombrePageTotal =nombreElementRequet /nombreElementPage+1;
-		if (numPage != nombrePageTotal) {
+		if (numPage != this.getNombrePageMax()) {
 			this.numPage ++;
 		}
 	}
+	
+	
 	
 	public void setPageBefore() {
 		if (numPage != 1) {
@@ -55,6 +63,9 @@ public class Page {
 		}
 	}
 
+
+	
+	
 	public void addNumPage(Integer numero) {
 		if (numero < 0) {
 			numero = -numero;

@@ -27,6 +27,7 @@ private ComputerMapper computerMapper;
 	
 	
 	public List<Computer> getListComputer(Page page) {
+		
 		return this.computerMapper.toListComputer(
 				DAOFactory.getComputerDAO().findAll(page)
 				);
@@ -53,8 +54,8 @@ private ComputerMapper computerMapper;
 				);	
 	}
 
-	public void addComputer(ComputerDTOInput computerDTOInput, String companyId) {
-		Computer computer = this.computerMapper.toComputer(computerDTOInput,"0" , companyId );
+	public void addComputer(ComputerDTOInput computerDTOInput) {
+		Computer computer = this.computerMapper.toComputer(computerDTOInput);
 		if (computer != null) {
 			DAOFactory.getComputerDAO().addComputer(computer);
 		}else {
@@ -63,7 +64,7 @@ private ComputerMapper computerMapper;
 	}
 
 	public void updateComputer( ComputerDTOInput computerDTOInput, String id , String companyId) {
-		Computer computer = this.computerMapper.toComputer( computerDTOInput, id ,  companyId);
+		Computer computer = this.computerMapper.toComputer( computerDTOInput);
 		System.out.println("Logg ComputerService update :"+ computer);
 
 		if (computer != null) {

@@ -84,6 +84,7 @@ public class ComputerDAO {
 			ResultSet result = preparedStatement.executeQuery();
 
 			if (result.isBeforeFirst()) {
+				result.next();
 				return this.computerMapping.toComputerDTOSQL(result);
 			}
 		} catch (SQLException e) {

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computerDatabase.bean.Coyote;
 import com.excilys.computerDatabase.connection.CdbConnection;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.model.Computer;
@@ -36,7 +35,7 @@ public class TestingServlet extends HttpServlet {
 		String message = "Transmission de variables : OK ! " + parametreAuteur;
 		
 		ComputerService computerService = ComputerService.getInstance();
-		System.out.println(CdbConnection.getInstance().getConnection() == null);
+		//System.out.println(CdbConnection.getInstance().getConnection() == null);
 		
 		Page page = new Page();
 		page.setNombreElementRequet(computerService.searchNombreElement());
@@ -49,8 +48,48 @@ public class TestingServlet extends HttpServlet {
 		request.setAttribute( "listcomputer", listcomputer );
 			
 		/* Transmission de la paire d'objets request/response à notre JSP */
+		//this.getServletContext().getRequestDispatcher( "/WEB-INF/jsp/dashboard.jsp" ).forward( request, response );
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/jsp/dashboard.jsp" ).forward( request, response );
+
 	}
+	
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String nom = request.getParameter("nom");
+        
+        request.setAttribute("nom", nom);
+        
+        this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/bonjour.jsp").forward(request, response);
+    }
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	
 }

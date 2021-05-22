@@ -23,7 +23,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                <c:out value="${ nombreComputerTrouve }" /> Computers found
+                <c:out value="${ page.nombreElementRequet }" /> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -35,7 +35,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -106,17 +106,42 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="?paginationNextPrev=prev" aria-label="Previous">
+                    <a href="?paginationNextPrev=fisrt" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="?addNumPage=-2">${page.numPage -2} </a></li>
-              <li><a href="?addNumPage=-1">${page.numPage -1} </a></li>
-              <li><a href="?addNumPage=0"> ..  </a></li>
-              <li><a href="?addNumPage=1">${page.numPage +1} </a></li>
-              <li><a href="?addNumPage=2">${page.numPage +2} </a></li>
+              
+             		 <li>
+             		 <c:if test="${ page.numPage -2 > 0 }" var="variable">
+             		 <a href="?addNumPage=-2">${page.numPage -2} </a>
+             		  </c:if>
+             		 </li>
+             	
+				
+              		<li>
+              		 <c:if test="${ page.numPage -1 > 0 }" var="variable">
+              		<a href="?addNumPage=-1">${page.numPage -1} </a>
+              		 </c:if>
+              		 </li>
+             	
+             	
+             	<li><a href="?addNumPage=0"> ..  </a></li>
+               
+              
+              	<li> <c:if test="${ page.numPage +1 <= page.getNombrePageMax() }" var="variable">
+              	<a href="?addNumPage=1">${page.numPage +1} </a>
+              	 </c:if>
+              	 </li>
+              	
+             
+              	<li>
+              	 <c:if test="${ page.numPage +2 <= page.getNombrePageMax() }" var="variable">
+              	 <a href="?addNumPage=2">${page.numPage +2} </a>
+              	  </c:if>
+              	  </li>
+            
               <li>
-                <a href="?paginationNextPrev=next" aria-label="Next">
+                <a href="?paginationNextPrev=last" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

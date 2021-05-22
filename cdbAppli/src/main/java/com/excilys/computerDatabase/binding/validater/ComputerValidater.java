@@ -24,14 +24,14 @@ public class ComputerValidater {
 				&& this.validateDate(computerDTOInput.getIntroduced())
 				&& this.validateDate(computerDTOInput.getDiscontinued())
 				&& this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued())
-				&& this.validateCompanyName(computerDTOInput.getCompanyName())
+				&& this.validateCompanyId(computerDTOInput.getCompanyId())
 				;
 	}
 
-	private boolean validateCompanyName(String name) {
+	private boolean validateCompanyId(String id) {
 		//System.out.println("Logg Service : introduced >= discontinued valid ");
 
-		return name.equals("") ||  this.validateName(name);
+		return id.equals("0") ||  this.validateId(id);
 
 	}
 

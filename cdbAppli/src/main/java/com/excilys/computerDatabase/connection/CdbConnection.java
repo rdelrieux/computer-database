@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class CdbConnection {
 
 	private final static String URL = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-	
+	private final static String DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static CdbConnection instance;
 
 	private String user  = "admincdb";
@@ -28,7 +28,7 @@ public class CdbConnection {
 
 	public Connection getConnection(){	
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(DRIVER);
 			return DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
 		} catch (SQLException 
 				| ClassNotFoundException e

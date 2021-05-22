@@ -14,7 +14,7 @@ import com.excilys.computerDatabase.model.Computer;
 import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.service.ComputerService;
 
-@WebServlet("/dashBoard")
+@WebServlet("/dashboard")
 public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ComputerService computerService;
@@ -30,9 +30,6 @@ public class DashBoardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 
 		
-		
-		
-		
 		String paramNombreElementPage = request.getParameter("nombreElementPage");
 		this.addNumPage( request.getParameter("addNumPage"));
 		
@@ -41,7 +38,7 @@ public class DashBoardServlet extends HttpServlet {
 		List<Computer> listcomputer = this.getListComputer(request.getParameter("search"));
 		
 		
-		request.setAttribute( "nombreComputerTrouve", page.getNombreElementRequet() );
+		//request.setAttribute( "nombrePageMax", page.getNombrePageMax() );
 		request.setAttribute( "listcomputer", listcomputer );
 		request.setAttribute( "page", page);
         this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
@@ -85,10 +82,10 @@ public class DashBoardServlet extends HttpServlet {
 	
 	private void goToNextPervPage(String paginationNextPrev) {
 		if (paginationNextPrev != null) {
-			if (paginationNextPrev.equals("prev")) {
-				this.page.setPageBefore();	
-			}else if (paginationNextPrev.equals("next")) {
-				this.page.setPageAfter();
+			if (paginationNextPrev.equals("fisrt")) {
+				this.page.setNumPage(1);	
+			}else if (paginationNextPrev.equals("last")) {
+				this.page.setNumPage(this.page.getNombrePageMax());
 				
 			}
 		}

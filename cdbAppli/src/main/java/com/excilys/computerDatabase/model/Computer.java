@@ -3,82 +3,46 @@ package com.excilys.computerDatabase.model;
 import java.time.LocalDate;
 
 public class Computer {
-	
-	private int id = 0;
-	
-	private String name = "";
-	
-	private LocalDate introduced = null;
-	
-	private LocalDate discontinued = null;
-	
-	private Company company = new Company();
-	
-	
-	public Computer () {
-		
-	}
 
-	public Computer (int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-	
-	
-	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.discontinued = discontinued;
-		this.company = company;
-	}
+	private int id;
 
+	private String name;
 
+	private LocalDate introduced;
 
+	private LocalDate discontinued;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	private Company company;
 
-	public void setIntroduced(LocalDate introduced) {
-		this.introduced = introduced;
-	}
-
-	public void setDiscontinued(LocalDate discontinued) {
-		this.discontinued = discontinued;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
+	private Computer(ComputerBuilder computerBuilder) {
+		this.id = computerBuilder.id;
+		this.name = computerBuilder.name;
+		this.introduced = computerBuilder.introduced;
+		this.discontinued = computerBuilder.discontinued;
+		this.discontinued = computerBuilder.discontinued;
+		this.company = computerBuilder.company;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-
 	public String getName() {
 		return name;
 	}
-
 
 	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-
 	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
-
 
 	public Company getCompany() {
 		return company;
 	}
 
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -130,8 +94,45 @@ public class Computer {
 		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
 				+ ", company=" + company + "]";
 	}
+
+	public static class ComputerBuilder {
+		
+		private int id ;
+		
+		private String name ;
+		
+		private LocalDate introduced ;
+		
+		private LocalDate discontinued ;
+		
+		private Company company ;
+		
+		
+		public ComputerBuilder (int id ,String name ) {
+			this.id = id;
+			this.name = name;
+		}
+
+		public Computer build() {
+			return new Computer (this);
+		}
+
+		public ComputerBuilder withIntroduced(LocalDate introduced) {
+			this.introduced = introduced;
+			return this;
+		}
+
+		public ComputerBuilder withDiscontinued(LocalDate discontinued) {
+			this.discontinued = discontinued;
+			return this;
+		}
+
+		public ComputerBuilder withCompany(Company company) {
+			this.company = company;
+			return this;
+		}
+
 	
-	
-	
+	}
 
 }
