@@ -53,13 +53,13 @@ public class ComputerCtr {
 
 	public void addComputer() {
 		ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreAddComputer();
-		if (computerDTOInput.getCompanyName().isEmpty()) {
-			this.computerService.addComputer(computerDTOInput, "");
+		if (computerDTOInput.getCompanyId().isEmpty()) {
+			this.computerService.addComputer(computerDTOInput);
 			System.out.println("logg ComputerCtr : " + CLI.ADD_REUSSI_MESSAGE);
 		} else {
-			Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
+			Company company = this.companyService.getCompany(computerDTOInput.getCompanyId());
 			if (company != null) {
-				this.computerService.addComputer(computerDTOInput, "" + company.getId());
+				this.computerService.addComputer(computerDTOInput);
 				System.out.println("logg ComputerCtr : " + CLI.ADD_REUSSI_MESSAGE);
 			} else {
 				System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
@@ -77,12 +77,12 @@ public class ComputerCtr {
 			this.computerCLI.showComputer(computer);
 			ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreUpdateComputer(computer);
 
-			if (computerDTOInput.getCompanyName().isEmpty()) {
+			if (computerDTOInput.getCompanyId().isEmpty()) {
 				this.computerService.updateComputer(computerDTOInput, "" + computer.getId(), "");
 				System.out.println("logg ComputerCtr : " + CLI.UPDATE_REUSSI_MESSAGE);
 
 			} else {
-				Company company = this.companyService.getCompany(computerDTOInput.getCompanyName());
+				Company company = this.companyService.getCompany(computerDTOInput.getCompanyId());
 				if (company != null) {
 					this.computerService.updateComputer(computerDTOInput, "" + computer.getId(), "" + company.getId());
 					System.out.println("logg ComputerCtr : " + CLI.UPDATE_REUSSI_MESSAGE);

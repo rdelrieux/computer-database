@@ -53,9 +53,8 @@ public class AddComputerServlet extends HttpServlet {
 		//System.out.println(computerDTOInput);
 		this.computerService .addComputer(computerDTOInput);
 		
-		
+		response.sendRedirect("dashboard");
 		   
-		 this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/addComputer.jsp").forward(request, response);
 	}
 
 

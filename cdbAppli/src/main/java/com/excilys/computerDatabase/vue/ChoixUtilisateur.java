@@ -1,7 +1,7 @@
 package com.excilys.computerDatabase.vue;
 
-import com.excilys.computerDatabase.binding.builder.ComputerDTOInputBuilder;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.binding.dto.ComputerDTOInput.ComputerDTOInputBuilder;
 import com.excilys.computerDatabase.model.Computer;
 
 public class ChoixUtilisateur extends CLI{
@@ -54,41 +54,38 @@ public class ChoixUtilisateur extends CLI{
 	
 	
 	public ComputerDTOInput choixParametreAddComputer() {
-		return new ComputerDTOInputBuilder()
+		return new ComputerDTOInput.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE))
+	
 		
-			.setName( this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE))
+			.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE))
 		
-			.setIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE))
+			.withDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE))
 		
-			.setDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE))
-		
-			.setCompanyName( this.choixName(CLI.ENTER_COMPANY_NAME_MESSAGE) )	
+			.withCompanyId( ""+this.choixId(CLI.ENTER_ID_MESSAGE) )	
 		
 		 	.build();
 	}
 
 	public ComputerDTOInput choixParametreUpdateComputer(Computer computer) {
-		ComputerDTOInputBuilder ComputerDTOInputBuilder = new ComputerDTOInputBuilder();
+		ComputerDTOInputBuilder ComputerDTOInputBuilder = new ComputerDTOInput.ComputerDTOInputBuilder(computer.getName());
 				
 		if (needUpdate(CHANGER_NOM_MESSAGE)) {
-			ComputerDTOInputBuilder.setName( this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE) );
-		}else {
-			ComputerDTOInputBuilder.setName(computer.getName());
+			ComputerDTOInputBuilder = new ComputerDTOInput.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE));
 		}
 		if (needUpdate(CHANGER_DATE_INTRODUCED_MESSAGE)) {
-			ComputerDTOInputBuilder.setIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE));
+			ComputerDTOInputBuilder.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE));
 		}else {
-			ComputerDTOInputBuilder.setIntroduced(computer.getIntroduced()== null ? "" : computer.getIntroduced().toString());
+			ComputerDTOInputBuilder.withIntroduced(computer.getIntroduced()== null ? "" : computer.getIntroduced().toString());
 		}
 		if (needUpdate(CHANGER_DATE_DISCONTINUD_MESSAGE)) {
-			ComputerDTOInputBuilder.setDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE));
+			ComputerDTOInputBuilder.withDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE));
 		}else {
-			ComputerDTOInputBuilder.setDiscontinued(computer.getDiscontinued()== null ? "" : computer.getDiscontinued().toString());
+			ComputerDTOInputBuilder.withDiscontinued(computer.getDiscontinued()== null ? "" : computer.getDiscontinued().toString());
 		}
 		if (needUpdate(CHANGER_COMPANY_NAME_MESSAGE)) {
-			ComputerDTOInputBuilder.setCompanyName( this.choixName(CLI.ENTER_COMPANY_NAME_MESSAGE) );	
+			ComputerDTOInputBuilder.withCompanyId (""+this.choixId(CLI.ENTER_ID_MESSAGE) );	
 		}else {
-			ComputerDTOInputBuilder.setCompanyName( computer.getCompany() == null ?  "" : computer.getCompany().getName());	
+			ComputerDTOInputBuilder.withCompanyId( computer.getCompany() == null ?  "" : ""+computer.getCompany().getId());	
 		}
 		return 	ComputerDTOInputBuilder.build();
 	}
