@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerDatabase.binding.builder.CompanyBuilder;
-import com.excilys.computerDatabase.binding.builder.CompanyDTOSQLBuilder;
 import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
 import com.excilys.computerDatabase.model.Company;
 
@@ -32,10 +30,9 @@ public class CompanyMapper {
 	public Optional<CompanyDTOSQL> toCompanyDTOSQL(ResultSet result) {
 		try {
 			if (result.next()) {
-				return Optional.of(new CompanyDTOSQLBuilder()
-						.setId(""+result.getInt(COLONNE_ID))
-						.setName(result.getString(COLONNE_NAME))
-						.build());
+				return Optional.of(new CompanyDTOSQL(
+						""+result.getInt(COLONNE_ID) , result.getString(COLONNE_NAME)
+						));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -45,25 +42,15 @@ public class CompanyMapper {
 		return Optional.empty();
 	}
 	
-	public Company toCompany(CompanyDTOSQL companyDTOSQL) {
-		
-		return new CompanyBuilder()
-		.setId(Integer.parseInt(companyDTOSQL.getId()))
-		.setName(companyDTOSQL.getName())
-		.build();
-	}
-	
 	
 	public Company toCompany(Optional <CompanyDTOSQL> companyDTOSQL ) {
 		
 		if ( companyDTOSQL.isEmpty() ){
 			return null;
 		}
-		return new CompanyBuilder()
-				.setId(Integer.parseInt(companyDTOSQL.get().getId()))
-				.setName(companyDTOSQL.get().getName())
-				.build();
-		
+		return new Company(
+				Integer.parseInt(companyDTOSQL.get().getId()) ,companyDTOSQL.get().getName()
+				);
 	}
 	
 	
@@ -73,10 +60,7 @@ public class CompanyMapper {
 
 		try {
 			while (result.next()) {
-				res.add(new CompanyDTOSQLBuilder()
-						.setId(""+result.getInt(COLONNE_ID))
-						.setName(result.getString(COLONNE_NAME))
-						.build() );
+				res.add(this.toCompanyDTOSQL(result).get());
 				}
 			return res;
 		} catch (SQLException e) {
@@ -90,7 +74,7 @@ public class CompanyMapper {
 	public List<Company> toListCompany( List<CompanyDTOSQL> listCompanyDTOSQL) {
 		ArrayList<Company> res = new ArrayList<Company>();
 		for (CompanyDTOSQL companyDTOSQL : listCompanyDTOSQL) {
-			res.add(this.toCompany(companyDTOSQL));
+			res.add(this.toCompany(Optional.of(companyDTOSQL)));
 		}
 		return res;
 	}

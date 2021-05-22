@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.excilys.computerDatabase.binding.builder.CompanyBuilder;
-import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOSQL;
 import com.excilys.computerDatabase.binding.validater.ComputerValidater;
@@ -133,66 +131,6 @@ public class ComputerMapper {
 						))
 				.build();
 	}
-
-
-
-	
-	
-	
-	/*
-	
-	public ComputerDTOUser toComputerDTO(Computer computer) {
-		return new ComputerDTOSQLBuilder()
-		
-		.setId(String.valueOf(computer.getId()))
-		
-		.setName(computer.getName())
-		
-		.setIntroduced(computer.getIntroduced() == null ? "" : computer.getIntroduced().toString())
-		
-		.setDiscontinued(computer.getDiscontinued() == null ? "" : computer.getDiscontinued().toString())
-	
-		.setCompanyId(computer.getCompany() == null ? "" : String.valueOf(computer.getCompany().getId()))
-		
-		.setCompanyName(computer.getCompany() == null ? "" : computer.getCompany().getName())
-		
-		.build();
-	
-	}
-	
-	public Computer toComputer(ComputerDTOUser computerDTOUser) {
-		if ( ! computerValidater.validate(computerDTOUser)) {
-			return null;
-		}
-		
-		return new ComputerBuilder()
-		
-		.setId(Integer.parseInt(computerDTOUser.getId()))
-		
-		.setName(computerDTOUser.getName())
-		
-		.setIntroduced(computerDTOUser.getIntroduced() == "" ? null : LocalDate.parse(computerDTOUser.getIntroduced()))
-		
-		.setDiscontinued(computerDTOUser.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOUser.getDiscontinued()))
-		
-	
-		.setCompany(computerDTOUser.getCompanyName() == "" ? new Company() : new Company(Integer.parseInt(computerDTOUser.getCompanyId()) , computerDTOUser.getCompanyName()))
-		
-		.build();
-		
-	
-	}
-	
-*/
-	
-	
-	
-	
-	
-	
-	
-	
-
 	
 
 }
