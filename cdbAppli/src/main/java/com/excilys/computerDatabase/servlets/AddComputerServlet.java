@@ -46,11 +46,11 @@ public class AddComputerServlet extends HttpServlet {
 		
 		ComputerDTOInput computerDTOInput = new ComputerDTOInput.ComputerDTOInputBuilder(request.getParameter("computerName"))
 				.withIntroduced(request.getParameter("introduced"))
-				.withIntroduced(request.getParameter("discontinued"))
+				.withDiscontinued(request.getParameter("discontinued"))
 				.withCompanyId(request.getParameter("companyId"))
 				.build();
 		
-		
+		//System.out.println(computerDTOInput);
 		this.computerService .addComputer(computerDTOInput);
 		
 		

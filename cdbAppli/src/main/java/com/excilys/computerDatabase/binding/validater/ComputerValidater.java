@@ -31,7 +31,10 @@ public class ComputerValidater {
 	private boolean validateCompanyId(String id) {
 		//System.out.println("Logg Service : introduced >= discontinued valid ");
 
-		return id.equals("0") ||  this.validateId(id);
+		if (! (id.equals("") ||  this.validateId(id))) {
+			System.out.println("Logg erreur : company not valid");
+		}
+		return id.equals("") ||  this.validateId(id);
 
 	}
 
@@ -42,9 +45,13 @@ public class ComputerValidater {
 			return true;
 		}
 		try {
+			if (! LocalDate.parse(introduced).isBefore(LocalDate.parse(discontinued))){
+				System.out.println("Logg erreur : Date Interval not valid" );
+			}
 			return LocalDate.parse(introduced).isBefore(LocalDate.parse(discontinued));
 
 		} catch (Exception e) {
+			System.out.println("Logg erreur : Date not valid" );
 			return false;
 		}
 
@@ -60,6 +67,7 @@ public class ComputerValidater {
 			LocalDate.parse(date);
 			return true;
 		} catch (Exception e) {
+			System.out.println("Logg erreur : Date not valid" );
 			return false;
 		}
 
@@ -67,7 +75,9 @@ public class ComputerValidater {
 
 	private boolean validateName(String name) {
 		//System.out.println("Logg Service : Id valid ");
-
+		if ( ! ( name != null && !name.isBlank() && !name.equals("null")) ) {
+			System.out.println("Logg erreur : Name not valid" );
+		}
 		return name != null && !name.isBlank() && !name.equals("null");
 
 	}
@@ -77,10 +87,14 @@ public class ComputerValidater {
 		try {
 			int num = Integer.parseInt(id);
 			
+			if (num <=0) {
+				System.out.println("Logg erreur : Id <= 0" );
+			}
+			
 			return num >0;
 
 		} catch (Exception e) {
-			
+			System.out.println("Logg erreur : Id not valid" );
 			return false;
 		}
 

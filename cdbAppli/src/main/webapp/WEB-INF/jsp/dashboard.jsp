@@ -106,7 +106,7 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="?paginationNextPrev=fisrt" aria-label="Previous">
+                    <a href="?paginationFisrtLast=fisrt" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
@@ -141,7 +141,7 @@
               	  </li>
             
               <li>
-                <a href="?paginationNextPrev=last" aria-label="Next">
+                <a href="?paginationFisrtLast=last" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

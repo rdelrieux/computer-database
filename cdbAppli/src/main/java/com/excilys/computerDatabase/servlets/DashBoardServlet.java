@@ -34,7 +34,7 @@ public class DashBoardServlet extends HttpServlet {
 		this.addNumPage( request.getParameter("addNumPage"));
 		
 		this.page.setNombreElementPage( paramNombreElementPage == null ?   this.page.getNombreElementPage() : Integer.valueOf(paramNombreElementPage)   ) ;
-		this.goToNextPervPage( request.getParameter("paginationNextPrev"));
+		this.goToFisrtLastPage( request.getParameter("paginationFisrtLast"));
 		List<Computer> listcomputer = this.getListComputer(request.getParameter("search"));
 		
 		
@@ -80,11 +80,11 @@ public class DashBoardServlet extends HttpServlet {
     }
 
 	
-	private void goToNextPervPage(String paginationNextPrev) {
-		if (paginationNextPrev != null) {
-			if (paginationNextPrev.equals("fisrt")) {
+	private void goToFisrtLastPage(String paginationFisrtLast) {
+		if (paginationFisrtLast != null) {
+			if (paginationFisrtLast.equals("fisrt")) {
 				this.page.setNumPage(1);	
-			}else if (paginationNextPrev.equals("last")) {
+			}else if (paginationFisrtLast.equals("last")) {
 				this.page.setNumPage(this.page.getNombrePageMax());
 				
 			}
