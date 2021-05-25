@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.excilys.computerDatabase.logger.LoggerCdb;
+
 
 public class CdbConnection {
 
@@ -27,14 +29,18 @@ public class CdbConnection {
 	}
 
 	public Connection getConnection(){	
-		try {
-			Class.forName(DRIVER);
-			return DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
-		} catch (SQLException 
-				| ClassNotFoundException e
-				) {
-			e.printStackTrace();
-		}
+		
+			try {
+				Class.forName(DRIVER);
+				//LoggerCdb.logInfo(CdbConnection.class.getName(), "Driver Loaded");
+				return DriverManager.getConnection(CdbConnection.URL, this.user, this.password);
+			} catch (ClassNotFoundException e) {
+				LoggerCdb.logFatal(CdbConnection.class.getName(), e);
+			} catch (SQLException e) {
+				LoggerCdb.logFatal(CdbConnection.class.getName(), e);
+			}
+			
+				
 		return null; 	
 
 	}

@@ -10,8 +10,10 @@ import java.util.Optional;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOSQL;
 import com.excilys.computerDatabase.binding.validater.ComputerValidater;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.model.Computer;
+import com.excilys.computerDatabase.persistence.dao.implement.ComputerDAO;
 
 
 
@@ -51,8 +53,7 @@ public class ComputerMapper {
 						.build() );
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerMapper.class.getName(), e);
 			
 		}
 		return Optional.empty();
@@ -97,10 +98,11 @@ public class ComputerMapper {
 			return res;
 		} catch (SQLException e) {
 			
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerMapper.class.getName(), e);
 			
-			return null;
+			
 		}
+		return new ArrayList<ComputerDTOSQL>();
 	}
 	
 	
@@ -116,20 +118,20 @@ public class ComputerMapper {
 	}
 
 	public Computer toComputer(ComputerDTOInput computerDTOInput) {
-		if ( ! computerValidater.validate(computerDTOInput)) {
-			return null;
-		}
+	
+			computerValidater.validate(computerDTOInput);
+			
+			return new Computer.ComputerBuilder(0,computerDTOInput.getName())
+					
+					.withIntroduced(computerDTOInput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOInput.getIntroduced()))
+					
+					.withDiscontinued(computerDTOInput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOInput.getDiscontinued()))
+					
+					.withCompany(computerDTOInput.getCompanyId() == "" ? null : new Company (
+							Integer.parseInt(computerDTOInput.getCompanyId()),""
+							))
+					.build();	
 		
-		return new Computer.ComputerBuilder(0,computerDTOInput.getName())
-				
-				.withIntroduced(computerDTOInput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOInput.getIntroduced()))
-				
-				.withDiscontinued(computerDTOInput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOInput.getDiscontinued()))
-				
-				.withCompany(computerDTOInput.getCompanyId() == "" ? null : new Company (
-						Integer.parseInt(computerDTOInput.getCompanyId()),""
-						))
-				.build();
 	}
 	
 

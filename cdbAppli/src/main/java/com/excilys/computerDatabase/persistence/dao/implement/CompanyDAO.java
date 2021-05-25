@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
 import com.excilys.computerDatabase.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.connection.CdbConnection;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 
 public class CompanyDAO {
 
@@ -42,14 +43,8 @@ public class CompanyDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 			return null;
-			/*
-			catch (MonException e) {
-				   logger.error("{} in {}", e.toString(), e.getStackTrace());
-				}
-			*/
 		}
 
 	}
@@ -66,8 +61,7 @@ public class CompanyDAO {
 			
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 		}
 		return Optional.empty();
 	}
@@ -80,8 +74,7 @@ public class CompanyDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -96,7 +89,7 @@ public class CompanyDAO {
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 		}
 		return Optional.empty();
 	}
@@ -108,8 +101,7 @@ public class CompanyDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -125,7 +117,7 @@ public class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 		}
 		return res;
 	}

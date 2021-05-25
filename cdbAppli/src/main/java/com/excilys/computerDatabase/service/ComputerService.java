@@ -56,11 +56,7 @@ private ComputerMapper computerMapper;
 
 	public void addComputer(ComputerDTOInput computerDTOInput) {
 		Computer computer = this.computerMapper.toComputer(computerDTOInput);
-		if (computer != null) {
-			DAOFactory.getComputerDAO().addComputer(computer);
-		}else {
-			System.out.println("Logg ComputerService add : Model Computer not valid");
-		}
+		DAOFactory.getComputerDAO().addComputer(computer);
 	}
 
 	public void updateComputer( ComputerDTOInput computerDTOInput, String id , String companyId) {

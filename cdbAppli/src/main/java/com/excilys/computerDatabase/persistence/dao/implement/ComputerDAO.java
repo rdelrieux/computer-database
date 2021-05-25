@@ -13,6 +13,7 @@ import java.util.Optional;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOSQL;
 import com.excilys.computerDatabase.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.connection.CdbConnection;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 import com.excilys.computerDatabase.model.Computer;
 import com.excilys.computerDatabase.model.Page;
 
@@ -69,8 +70,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 			return null;
 
 		}
@@ -88,7 +88,7 @@ public class ComputerDAO {
 				return this.computerMapping.toComputerDTOSQL(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return Optional.empty();
 	}
@@ -101,8 +101,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -116,7 +115,7 @@ public class ComputerDAO {
 				return this.computerMapping.toComputerDTOSQL(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return Optional.empty();
 	}
@@ -129,8 +128,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -144,7 +142,7 @@ public class ComputerDAO {
 			count = result.getInt("count");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return count;
 	}
@@ -158,8 +156,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -173,7 +170,7 @@ public class ComputerDAO {
 				res = this.computerMapping.toListComputerDTOSQL(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return res;
 	}
@@ -188,8 +185,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -203,7 +199,7 @@ public class ComputerDAO {
 				res = this.computerMapping.toListComputerDTOSQL(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return res;
 	}
@@ -217,8 +213,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -232,7 +227,7 @@ public class ComputerDAO {
 			count = result.getInt("count");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return count;
 	}
@@ -250,7 +245,7 @@ public class ComputerDAO {
 				preparedStatement.setDate(2, Date.valueOf(computer.getIntroduced()));
 			}
 
-			if (computer.getIntroduced() == null) {
+			if (computer.getDiscontinued() == null) {
 				preparedStatement.setNull(3, Types.NULL);
 			} else {
 				preparedStatement.setDate(3, Date.valueOf(computer.getDiscontinued()));
@@ -265,8 +260,7 @@ public class ComputerDAO {
 
 			return preparedStatement;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -278,8 +272,7 @@ public class ComputerDAO {
 			preparedStatement.execute();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 
 	}
@@ -315,8 +308,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -342,8 +334,7 @@ public class ComputerDAO {
 			return preparedStatement;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;
 	}
@@ -358,8 +349,7 @@ public class ComputerDAO {
 			preparedStatement.execute();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 
 	}

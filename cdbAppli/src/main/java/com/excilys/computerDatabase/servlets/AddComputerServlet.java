@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerDatabase.App;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 import com.excilys.computerDatabase.model.Company;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
@@ -50,8 +52,13 @@ public class AddComputerServlet extends HttpServlet {
 				.withCompanyId(request.getParameter("companyId"))
 				.build();
 		
-		//System.out.println(computerDTOInput);
-		this.computerService .addComputer(computerDTOInput);
+		try {
+			this.computerService .addComputer(computerDTOInput);
+		}catch (RuntimeException e){
+			LoggerCdb.logError(AddComputerServlet.class.getName(), e);
+
+		}
+		
 		
 		response.sendRedirect("dashboard");
 		   

@@ -3,10 +3,14 @@ package com.excilys.computerDatabase.binding.validater;
 import java.time.LocalDate;
 
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.binding.mapper.CompanyMapper;
+import com.excilys.computerDatabase.exception.NameNotValidException;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 
 public class ComputerValidater {
 
 	private static ComputerValidater instance;
+	
 
 	private ComputerValidater() {
 
@@ -19,13 +23,19 @@ public class ComputerValidater {
 		return instance;
 	}
 
-	public boolean validate(ComputerDTOInput computerDTOInput) {
-		return  this.validateName(computerDTOInput.getName())
+	public void validate(ComputerDTOInput computerDTOInput)  {
+		
+			this.validateName(computerDTOInput.getName());
+			
+		
+		/*
+		return  
 				&& this.validateDate(computerDTOInput.getIntroduced())
 				&& this.validateDate(computerDTOInput.getDiscontinued())
 				&& this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued())
 				&& this.validateCompanyId(computerDTOInput.getCompanyId())
 				;
+*/
 	}
 
 	private boolean validateCompanyId(String id) {
@@ -73,13 +83,10 @@ public class ComputerValidater {
 
 	}
 
-	private boolean validateName(String name) {
-		//System.out.println("Logg Service : Id valid ");
+	private void validateName(String name) throws NameNotValidException{
 		if ( ! ( name != null && !name.isBlank() && !name.equals("null")) ) {
-			System.out.println("Logg erreur : Name not valid" );
+			throw new NameNotValidException("Name not valid : " + name);
 		}
-		return name != null && !name.isBlank() && !name.equals("null");
-
 	}
 
 	private boolean validateId(String id) {

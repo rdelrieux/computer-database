@@ -10,12 +10,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.excilys.computerDatabase.model.Computer;
 import com.excilys.computerDatabase.model.Page;
 import com.excilys.computerDatabase.service.ComputerService;
 
 @WebServlet("/dashboard")
 public class DashBoardServlet extends HttpServlet {
+	 final static Logger LOGGER= LogManager.getLogger(DashBoardServlet.class);
 	private static final long serialVersionUID = 1L;
 	private ComputerService computerService;
     private String search = "";
@@ -28,8 +32,9 @@ public class DashBoardServlet extends HttpServlet {
     
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
 		
+		
+	
 		String paramNombreElementPage = request.getParameter("nombreElementPage");
 		this.addNumPage( request.getParameter("addNumPage"));
 		

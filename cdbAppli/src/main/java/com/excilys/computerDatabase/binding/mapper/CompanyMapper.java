@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.computerDatabase.binding.dto.CompanyDTOSQL;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 import com.excilys.computerDatabase.model.Company;
 
 public class CompanyMapper {
@@ -35,8 +36,7 @@ public class CompanyMapper {
 						));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(CompanyMapper.class.getName(), e);
 			
 		}
 		return Optional.empty();
@@ -64,9 +64,9 @@ public class CompanyMapper {
 				}
 			return res;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			
+			LoggerCdb.logError(CompanyMapper.class.getName(), e);
+			return new ArrayList<CompanyDTOSQL>();
 		}
 	}
 	

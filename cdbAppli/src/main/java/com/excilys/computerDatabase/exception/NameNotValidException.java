@@ -1,10 +1,10 @@
 package com.excilys.computerDatabase.exception;
 
-public class MyException extends RuntimeException{
-
+public class NameNotValidException extends RuntimeException{
+	
 	private static final long serialVersionUID = 1L;
-
-	public  MyException(String message) {
+	
+	public  NameNotValidException(String message) {
         super(message);
     }
 
