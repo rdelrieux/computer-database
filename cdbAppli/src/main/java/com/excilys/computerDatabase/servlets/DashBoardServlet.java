@@ -69,7 +69,7 @@ public class DashBoardServlet extends HttpServlet {
 		
 		if (this.search == "") {
 			page.setNombreElementRequet(computerService.searchNombreElement());
-			listcomputer =   computerService.getListComputer( page);
+			listcomputer =   computerService.getListComputer(page);
 		}else {
 			page.setNombreElementRequet(computerService.searchNombreElement(search));
 			listcomputer =   computerService.searchComputer(search, page);

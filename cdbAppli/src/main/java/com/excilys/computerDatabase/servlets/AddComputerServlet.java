@@ -53,10 +53,9 @@ public class AddComputerServlet extends HttpServlet {
 				.build();
 		
 		try {
-			this.computerService .addComputer(computerDTOInput);
+			this.computerService.addComputer(computerDTOInput);
 		}catch (RuntimeException e){
-			LoggerCdb.logError(AddComputerServlet.class.getName(), e);
-
+			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
 		}
 		
 		

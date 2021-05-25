@@ -4,13 +4,16 @@ import java.time.LocalDate;
 
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.binding.mapper.CompanyMapper;
+import com.excilys.computerDatabase.exception.CompanyIdNotValidException;
+import com.excilys.computerDatabase.exception.DateFormaNotValidException;
+import com.excilys.computerDatabase.exception.DateIntervalNotValidException;
 import com.excilys.computerDatabase.exception.NameNotValidException;
 import com.excilys.computerDatabase.logger.LoggerCdb;
+import com.excilys.computerDatabase.persistence.dao.implement.ComputerDAO;
 
 public class ComputerValidater {
 
 	private static ComputerValidater instance;
-	
 
 	private ComputerValidater() {
 
@@ -23,86 +26,66 @@ public class ComputerValidater {
 		return instance;
 	}
 
-	public void validate(ComputerDTOInput computerDTOInput)  {
+	public void validate(ComputerDTOInput computerDTOInput) {
+
+		this.validateName(computerDTOInput.getName());
+		this.validateDate(computerDTOInput.getIntroduced());
+		this.validateDate(computerDTOInput.getDiscontinued());
+		this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued());
+		this.validateCompanyId(computerDTOInput.getCompanyId()) ;
 		
-			this.validateName(computerDTOInput.getName());
-			
-		
-		/*
-		return  
-				&& this.validateDate(computerDTOInput.getIntroduced())
-				&& this.validateDate(computerDTOInput.getDiscontinued())
-				&& this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued())
-				&& this.validateCompanyId(computerDTOInput.getCompanyId())
-				;
-*/
 	}
 
-	private boolean validateCompanyId(String id) {
-		//System.out.println("Logg Service : introduced >= discontinued valid ");
-
-		if (! (id.equals("") ||  this.validateId(id))) {
-			System.out.println("Logg erreur : company not valid");
+	private void validateCompanyId(String id) {
+		if (!(id.equals("") ) ) {
+			this.validateId(id);
 		}
-		return id.equals("") ||  this.validateId(id);
-
 	}
 
-	private boolean validateDateInterval(String introduced, String discontinued) {
-		//System.out.println("Logg Service : discontinued valid ");
-		if ( introduced.equals("") || discontinued.equals("")) {
-
-			return true;
-		}
-		try {
-			if (! LocalDate.parse(introduced).isBefore(LocalDate.parse(discontinued))){
-				System.out.println("Logg erreur : Date Interval not valid" );
+	private void validateDateInterval(String introduced, String discontinued) {
+		
+	
+			if ( ! (introduced.equals("") || discontinued.equals("")) ) {
+				if (!LocalDate.parse(introduced).isBefore(LocalDate.parse(discontinued))) {
+					throw new DateIntervalNotValidException("Date Interval not valid : " + introduced+ ">"+discontinued);
+				}
 			}
-			return LocalDate.parse(introduced).isBefore(LocalDate.parse(discontinued));
 
-		} catch (Exception e) {
-			System.out.println("Logg erreur : Date not valid" );
-			return false;
-		}
 
 	}
 
-	private boolean validateDate(String date) {
-		//System.out.println("Logg Service : name / introduced valid ");
-		if (date.equals("")) {
-			
-			return true;
-		}
+	private void validateDate(String date) {
 		try {
-			LocalDate.parse(date);
-			return true;
+			if (!date.equals("")) {
+				LocalDate.parse(date);
+			}
+
 		} catch (Exception e) {
-			System.out.println("Logg erreur : Date not valid" );
-			return false;
+			throw new DateFormaNotValidException("Date Forma not valid : " + date);
 		}
 
 	}
 
-	private void validateName(String name) throws NameNotValidException{
-		if ( ! ( name != null && !name.isBlank() && !name.equals("null")) ) {
+	private void validateName(String name) throws NameNotValidException {
+		if (!(name != null && !name.isBlank() && !name.equals("null"))) {
 			throw new NameNotValidException("Name not valid : " + name);
 		}
 	}
 
-	private boolean validateId(String id) {
-		
+	private void validateId(String id) {
+
 		try {
 			int num = Integer.parseInt(id);
-			
-			if (num <=0) {
-				System.out.println("Logg erreur : Id <= 0" );
+
+			if (num <= 0) {
+				throw new CompanyIdNotValidException("Company Id not valid : " + id);
 			}
 			
-			return num >0;
 
 		} catch (Exception e) {
-			System.out.println("Logg erreur : Id not valid" );
-			return false;
+			LoggerCdb.logWarn(ComputerValidater.class.getName(), e);
+			throw new CompanyIdNotValidException("Company Id not valid : " + id);
+			
 		}
 
 	}
