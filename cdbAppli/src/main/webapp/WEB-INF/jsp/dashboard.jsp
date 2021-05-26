@@ -16,7 +16,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard?search=#"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -106,42 +106,42 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="?paginationFisrtLast=fisrt" aria-label="Previous">
+                    <a href="?Page=1" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               
              		 <li>
              		 <c:if test="${ page.numPage -2 > 0 }" var="variable">
-             		 <a href="?addNumPage=-2">${page.numPage -2} </a>
+             		 <a href="?Page=${page.numPage -2}">${page.numPage -2} </a>
              		  </c:if>
              		 </li>
              	
 				
               		<li>
               		 <c:if test="${ page.numPage -1 > 0 }" var="variable">
-              		<a href="?addNumPage=-1">${page.numPage -1} </a>
+              		<a href="?Page=${page.numPage -1}">${page.numPage -1} </a>
               		 </c:if>
               		 </li>
              	
              	
-             	<li><a href="?addNumPage=0"> ..  </a></li>
+             	<li><a href="?Page=${page.numPage}"> ..  </a></li>
                
               
               	<li> <c:if test="${ page.numPage +1 <= page.getNombrePageMax() }" var="variable">
-              	<a href="?addNumPage=1">${page.numPage +1} </a>
+              	<a href="?Page=${page.numPage +1}">${page.numPage +1} </a>
               	 </c:if>
               	 </li>
               	
              
               	<li>
               	 <c:if test="${ page.numPage +2 <= page.getNombrePageMax() }" var="variable">
-              	 <a href="?addNumPage=2">${page.numPage +2} </a>
+              	 <a href="?Page=${page.numPage +2}">${page.numPage +2} </a>
               	  </c:if>
               	  </li>
             
               <li>
-                <a href="?paginationFisrtLast=last" aria-label="Next">
+                <a href="?Page=${ page.getNombrePageMax() }" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

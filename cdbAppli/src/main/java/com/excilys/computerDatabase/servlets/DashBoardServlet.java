@@ -9,9 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.excilys.computerDatabase.model.Computer;
 import com.excilys.computerDatabase.model.Page;
@@ -19,11 +18,17 @@ import com.excilys.computerDatabase.service.ComputerService;
 
 @WebServlet("/dashboard")
 public class DashBoardServlet extends HttpServlet {
-	 final static Logger LOGGER= LogManager.getLogger(DashBoardServlet.class);
 	private static final long serialVersionUID = 1L;
+	
+	private static final String ATT_SEARCH = "search";
+	private static final String ATT_PAGE = "page";
+	
+	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
+	
+	
 	private ComputerService computerService;
-    private String search = "";
-    private Page page = new Page();
+
+	private HttpSession session;
     
 
     public DashBoardServlet() {
@@ -35,39 +40,76 @@ public class DashBoardServlet extends HttpServlet {
 		
 		
 	
+		this.session = request.getSession();
+		
+		if (session.getAttribute(ATT_PAGE) == null) {
+			this.initialisationSession(session);
+		}
+		
 		String paramNombreElementPage = request.getParameter("nombreElementPage");
-		this.addNumPage( request.getParameter("addNumPage"));
+		String numPage = request.getParameter("Page");
 		
-		this.page.setNombreElementPage( paramNombreElementPage == null ?   this.page.getNombreElementPage() : Integer.valueOf(paramNombreElementPage)   ) ;
-		this.goToFisrtLastPage( request.getParameter("paginationFisrtLast"));
-		List<Computer> listcomputer = this.getListComputer(request.getParameter("search"));
+		this.updatePage(session , paramNombreElementPage ,  numPage );
+		Page page = (Page)session.getAttribute(ATT_PAGE);
 		
+		String paramSearch = request.getParameter("search");
+		this.updateSearch(session , paramSearch);
 		
-		//request.setAttribute( "nombrePageMax", page.getNombrePageMax() );
-		request.setAttribute( "listcomputer", listcomputer );
-		request.setAttribute( "page", page);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+		String search =  ""+session.getAttribute(ATT_SEARCH);
+		
+		List<Computer> listcomputer = this.getListComputer(page , search);
+		
+		request.setAttribute("listcomputer", listcomputer);
+		
+        this.getServletContext().getRequestDispatcher(VUE_DASHBOARD).forward(request, response);
 
 	}
 	
+
+
+
 	
-	private void addNumPage(String parameter) {
-		if (parameter != null) {
-			this.page.addNumPage(Integer.valueOf(parameter));
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       
+    }
+	
+	private void initialisationSession(HttpSession session) {
+		session.setAttribute( ATT_PAGE , new Page());
+		session.setAttribute(ATT_SEARCH, "");
+	}
+	
+
+	private void updatePage(HttpSession session, String paramNombreElementPage , String numPage) {
+		Page page = (Page)session.getAttribute(ATT_PAGE);
+		if (paramNombreElementPage != null) {
+		
+			page.setNumPage( 1+(page.getNumPage()-1)*page.getNombreElementPage()/Integer.valueOf(paramNombreElementPage));
+			page.setNombreElementPage(Integer.valueOf(paramNombreElementPage) );
 		}
-		
+		if  (numPage != null &&  Integer.valueOf(numPage) <= page.getNombrePageMax()) {
+			page.setNumPage(Integer.valueOf(numPage));
+		}
+		session.setAttribute(ATT_PAGE, page);
+
 	}
 
-
-	private List<Computer> getListComputer(String paramSearch) {
-		List<Computer> listcomputer = new ArrayList<Computer>(); 
-		if (paramSearch != null) {
+	private void updateSearch(HttpSession session, String paramSearch) {
+		if  (paramSearch != null  ) {
+			Page page = (Page)session.getAttribute(ATT_PAGE);
+			session.setAttribute(ATT_SEARCH, paramSearch);
 			page.setNumPage(1);
-			search = paramSearch;
+			session.setAttribute(ATT_PAGE, page);
 		}
 		
+	}
+
+	
+
+	private List<Computer> getListComputer( Page page , String search) {
+		List<Computer> listcomputer = new ArrayList<Computer>(); 
 		
-		if (this.search == "") {
+		if (search == "") {
 			page.setNombreElementRequet(computerService.searchNombreElement());
 			listcomputer =   computerService.getListComputer(page);
 		}else {
@@ -79,22 +121,6 @@ public class DashBoardServlet extends HttpServlet {
 	
 	}
 
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       
-    }
-
-	
-	private void goToFisrtLastPage(String paginationFisrtLast) {
-		if (paginationFisrtLast != null) {
-			if (paginationFisrtLast.equals("fisrt")) {
-				this.page.setNumPage(1);	
-			}else if (paginationFisrtLast.equals("last")) {
-				this.page.setNumPage(this.page.getNombrePageMax());
-				
-			}
-		}
-	}
 
 
 }

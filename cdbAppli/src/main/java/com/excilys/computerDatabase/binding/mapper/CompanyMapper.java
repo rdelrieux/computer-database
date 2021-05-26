@@ -30,11 +30,11 @@ public class CompanyMapper {
 
 	public Optional<CompanyDTOSQL> toCompanyDTOSQL(ResultSet result) {
 		try {
-			if (result.next()) {
+			
 				return Optional.of(new CompanyDTOSQL(
 						""+result.getInt(COLONNE_ID) , result.getString(COLONNE_NAME)
 						));
-			}
+			
 		} catch (SQLException e) {
 			LoggerCdb.logError(CompanyMapper.class.getName(), e);
 			

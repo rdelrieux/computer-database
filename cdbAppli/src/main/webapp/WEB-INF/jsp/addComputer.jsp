@@ -49,6 +49,13 @@
                          		
                             </div>                  
                         </fieldset>
+                        
+                        <div class="alert alert-danger page-alert" id="alert-message" style="display: none;">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+							<strong>Action add Canceled ! </strong> <label id = erroradd ></label>
+						</div>
+                        
+                        
                         <div class="actions pull-right">
                             <input  type="submit" value="Add" class="btn btn-primary">
                             or
@@ -59,5 +66,8 @@
             </div>
         </div>
     </section>
+    <script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/addComputer.js"></script>
 </body>
 </html>

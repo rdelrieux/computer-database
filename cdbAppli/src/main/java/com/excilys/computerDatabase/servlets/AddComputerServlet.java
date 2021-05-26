@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.computerDatabase.App;
 import com.excilys.computerDatabase.binding.dto.ComputerDTOInput;
@@ -27,13 +28,22 @@ public class AddComputerServlet extends HttpServlet {
 
     private CompanyService companyService = CompanyService.getInstance();
 
+    private static final String ATT_COMPANY_LIST = "listCompany";
+
+	
+	private static final String VUE_DASHBOARD = "dashboard";
+
+	private static final String ATT_ERRORS = "error";
    
     
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
+		
+		HttpSession session = request.getSession();
+		
+		
 		List<Company> listCompany = companyService.getListCompany();
-		request.setAttribute( "listCompany", listCompany );
+		session.setAttribute( ATT_COMPANY_LIST , listCompany );
 
 		
        this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/addComputer.jsp").forward(request, response);
@@ -41,9 +51,10 @@ public class AddComputerServlet extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated 
+		HttpSession session = request.getSession();
+		
 		List<Company> listCompany = companyService.getListCompany();
-		request.setAttribute( "listCompany", listCompany );
+		session.setAttribute( ATT_COMPANY_LIST , listCompany );
 		
 		
 		ComputerDTOInput computerDTOInput = new ComputerDTOInput.ComputerDTOInputBuilder(request.getParameter("computerName"))
@@ -55,11 +66,12 @@ public class AddComputerServlet extends HttpServlet {
 		try {
 			this.computerService.addComputer(computerDTOInput);
 		}catch (RuntimeException e){
+			request.setAttribute(ATT_ERRORS, "ssss");
 			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
 		}
 		
 		
-		response.sendRedirect("dashboard");
+		response.sendRedirect(VUE_DASHBOARD);
 		   
 	}
 
