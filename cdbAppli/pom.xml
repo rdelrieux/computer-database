@@ -87,19 +87,26 @@
 			<version>2.13.3</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.199</version>
-		</dependency>
-
-
 
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito-all.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.198</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -115,7 +122,7 @@
 
 		<testResources>
 			<testResource>
-				<directory>test/main/resources</directory>
+				<directory>src/test/resources</directory>
 			</testResource>
 		</testResources>
 
