@@ -22,15 +22,7 @@ public class App {
 
 
 	public static void main(String[] args) {
-		
-		ComputerDTOInput ci = new ComputerDTOInput.ComputerDTOInputBuilder
-				("null").build();
-		try {
-			ComputerService.getInstance().addComputer(ci);
-		}catch (RuntimeException e){
-			LoggerCdb.logError(App.class.getName(), e);
-
-		}
+	
 		
 		
 		

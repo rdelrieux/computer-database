@@ -1,11 +1,16 @@
 package com.excilys.computerDatabase.test;
 
+import com.excilys.computerDatabase.connection.CdbConnection;
+import com.excilys.computerDatabase.persistence.dao.implement.CompanyDAO;
 import com.excilys.computerDatabase.vue.StartApplication;
 
 public class Test {
 
 	public static void main(String[] args) {
 
+		CdbConnection.getInstance().getConnection();
+		
+		CompanyDAO.getInstance().findAll();
 		
 	
 		/*
@@ -16,10 +21,10 @@ public class Test {
 		//Vue v = new Vue();
 		//v.start();
 	
-		testStart();
+		//testStart();
 		
 		
-		//CdbConnection.getInstance();
+		
 
 		// testConnection();
 		//testRequestCompany();

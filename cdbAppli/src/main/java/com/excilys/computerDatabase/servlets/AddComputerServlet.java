@@ -32,8 +32,9 @@ public class AddComputerServlet extends HttpServlet {
 
 	
 	private static final String VUE_DASHBOARD = "dashboard";
+	private static final String VUE_ADD_COMPUTER = "/WEB-INF/jsp/addComputer.jsp";
 
-	private static final String ATT_ERRORS = "error";
+	
    
     
     
@@ -46,7 +47,7 @@ public class AddComputerServlet extends HttpServlet {
 		session.setAttribute( ATT_COMPANY_LIST , listCompany );
 
 		
-       this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/addComputer.jsp").forward(request, response);
+       this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 
 	}
 	
@@ -65,13 +66,14 @@ public class AddComputerServlet extends HttpServlet {
 		
 		try {
 			this.computerService.addComputer(computerDTOInput);
+			response.sendRedirect(VUE_DASHBOARD);
 		}catch (RuntimeException e){
-			request.setAttribute(ATT_ERRORS, "ssss");
 			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
+			 this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 		}
 		
 		
-		response.sendRedirect(VUE_DASHBOARD);
+		
 		   
 	}
 
