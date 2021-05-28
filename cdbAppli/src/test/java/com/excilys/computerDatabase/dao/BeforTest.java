@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 public class BeforTest implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 
 	private static boolean started = false;
-	//private static final String PROP_FILE_NAME = "test-db.sql";
 	private static final String PROP_FILE_NAME = "/scriptTest.sql";
 
 	@Override
