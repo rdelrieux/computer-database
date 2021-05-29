@@ -25,21 +25,25 @@ public class LoggerCdb {
 	public static void logInfo(String name, Exception exception) {
 		Logger logger = LogManager.getLogger(name);
 		logger.info(exception.getClass() + " : " + exception.getMessage());
+		exception.printStackTrace();
 	}
 	
 	public static void logWarn(String name, Exception exception) {
 		Logger logger = LogManager.getLogger(name);
 		logger.warn(exception.getClass() + " : " + exception.getMessage());
+		exception.printStackTrace();
 	}
 	
 	public static void logError(String name, Exception exception) {
 		Logger logger = LogManager.getLogger(name);
 		logger.error(exception.getClass() + " : " + exception.getMessage());
+		exception.printStackTrace();
 	}
 	
 	public static void logFatal(String name, Exception exception) {
 		Logger logger = LogManager.getLogger(name);
 		logger.fatal(exception.getClass() + " : " + exception.getMessage());
+		exception.printStackTrace();
 	}
 	
 }
