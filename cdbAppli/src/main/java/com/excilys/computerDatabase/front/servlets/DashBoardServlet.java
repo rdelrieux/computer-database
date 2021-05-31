@@ -3,6 +3,7 @@ package com.excilys.computerDatabase.front.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 
 
@@ -28,7 +30,7 @@ public class DashBoardServlet extends HttpServlet {
 	
 	
 	private ComputerService computerService;
-	 private ComputerMapper computerMapper;
+	private ComputerMapper computerMapper;
 	private HttpSession session;
     
 
@@ -59,7 +61,7 @@ public class DashBoardServlet extends HttpServlet {
 		
 		String search =  ""+session.getAttribute(ATT_SEARCH);
 		
-		List<Computer> listcomputer = this.getListComputer(page , search);
+		List<ComputerDTOOutput> listcomputer = this.getListComputer(page , search);
 		
 		request.setAttribute("listcomputer", listcomputer);
 		
@@ -108,7 +110,7 @@ public class DashBoardServlet extends HttpServlet {
 
 	
 
-	private List<Computer> getListComputer( Page page , String search) {
+	private List<ComputerDTOOutput> getListComputer( Page page , String search) {
 		List<Computer> listcomputer = new ArrayList<Computer>(); 
 		
 		if (search == "") {
@@ -119,7 +121,10 @@ public class DashBoardServlet extends HttpServlet {
 			listcomputer =   computerService.searchComputer(search, page);
 			
 		}
-		return listcomputer;
+		
+		return listcomputer.stream()
+				.map(c -> this.computerMapper.mapToComputerDTOOutput(c) )
+				.collect(Collectors.toList());
 	
 	}
 

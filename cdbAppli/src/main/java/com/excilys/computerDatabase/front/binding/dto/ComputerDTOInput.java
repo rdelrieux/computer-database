@@ -8,13 +8,13 @@ public class ComputerDTOInput {
 
 	private String discontinued ;
 
-	private String companyId ;
+	private CompanyDTO companyDTO ;
 
 	private ComputerDTOInput(ComputerDTOInputBuilder computerDTOInputBuilder) {
 		this.name = computerDTOInputBuilder.name;
 		this.introduced = computerDTOInputBuilder.introduced;
 		this.discontinued = computerDTOInputBuilder.discontinued;
-		this.companyId = computerDTOInputBuilder.companyId;
+		this.companyDTO = computerDTOInputBuilder.companyDTO;
 	}
 
 	public String getName() {
@@ -29,29 +29,34 @@ public class ComputerDTOInput {
 		return discontinued;
 	}
 
-	public String getCompanyId() {
-		return companyId;
+	public CompanyDTO getCompanyDTO() {
+		return companyDTO;
 	}
 
 	@Override
 	public String toString() {
 		return "ComputerDTOInput [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", companyId=" + companyId + "]";
+				+ ", companyId=" + companyDTO + "]";
 	}
 
 	public static class ComputerDTOInputBuilder {
 
+		
+		
 		private String name ;
 
 		private String introduced ;
 		
 		private String discontinued ;
 
-		private String companyId ;
+		private CompanyDTO companyDTO ;
 
 
 		public ComputerDTOInputBuilder(String name) {
 			this.name = name;
+			this.introduced = "";
+			this.discontinued = "";
+			this.companyDTO = new CompanyDTO("","");
 		}
 	
 
@@ -65,8 +70,8 @@ public class ComputerDTOInput {
 			return this;
 		}
 
-		public ComputerDTOInputBuilder withCompanyId(String companyName) {
-			this.companyId = companyName;
+		public ComputerDTOInputBuilder withCompanyDTO(CompanyDTO companyDTO) {
+			this.companyDTO = companyDTO;
 			return this;
 		}
 		

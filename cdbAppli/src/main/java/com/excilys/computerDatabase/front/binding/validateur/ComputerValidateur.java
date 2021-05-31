@@ -30,13 +30,12 @@ public class ComputerValidateur {
 		this.validateDate(computerDTOInput.getIntroduced());
 		this.validateDate(computerDTOInput.getDiscontinued());
 		this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued());
-		this.validateCompanyId(computerDTOInput.getCompanyId()) ;
 		
 	}
 
-	private void validateCompanyId(String id) {
-		if (!("".equals(id) ) ) {
-			this.validateId(id);
+	private void validateName(String name) {
+		if (!(name != null && !name.isBlank() && !name.equals("null"))) {
+			throw new NameNotValidException("Name not valid : " + name);
 		}
 	}
 
@@ -64,29 +63,7 @@ public class ComputerValidateur {
 
 	}
 
-	private void validateName(String name) {
-		if (!(name != null && !name.isBlank() && !name.equals("null"))) {
-			throw new NameNotValidException("Name not valid : " + name);
-		}
-	}
-
-	private void validateId(String id) {
-
-		try {
-			int num = Integer.parseInt(id);
-
-			if (num <= 0) {
-				throw new CompanyIdNotValidException("Company Id not valid : " + id);
-			}
-			
-
-		} catch (Exception e) {
-			LoggerCdb.logWarn(ComputerValidateur.class.getName(), e);
-			throw new CompanyIdNotValidException("Company Id not valid : " + id);
-			
-		}
-
-	}
+	
 
 }
 	

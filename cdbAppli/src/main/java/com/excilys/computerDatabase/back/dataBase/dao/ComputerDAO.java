@@ -84,11 +84,12 @@ public class ComputerDAO {
 
 	public Computer find(int id) {
 
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getConnection(); ) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 			ResultSet result = preparedStatement.executeQuery();
 
 			if (result.isBeforeFirst()) {
+				result.next();
 				Optional <ComputerDTOOutput> cout = this.computerMapping.mapToComputerDTOOutput(result);
 				return this.computerMapping.mapToComputer(cout.orElseThrow());
 			}
@@ -176,6 +177,7 @@ public class ComputerDAO {
 
 	public List<Computer> findAll(Page page) {
 		List<Computer> res = new ArrayList<>();
+	
 		try (Connection connection = cdbConnection.getConnection();
 				PreparedStatement preparedStatement = this.creatStatementFindAll(connection, page);
 				ResultSet result = preparedStatement.executeQuery();) {

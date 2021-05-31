@@ -4,19 +4,22 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
+import com.excilys.computerDatabase.back.model.Computer.ComputerBuilder;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput.ComputerDTOOutputBuilder;
 import com.excilys.computerDatabase.front.binding.validateur.ComputerValidateur;
 
 public class ComputerMapper {
 	
 	private static ComputerMapper instance;
+	private CompanyMapper companyMapper;
 	private ComputerValidateur computerValidateur;
 	
 	private ComputerMapper() {
 		this.computerValidateur = ComputerValidateur.getInstance();
+		this.companyMapper = CompanyMapper.getInstance();
 		}
 
 	public static ComputerMapper getInstance() {
@@ -30,30 +33,32 @@ public class ComputerMapper {
 		
 		this.computerValidateur.validate(computerDTOInput);
 		
-		return new Computer.ComputerBuilder(0,computerDTOInput.getName())
+		ComputerBuilder builder =  new Computer.ComputerBuilder(0,computerDTOInput.getName());
 				
-				.withIntroduced(computerDTOInput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOInput.getIntroduced()))
+				if (! "".equals(computerDTOInput.getIntroduced())) {
+					builder.withIntroduced( LocalDate.parse(computerDTOInput.getIntroduced()) );
+				}
+				if (! "".equals(computerDTOInput.getDiscontinued())) {
+					builder.withDiscontinued( LocalDate.parse(computerDTOInput.getDiscontinued()) );
+				}
+				builder.withCompany( this.companyMapper.mapToCompany(computerDTOInput.getCompanyDTO()) );
 				
-				.withDiscontinued(computerDTOInput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOInput.getDiscontinued()))
-				
-				.withCompany(computerDTOInput.getCompanyId() == "" ? null : new Company (
-						Integer.parseInt(computerDTOInput.getCompanyId()),""
-						))
-				
-				.build();	
+				return	builder.build();	
 	}
 	
 	public ComputerDTOOutput  mapToComputerDTOOutput(Computer computer) {
 		
-		return new ComputerDTOOutput.ComputerDTOOutputBuilder(computer.getName())
+		ComputerDTOOutputBuilder builder =  new ComputerDTOOutput.ComputerDTOOutputBuilder(""+computer.getId(),computer.getName()) ;
 				
-				.withIntroduced(computer.getIntroduced() == null ? "" : ""+computer.getIntroduced())
-				
-				.withDiscontinued(computer.getDiscontinued() == null ? "" : ""+computer.getDiscontinued())
-				
-				.withCompanyName(computer.getCompany() == null ? "" : computer.getCompany().getName())
-				
-				.build();	
+			if (computer.getIntroduced() != null) {
+				builder.withIntroduced( ""+computer.getIntroduced() );
+			}
+			if (computer.getDiscontinued() != null) {
+				builder.withDiscontinued( ""+computer.getDiscontinued() );
+			}
+			builder.withCompanyName( this.companyMapper.mapToCompanyDTO( computer.getCompany() ).getName() );
+			
+			return builder.build();	
 	}
 	
 	public List<ComputerDTOOutput>  mapToListComputerDTOOutput(List<Computer> listComputer) {

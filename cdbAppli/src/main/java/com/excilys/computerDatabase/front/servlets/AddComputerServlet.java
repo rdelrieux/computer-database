@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.front.servlets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +14,9 @@ import javax.servlet.http.HttpSession;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
+import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.front.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
@@ -28,56 +31,77 @@ public class AddComputerServlet extends HttpServlet {
 
     private CompanyService companyService = CompanyService.getInstance();
     private ComputerMapper computerMapper = ComputerMapper.getInstance();
+    private CompanyMapper companyMapper = CompanyMapper.getInstance();
+
     
 
     private static final String ATT_COMPANY_LIST = "listCompany";
-
-	
 	private static final String VUE_DASHBOARD = "dashboard";
 	private static final String VUE_ADD_COMPUTER = "/WEB-INF/jsp/addComputer.jsp";
 
-	
+	private HttpSession session;
    
     
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		HttpSession session = request.getSession();
+		session = request.getSession();
 		
+		this.showListCompany();
 		
-		List<Company> listCompany = companyService.getListCompany();
-		session.setAttribute( ATT_COMPANY_LIST , listCompany );
 
 		
        this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 
 	}
 	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
+		session = request.getSession();
 		
-		List<Company> listCompany = companyService.getListCompany();
-		session.setAttribute( ATT_COMPANY_LIST , listCompany );
+		this.showListCompany();
 		
+	
+		String company = request.getParameter("company");
+		String companyId = "";
+		String companyName = "";
+		if (company.contains(":")) {
+			 companyId = company.split(":")[0];
+			 companyName = company.split(":")[0];
+		}
+		
+
+	
 		
 		ComputerDTOInput computerDTOInput = new ComputerDTOInput.ComputerDTOInputBuilder(request.getParameter("computerName"))
 				.withIntroduced(request.getParameter("introduced"))
 				.withDiscontinued(request.getParameter("discontinued"))
-				.withCompanyId(request.getParameter("companyId"))
+				.withCompanyDTO( new CompanyDTO(companyId , companyName ))
 				.build();
+		
+		
 		
 		try {
 			this.computerService.addComputer( this.computerMapper.mapToComputer(computerDTOInput));
+			
 			response.sendRedirect(VUE_DASHBOARD);
+		
 		}catch (RuntimeException e){
 			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
 			 this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 		}
 		
-		
-		
-		   
 	}
+	
+	private void showListCompany() {
+		List<Company> listCompany = companyService.getListCompany();
+		List<CompanyDTO> listCompanyDTO =  listCompany.stream()
+		.map(c -> this.companyMapper.mapToCompanyDTO(c) )
+		.collect(Collectors.toList());
+		session.setAttribute( ATT_COMPANY_LIST ,  listCompanyDTO );
+		
+	}
+
 
 
 }

@@ -8,41 +8,18 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import com.excilys.computerDatabase.logger.LoggerCdb;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 
 public class CdbConnection {
 
-	private static final String PROP_FILE_NAME = "database.properties";
-	private final static String PROPERTY_URL = "database.url";
-	private final static String PROPERTY_DRIVER = "database.driver";
-	private static final String PROPERTY_USER = "database.user";
-	private static final String PROPERTY_PASSWORD = "database.password";
+	private static final String PROP_FILE_NAME = "datasource.properties";
+	
+	private static HikariConfig config ;
+	private static HikariDataSource ds;
 	
 	private static CdbConnection instance;
-
-	private String user  ;
-	private String password ;
-	private String url ;
-	private String driver;
-	
-	private CdbConnection() {
-		Properties prop = new Properties();
-		InputStream stream = this.getClass().getClassLoader().getResourceAsStream(PROP_FILE_NAME);
-		try {
-			prop.load(stream);
-			this.driver = prop.getProperty(PROPERTY_DRIVER);
-			this.url = prop.getProperty(PROPERTY_URL);
-			this.user = prop.getProperty(PROPERTY_USER);
-			this.password = prop.getProperty(PROPERTY_PASSWORD);
-			
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 	
 	public static CdbConnection getInstance() {
 		if (instance == null) {
@@ -50,22 +27,25 @@ public class CdbConnection {
 		}
 		return instance;
 	}
-
-	public Connection getConnection(){	
+	
+	private CdbConnection() {
+		Properties prop = new Properties();
+		InputStream stream = getClass().getClassLoader().getResourceAsStream(PROP_FILE_NAME);
+		try {
+			prop.load(stream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		config = new HikariConfig(prop);
+		ds = new HikariDataSource(config);
 		
-			try {
-				Class.forName(this.driver);
-				//LoggerCdb.logInfo(CdbConnection.class.getName(), "Driver Loaded");
-				return DriverManager.getConnection(this.url, this.user, this.password);
-			} catch (ClassNotFoundException e) {
-				LoggerCdb.logFatal(CdbConnection.class.getName(), e);
-			} catch (SQLException e) {
-				LoggerCdb.logFatal(CdbConnection.class.getName(), e);
-			}
-			
-				
-		return null; 	
+	}
+	
+	
 
+	public Connection getConnection() throws SQLException{	
+			return ds.getConnection();
 	}
 
 	
