@@ -5,6 +5,7 @@ import java.util.List;
 import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
+import com.excilys.computerDatabase.enumeration.OrderBy;
 
 
 public class ComputerService {
@@ -25,8 +26,8 @@ private ComputerDAO computerDAO;
 	}
 	
 	
-	public List<Computer> getListComputer(Page page) {
-		return this.computerDAO.findAll(page);
+	public List<Computer> getListComputer(Page page, OrderBy orderBy) {
+		return this.computerDAO.findAll(page,orderBy);
 	}
 	
 	public int searchNombreElement(){
@@ -34,8 +35,8 @@ private ComputerDAO computerDAO;
 	}
 	
 	
-	public List<Computer> searchComputer(String search, Page page) {
-		return this.computerDAO.search(search, page);		
+	public List<Computer> searchComputer(String search, Page page,OrderBy orderBy) {
+		return this.computerDAO.search(search, page, orderBy);		
 	}
 	
 	public int searchNombreElement(String search){

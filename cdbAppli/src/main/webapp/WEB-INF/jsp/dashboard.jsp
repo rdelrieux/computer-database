@@ -66,15 +66,21 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
 						
-						<th>Introduced date</th>
+					 <th>Computer name <a href="?orderBy=computer.name" >
+						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
+						
+						<th>Introduced date<a href="?orderBy=introduced" >
+						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th>Discontinued date<a href="?orderBy=discontinued" >
+						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th>Company<a href="?orderBy=company.name" >
+						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
 
 					</tr>
+					
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">

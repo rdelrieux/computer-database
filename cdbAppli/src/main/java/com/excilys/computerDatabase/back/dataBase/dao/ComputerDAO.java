@@ -15,6 +15,7 @@ import com.excilys.computerDatabase.back.dataBase.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.back.dataBase.connection.CdbConnection;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
+import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
 
@@ -22,19 +23,28 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 public class ComputerDAO {
 
 	private static final String REQUET_AFFICHER_TOUTE_COMPUTERS = "SELECT *\n" + "FROM computer \n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n" + "LIMIT ? , ?";
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			+ "ORDER BY columnname \n"
+			+ "LIMIT ? , ?\n"
+			;
 	private static final String REQUET_NOMBRE_ELEMENT = "SELECT COUNT(computer.id) AS count\n" + "FROM computer \n"
 			+ "LEFT JOIN company ON company.id = computer.company_id\n";
 
 	private static final String REQUET_NOMBRE_ELEMENT_SEARCH = "SELECT COUNT(computer.id) AS count\n"
 			+ "FROM computer \n" + "LEFT JOIN company ON company.id = computer.company_id\n"
 			+ "WHERE computer.name LIKE ? "
-			+ "OR company.name LIKE ? ";
+			+ "OR company.name LIKE ? "
+			+ "OR introduced LIKE ? "
+			+ "OR discontinued LIKE ? "
+			;
 	
-	private static final String REQUET_AFFICHER_SOME_COMPUTERS_SEARCH = "SELECT *\n" + "FROM computer \n"
+	private static final String REQUET_AFFICHER_COMPUTERS_SEARCH = "SELECT *\n" + "FROM computer \n"
 			+ "LEFT JOIN company ON company.id = computer.company_id\n" 
 			+ "WHERE computer.name LIKE ? \n"
 			+ "OR company.name LIKE ? "
+			+ "OR introduced LIKE ? "
+			+ "OR discontinued LIKE ? "
+			+"ORDER BY columnname \n"
 			+ "LIMIT ? , ?";
 
 	private static final String REQUET_TROUVER_COMPUTER_FROM_ID = "SELECT *\n" + "FROM computer\n"
@@ -161,12 +171,21 @@ public class ComputerDAO {
 		return count;
 	}
 
-	public PreparedStatement creatStatementFindAll(Connection connection, Page page) {
+	public PreparedStatement creatStatementFindAll(Connection connection, Page page, OrderBy orderBy) {
 		try {
-
-			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_AFFICHER_TOUTE_COMPUTERS);
+			String statement = REQUET_AFFICHER_TOUTE_COMPUTERS;
+			if (orderBy.isUp()) {
+				 statement = statement.replace("columnname", orderBy.getValeur());
+			}else {
+				statement = statement.replace("columnname", orderBy.getValeur()+" DESC");
+			}
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(statement);
+			
+			
 			preparedStatement.setInt(1, (page.getNumPage() - 1) * page.getNombreElementPage());
 			preparedStatement.setInt(2, page.getNombreElementPage());
+			
 			return preparedStatement;
 
 		} catch (SQLException e) {
@@ -175,11 +194,11 @@ public class ComputerDAO {
 		return null;
 	}
 
-	public List<Computer> findAll(Page page) {
+	public List<Computer> findAll(Page page, OrderBy orderBy) {
 		List<Computer> res = new ArrayList<>();
 	
 		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementFindAll(connection, page);
+				PreparedStatement preparedStatement = this.creatStatementFindAll(connection, page,orderBy);
 				ResultSet result = preparedStatement.executeQuery();) {
 			if (result.isBeforeFirst()) {
 				res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
@@ -191,14 +210,24 @@ public class ComputerDAO {
 		return res;
 	}
 
-	public PreparedStatement creatStatementSearch(Connection connection, String search, Page page) {
+	public PreparedStatement creatStatementSearch(Connection connection, String search, Page page, OrderBy orderBy) {
 		try {
 
-			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_AFFICHER_SOME_COMPUTERS_SEARCH);
+			String statement = REQUET_AFFICHER_COMPUTERS_SEARCH;
+			if (orderBy.isUp()) {
+				 statement = statement.replace("columnname", orderBy.getValeur());
+			}else {
+				statement = statement.replace("columnname", orderBy.getValeur()+" DESC");
+			}
+			
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(statement);
 			preparedStatement.setString(1, "%" + search + "%");
 			preparedStatement.setString(2, "%" + search + "%");
-			preparedStatement.setInt(3, (page.getNumPage() - 1) * page.getNombreElementPage());
-			preparedStatement.setInt(4, page.getNombreElementPage());
+			preparedStatement.setString(3, "%" + search + "%");
+			preparedStatement.setString(4, "%" + search + "%");
+			preparedStatement.setInt(5, (page.getNumPage() - 1) * page.getNombreElementPage());
+			preparedStatement.setInt(6, page.getNombreElementPage());
 			return preparedStatement;
 
 		} catch (SQLException e) {
@@ -207,10 +236,10 @@ public class ComputerDAO {
 		return null;
 	}
 
-	public List<Computer> search(String search, Page page) {
+	public List<Computer> search(String search, Page page,OrderBy orderBy) {
 		List<Computer> res = new ArrayList<Computer>();
 		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementSearch(connection, search, page);
+				PreparedStatement preparedStatement = this.creatStatementSearch(connection, search, page,orderBy );
 				ResultSet result = preparedStatement.executeQuery();) {
 			if (result.isBeforeFirst()) {
 				res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
@@ -227,7 +256,8 @@ public class ComputerDAO {
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_NOMBRE_ELEMENT_SEARCH);
 			preparedStatement.setString(1, "%" + search + "%");
 			preparedStatement.setString(2, "%" + search + "%");
-
+			preparedStatement.setString(3, "%" + search + "%");
+			preparedStatement.setString(4, "%" + search + "%");			
 			return preparedStatement;
 
 		} catch (SQLException e) {

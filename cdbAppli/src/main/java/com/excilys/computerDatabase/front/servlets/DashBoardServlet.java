@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
+import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.logger.LoggerCdb;
@@ -26,7 +27,9 @@ public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private static final String ATT_SEARCH = "search";
+	private static final String ATT_ORDER_BY = "orderBy";
 	private static final String ATT_PAGE = "page";
+	
 	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
 	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
 	
@@ -55,15 +58,23 @@ public class DashBoardServlet extends HttpServlet {
 		String paramNombreElementPage = request.getParameter("nombreElementPage");
 		String numPage = request.getParameter("Page");
 		
-		this.updatePage(session , paramNombreElementPage ,  numPage );
+		this.updatePage( paramNombreElementPage ,  numPage );
 		Page page = (Page)session.getAttribute(ATT_PAGE);
 		
 		String paramSearch = request.getParameter("search");
-		this.updateSearch(session , paramSearch);
+		this.updateSearch( paramSearch);
 		
 		String search =  ""+session.getAttribute(ATT_SEARCH);
 		
-		List<ComputerDTOOutput> listComputer = this.getListComputer(page , search);
+		String paramOrderBy = request.getParameter("orderBy");
+		this.updateOrderBy( paramOrderBy);
+		
+		OrderBy orderBy =  (OrderBy) session.getAttribute(ATT_ORDER_BY);
+		
+		//System.out.println(orderBy.getValeur());
+		//System.out.println(orderBy.isUp());
+		
+		List<ComputerDTOOutput> listComputer = this.getListComputer(page , search, orderBy );
 		
 		request.setAttribute("listcomputer", listComputer);
 		
@@ -90,7 +101,7 @@ public class DashBoardServlet extends HttpServlet {
 		}
 		
 		
-		this.updateSearch(session, ""+session.getAttribute(ATT_SEARCH));
+		this.updateSearch(""+session.getAttribute(ATT_SEARCH));
 		response.sendRedirect(VUE_DASHBOARD_REDIRECT);
 		
     }
@@ -98,10 +109,11 @@ public class DashBoardServlet extends HttpServlet {
 	private void initialisationSession(HttpSession session) {
 		session.setAttribute( ATT_PAGE , new Page());
 		session.setAttribute(ATT_SEARCH, "");
+		session.setAttribute(ATT_ORDER_BY,  OrderBy.COMPUTER_NAME );
 	}
 	
 
-	private void updatePage(HttpSession session, String paramNombreElementPage , String numPage) {
+	private void updatePage( String paramNombreElementPage , String numPage) {
 		Page page = (Page)session.getAttribute(ATT_PAGE);
 		if (paramNombreElementPage != null) {
 		
@@ -115,10 +127,25 @@ public class DashBoardServlet extends HttpServlet {
 
 	}
 
-	private void updateSearch(HttpSession session, String paramSearch) {
+	private void updateSearch( String paramSearch) {
 		if  (paramSearch != null  ) {
 			Page page = (Page)session.getAttribute(ATT_PAGE);
 			session.setAttribute(ATT_SEARCH, paramSearch);
+			session.setAttribute(ATT_ORDER_BY, OrderBy.COMPUTER_NAME);
+			page.setNumPage(1);
+			session.setAttribute(ATT_PAGE, page);
+		}
+		
+	}
+
+
+	private void updateOrderBy(String paramOrderBy) {
+		if  (paramOrderBy != null  ) {
+			Page page = (Page)session.getAttribute(ATT_PAGE);
+			String search = ""+session.getAttribute(ATT_SEARCH);
+			session.setAttribute(ATT_SEARCH, search);
+			
+			session.setAttribute(ATT_ORDER_BY, OrderBy.getOrderBy(paramOrderBy));
 			page.setNumPage(1);
 			session.setAttribute(ATT_PAGE, page);
 		}
@@ -126,16 +153,17 @@ public class DashBoardServlet extends HttpServlet {
 	}
 
 	
+	
 
-	private List<ComputerDTOOutput> getListComputer( Page page , String search) {
+	private List<ComputerDTOOutput> getListComputer( Page page , String search, OrderBy orderBy) {
 		List<Computer> listcomputer = new ArrayList<Computer>(); 
 		
 		if (search == "") {
 			page.setNombreElementRequet(computerService.searchNombreElement());
-			listcomputer =   computerService.getListComputer(page);
+			listcomputer =   computerService.getListComputer(page,orderBy);
 		}else {
 			page.setNombreElementRequet(computerService.searchNombreElement(search));
-			listcomputer =   computerService.searchComputer(search, page);
+			listcomputer =   computerService.searchComputer(search, page, orderBy);
 			
 		}
 		
