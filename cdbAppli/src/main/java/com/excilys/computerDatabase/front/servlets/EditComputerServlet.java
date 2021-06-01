@@ -29,6 +29,7 @@ public class EditComputerServlet extends HttpServlet {
 
 	private static final String ATT_COMPANY_LIST = "listCompany";
 	private static final String VUE_DASHBOARD = "dashboard";
+	private static final String VUE_ERREUR = "editComputer?id=";
 	private static final String VUE_EDIT_COMPUTER = "/WEB-INF/jsp/editComputer.jsp";
 
 	private ComputerService computerService = ComputerService.getInstance();
@@ -95,7 +96,8 @@ public class EditComputerServlet extends HttpServlet {
 		
 		}catch (RuntimeException e){
 			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
-			this.getServletContext().getRequestDispatcher(VUE_EDIT_COMPUTER).forward(request, response);
+			
+			response.sendRedirect(VUE_ERREUR+request.getParameter("id"));
 		}
 		
 	}

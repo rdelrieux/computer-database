@@ -339,8 +339,7 @@ public class ComputerDAO {
 			preparedStatement.execute();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 
 	}

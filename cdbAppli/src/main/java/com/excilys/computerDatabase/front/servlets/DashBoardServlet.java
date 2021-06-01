@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.front.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 
 
 @WebServlet("/dashboard")
@@ -25,7 +27,7 @@ public class DashBoardServlet extends HttpServlet {
 	
 	private static final String ATT_SEARCH = "search";
 	private static final String ATT_PAGE = "page";
-	
+	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
 	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
 	
 	
@@ -75,7 +77,22 @@ public class DashBoardServlet extends HttpServlet {
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       
+		this.session = request.getSession();
+		
+		List<String> selection = Arrays.asList(request.getParameter("selection").split(","));
+		
+		try {
+			selection.stream()
+			.map(s -> Integer.valueOf(s) )
+			.forEach(id -> this.computerService.deletComputer(id) );
+		}catch (RuntimeException e) {
+			LoggerCdb.logWarn(DashBoardServlet.class.toString(), e);
+		}
+		
+		
+		this.updateSearch(session, ""+session.getAttribute(ATT_SEARCH));
+		response.sendRedirect(VUE_DASHBOARD_REDIRECT);
+		
     }
 	
 	private void initialisationSession(HttpSession session) {

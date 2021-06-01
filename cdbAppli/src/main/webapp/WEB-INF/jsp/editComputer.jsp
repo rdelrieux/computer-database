@@ -42,16 +42,16 @@
 								<label for="introduced">Introduced date</label> 
 								
 							
-								 <c:set var = "now" value = "${computer.introduced  }" />
-								 <fmt:parseDate value = "${now}" var = "parsedEmpDate" pattern = "yyyy-MM-dd" /> 
-     							 <fmt:formatDate value = "${parsedEmpDate}" var = "formEmpDate" pattern = "yyyy-MM-dd" />
+								 <c:set var = "date" value = "${computer.introduced  }" />
+								 <fmt:parseDate value = "${date}" var = "parsedDate" pattern = "yyyy-MM-dd" /> 
+     							 <fmt:formatDate value = "${parsedDate}" var = "formDate" pattern = "yyyy-MM-dd" />
 							
                                       
 								<input
 									type="text" onfocus="(this.type='date')"
 									class="form-control" id="introduced"
 									name="introduced"
-									value=${formEmpDate }>
+									value=${formDate }>
 									
 									
 							</div>
@@ -59,16 +59,16 @@
 								<label for="discontinued">Discontinued date</label>
 								
 								
-								 <c:set var = "now" value = "${computer.discontinued  }" />
-								 <fmt:parseDate value = "${now}" var = "parsedEmpDate" pattern = "yyyy-MM-dd" /> 
-     							 <fmt:formatDate value = "${parsedEmpDate}" var = "formEmpDate" pattern = "yyyy-MM-dd" />
+								 <c:set var = "date" value = "${computer.discontinued  }" />
+								 <fmt:parseDate value = "${date}" var = "parsedDate" pattern = "yyyy-MM-dd" /> 
+     							 <fmt:formatDate value = "${parsedDate}" var = "formDate" pattern = "yyyy-MM-dd" />
 							
 								
 								 <input
 									type="text" onfocus="(this.type='date')"
 									class="form-control" id="discontinued"
 									name="discontinued"
-									value=${formEmpDate }>
+									value=${formDate }>
 								
 							</div>
 							<div class="form-group">
