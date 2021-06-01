@@ -20,5 +20,11 @@ public class CompanyDTO {
 	public String getName() {
 		return name;
 	}
+
+	@Override
+	public String toString() {
+		return "CompanyDTO [id=" + id + ", name=" + name + "]";
+	}
+	
 	
 }

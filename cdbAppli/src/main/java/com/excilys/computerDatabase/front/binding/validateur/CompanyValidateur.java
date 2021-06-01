@@ -1,7 +1,7 @@
 package com.excilys.computerDatabase.front.binding.validateur;
 
 import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
-import com.excilys.computerDatabase.front.binding.exception.CompanyIdNotValidException;
+import com.excilys.computerDatabase.front.binding.exception.IdNotValidException;
 import com.excilys.computerDatabase.front.binding.exception.NameNotValidException;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
@@ -34,12 +34,12 @@ public class CompanyValidateur {
 				int num = Integer.parseInt(id);
 
 				if (num < 0) {
-					throw new CompanyIdNotValidException("Company Id not valid : 1 >" + id);
+					throw new IdNotValidException("Company Id not valid : 1 >" + id);
 				}
 
 			} catch (Exception e) {
 				LoggerCdb.logWarn(ComputerValidateur.class.getName(), e);
-				throw new CompanyIdNotValidException("Company Id not valid : " + id);
+				throw new IdNotValidException("Company Id not valid : " + id);
 
 			}
 

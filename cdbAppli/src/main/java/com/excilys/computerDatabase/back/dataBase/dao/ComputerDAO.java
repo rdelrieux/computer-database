@@ -183,6 +183,7 @@ public class ComputerDAO {
 				ResultSet result = preparedStatement.executeQuery();) {
 			if (result.isBeforeFirst()) {
 				res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
+				
 			}
 		} catch (SQLException e) {
 			LoggerCdb.logError(ComputerDAO.class.getName(), e);
@@ -295,6 +296,7 @@ public class ComputerDAO {
 	}
 
 	public PreparedStatement creatStatementUpdateComputer(Connection connection, Computer computer) {
+		
 		try {
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_UPDATE_COMPUTER);
@@ -321,10 +323,11 @@ public class ComputerDAO {
 				preparedStatement.setInt(4, computer.getCompany().getId());
 			}
 			preparedStatement.setInt(5, computer.getId());
-
+			
 			return preparedStatement;
 
 		} catch (SQLException e) {
+			
 			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
 		return null;

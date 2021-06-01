@@ -15,7 +15,7 @@ import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
 import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.logger.LoggerCdb;
@@ -60,29 +60,18 @@ public class AddComputerServlet extends HttpServlet {
 		session = request.getSession();
 		
 		this.showListCompany();
-		
-	
-		String company = request.getParameter("company");
-		String companyId = "";
-		String companyName = "";
-		if (company.contains(":")) {
-			 companyId = company.split(":")[0];
-			 companyName = company.split(":")[0];
-		}
-		
-
 	
 		
-		ComputerDTOInput computerDTOInput = new ComputerDTOInput.ComputerDTOInputBuilder(request.getParameter("computerName"))
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(request.getParameter("computerName"))
 				.withIntroduced(request.getParameter("introduced"))
 				.withDiscontinued(request.getParameter("discontinued"))
-				.withCompanyDTO( new CompanyDTO(companyId , companyName ))
+				.withCompanyId( request.getParameter("companyId"))
 				.build();
 		
 		
 		
 		try {
-			this.computerService.addComputer( this.computerMapper.mapToComputer(computerDTOInput));
+			this.computerService.addComputer( this.computerMapper.mapToComputer(computerDTOAdd));
 			
 			response.sendRedirect(VUE_DASHBOARD);
 		

@@ -1,6 +1,6 @@
 package com.excilys.computerDatabase.front.cli;
 
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 
 public class ChoixUtilisateur extends CLI{
 	
@@ -51,8 +51,8 @@ public class ChoixUtilisateur extends CLI{
 	}
 	
 	
-	public ComputerDTOInput choixParametreAddComputer() {
-		return new ComputerDTOInput.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE))
+	public ComputerDTOAdd choixParametreAddComputer() {
+		return new ComputerDTOAdd.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE))
 	
 		
 			.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE))
@@ -64,11 +64,11 @@ public class ChoixUtilisateur extends CLI{
 		 	.build();
 	}
 
-	public ComputerDTOInput choixParametreUpdateComputer(Computer computer) {
-		ComputerDTOInputBuilder ComputerDTOInputBuilder = new ComputerDTOInput.ComputerDTOInputBuilder(computer.getName());
+	public ComputerDTOAdd choixParametreUpdateComputer(Computer computer) {
+		ComputerDTOInputBuilder ComputerDTOInputBuilder = new ComputerDTOAdd.ComputerDTOInputBuilder(computer.getName());
 				
 		if (needUpdate(CHANGER_NOM_MESSAGE)) {
-			ComputerDTOInputBuilder = new ComputerDTOInput.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE));
+			ComputerDTOInputBuilder = new ComputerDTOAdd.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE));
 		}
 		if (needUpdate(CHANGER_DATE_INTRODUCED_MESSAGE)) {
 			ComputerDTOInputBuilder.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE));

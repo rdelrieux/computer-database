@@ -5,7 +5,7 @@ import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.cli.CLI;
 import com.excilys.computerDatabase.front.cli.ChoixUtilisateur;
 import com.excilys.computerDatabase.front.cli.ComputerCLI;
@@ -52,7 +52,7 @@ public class ComputerCtr {
 	}
 
 	public void addComputer() {
-		ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreAddComputer();
+		ComputerDTOAdd computerDTOInput = this.choixutilisateur.choixParametreAddComputer();
 		if (computerDTOInput.getCompanyId().isEmpty()) {
 			this.computerService.addComputer(computerDTOInput);
 			System.out.println("logg ComputerCtr : " + CLI.ADD_REUSSI_MESSAGE);
@@ -75,7 +75,7 @@ public class ComputerCtr {
 		} else {
 
 			this.computerCLI.showComputer(computer);
-			ComputerDTOInput computerDTOInput = this.choixutilisateur.choixParametreUpdateComputer(computer);
+			ComputerDTOAdd computerDTOInput = this.choixutilisateur.choixParametreUpdateComputer(computer);
 
 			if (computerDTOInput.getCompanyId().isEmpty()) {
 				this.computerService.updateComputer(computerDTOInput, "" + computer.getId(), "");

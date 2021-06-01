@@ -61,9 +61,9 @@ public class DashBoardServlet extends HttpServlet {
 		
 		String search =  ""+session.getAttribute(ATT_SEARCH);
 		
-		List<ComputerDTOOutput> listcomputer = this.getListComputer(page , search);
+		List<ComputerDTOOutput> listComputer = this.getListComputer(page , search);
 		
-		request.setAttribute("listcomputer", listcomputer);
+		request.setAttribute("listcomputer", listComputer);
 		
         this.getServletContext().getRequestDispatcher(VUE_DASHBOARD).forward(request, response);
 

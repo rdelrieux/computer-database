@@ -2,8 +2,9 @@ package com.excilys.computerDatabase.front.binding.validateur;
 
 import java.time.LocalDate;
 
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
-import com.excilys.computerDatabase.front.binding.exception.CompanyIdNotValidException;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
+import com.excilys.computerDatabase.front.binding.exception.IdNotValidException;
 import com.excilys.computerDatabase.front.binding.exception.DateFormaNotValidException;
 import com.excilys.computerDatabase.front.binding.exception.DateIntervalNotValidException;
 import com.excilys.computerDatabase.front.binding.exception.NameNotValidException;
@@ -24,12 +25,40 @@ public class ComputerValidateur {
 		return instance;
 	}
 
-	public void validate(ComputerDTOInput computerDTOInput) {
+	public void validate(ComputerDTOAdd computerDTOAdd) {
+		
+		this.validateName(computerDTOAdd.getName());
+		this.validateDate(computerDTOAdd.getIntroduced());
+		this.validateDate(computerDTOAdd.getDiscontinued());
+		this.validateDateInterval(computerDTOAdd.getIntroduced(), computerDTOAdd.getDiscontinued());
+		this.validateCompanyId(computerDTOAdd.getCompanyId());
+	}
 
-		this.validateName(computerDTOInput.getName());
-		this.validateDate(computerDTOInput.getIntroduced());
-		this.validateDate(computerDTOInput.getDiscontinued());
-		this.validateDateInterval(computerDTOInput.getIntroduced(), computerDTOInput.getDiscontinued());
+	public void validate(ComputerDTOUpdate computerDTOUpdate) {
+		
+		this.validateId(computerDTOUpdate.getId());
+		this.validateName(computerDTOUpdate.getName());
+		this.validateDate(computerDTOUpdate.getIntroduced());
+		this.validateDate(computerDTOUpdate.getDiscontinued());
+		this.validateDateInterval(computerDTOUpdate.getIntroduced(), computerDTOUpdate.getDiscontinued());
+		this.validateCompanyId(computerDTOUpdate.getCompanyId());
+		
+	}
+	
+	
+	private void validateId(String id) {
+		try {
+			int num = Integer.parseInt(id);
+
+			if (num <= 0) {
+				throw new IdNotValidException("Id not valid :" + id+ "negatif or =0");
+			}
+
+		} catch (Exception e) {
+			LoggerCdb.logWarn(ComputerValidateur.class.getName(), e);
+			throw new IdNotValidException("Id not valid : " + id);
+
+		}
 		
 	}
 
@@ -63,6 +92,15 @@ public class ComputerValidateur {
 
 	}
 
+	private void validateCompanyId(String id) {
+		if (!("".equals(id))) {
+			
+			validateId( id);
+
+		}
+	}
+
+	
 	
 
 }

@@ -88,6 +88,7 @@ public class CompanyDAO {
 				ResultSet result = preparedStatement.executeQuery();) {
 
 			if (result.isBeforeFirst() ) {
+				result.next();
 				Optional <CompanyDTOOutput> cout = this.companyMapper.mapToCompanyDTOOutput(result) ;
 				if (cout.isPresent()) {
 					return this.companyMapper.mapToCompany (cout.get());

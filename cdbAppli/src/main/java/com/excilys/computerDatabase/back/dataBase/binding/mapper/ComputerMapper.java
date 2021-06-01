@@ -43,8 +43,9 @@ public class ComputerMapper {
 	}
 
 	public Optional <ComputerDTOOutput> mapToComputerDTOOutput(ResultSet result) {
-	
+		
 		try {
+			
 				return Optional.of( new ComputerDTOOutput.ComputerDTOOutputBuilder(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME))
 						.withIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : ""+result.getDate(COLONNE_DATE_INTRODUCED))
 						.withDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : ""+result.getDate(COLONNE_DATE_DISCONTINUED))
@@ -87,7 +88,7 @@ public class ComputerMapper {
 	
 	
 	public Computer mapToComputer( ComputerDTOOutput computerDTOOutput ) {
-		return new Computer.ComputerBuilder(0 ,computerDTOOutput.getName())
+		return new Computer.ComputerBuilder(Integer.valueOf(computerDTOOutput.getId()) ,computerDTOOutput.getName())
 				
 				.withIntroduced(computerDTOOutput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOOutput.getIntroduced()))
 				

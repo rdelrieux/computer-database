@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Computer.ComputerBuilder;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOInput;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput.ComputerDTOOutputBuilder;
 import com.excilys.computerDatabase.front.binding.validateur.ComputerValidateur;
@@ -29,22 +31,7 @@ public class ComputerMapper {
 		return instance;
 	}
 	
-	public Computer mapToComputer(ComputerDTOInput computerDTOInput) {
-		
-		this.computerValidateur.validate(computerDTOInput);
-		
-		ComputerBuilder builder =  new Computer.ComputerBuilder(0,computerDTOInput.getName());
-				
-				if (! "".equals(computerDTOInput.getIntroduced())) {
-					builder.withIntroduced( LocalDate.parse(computerDTOInput.getIntroduced()) );
-				}
-				if (! "".equals(computerDTOInput.getDiscontinued())) {
-					builder.withDiscontinued( LocalDate.parse(computerDTOInput.getDiscontinued()) );
-				}
-				builder.withCompany( this.companyMapper.mapToCompany(computerDTOInput.getCompanyDTO()) );
-				
-				return	builder.build();	
-	}
+	
 	
 	public ComputerDTOOutput  mapToComputerDTOOutput(Computer computer) {
 		
@@ -68,11 +55,45 @@ public class ComputerMapper {
 	}
 
 	
+public Computer mapToComputer(ComputerDTOAdd computerDTOAdd) {
+		
+		this.computerValidateur.validate(computerDTOAdd);
+		
+		ComputerBuilder builder =  new Computer.ComputerBuilder(0,computerDTOAdd.getName());
+				
+				if (! "".equals(computerDTOAdd.getIntroduced())) {
+					builder.withIntroduced( LocalDate.parse(computerDTOAdd.getIntroduced()) );
+				}
+				if (! "".equals(computerDTOAdd.getDiscontinued())) {
+					builder.withDiscontinued( LocalDate.parse(computerDTOAdd.getDiscontinued()) );
+				}
+				if (! "".equals(computerDTOAdd.getCompanyId())) {
+					builder.withCompany( new Company (Integer.parseInt(computerDTOAdd.getCompanyId()),"addComputer") );
+				}
+				
+				return	builder.build();	
+	}
 	
 	
 	
+public Computer mapToComputer(ComputerDTOUpdate computerDTOUpdate) {
 	
+	this.computerValidateur.validate(computerDTOUpdate);
 	
+	ComputerBuilder builder =  new Computer.ComputerBuilder(Integer.parseInt( computerDTOUpdate.getId()) ,computerDTOUpdate.getName());
+			
+			if (! "".equals(computerDTOUpdate.getIntroduced())) {
+				builder.withIntroduced( LocalDate.parse(computerDTOUpdate.getIntroduced()) );
+			}
+			if (! "".equals(computerDTOUpdate.getDiscontinued())) {
+				builder.withDiscontinued( LocalDate.parse(computerDTOUpdate.getDiscontinued()) );
+			}
+			if (! "".equals(computerDTOUpdate.getCompanyId())) {
+				builder.withCompany( new Company (Integer.parseInt(computerDTOUpdate.getCompanyId()),"updateComputer") );
+			}
+			
+			return	builder.build();	
+}
 	
 	
 	
