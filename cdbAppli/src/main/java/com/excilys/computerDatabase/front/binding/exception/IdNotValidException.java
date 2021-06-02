@@ -1,6 +1,6 @@
 package com.excilys.computerDatabase.front.binding.exception;
 
-public class IdNotValidException extends ValidateurInputException{
+public class IdNotValidException extends ValidateurDTOException{
 	
 	private static final long serialVersionUID = 1L;
 	

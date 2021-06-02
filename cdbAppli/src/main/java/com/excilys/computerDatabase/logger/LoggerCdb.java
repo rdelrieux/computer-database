@@ -25,7 +25,7 @@ public class LoggerCdb {
 	public static void logInfo(String name, Exception exception) {
 		Logger logger = LogManager.getLogger(name);
 		logger.info(exception.getClass() + " : " + exception.getMessage());
-		exception.printStackTrace();
+		//exception.printStackTrace();
 	}
 	
 	public static void logWarn(String name, Exception exception) {

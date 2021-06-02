@@ -3,10 +3,10 @@ package com.excilys.computerDatabase.back.dataBase.connection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.excilys.computerDatabase.back.dataBase.exception.ConnectionException;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -36,6 +36,7 @@ public class CdbConnection {
 			
 		} catch (IOException e) {
 			LoggerCdb.logError(CdbConnection.class.toString(), e);
+			throw new ConnectionException();
 		}
 		
 		config = new HikariConfig(prop);
@@ -44,9 +45,14 @@ public class CdbConnection {
 	}
 	
 	
-
-	public Connection getConnection() throws SQLException{	
-			return ds.getConnection();
+	public Connection getConnection() {	
+			
+			try {
+				return ds.getConnection();
+			} catch (SQLException e) {
+				LoggerCdb.logError(CdbConnection.class.toString(), e);
+				throw new ConnectionException();
+			}
 	}
 
 	

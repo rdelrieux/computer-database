@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput;
+import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.logger.LoggerCdb;
@@ -42,11 +43,10 @@ public class ComputerMapper {
 		return instance;
 	}
 
-	public Optional <ComputerDTOOutput> mapToComputerDTOOutput(ResultSet result) {
+	public ComputerDTOOutput mapToComputerDTOOutput(ResultSet result) {
 		
 		try {
-			
-				return Optional.of( new ComputerDTOOutput.ComputerDTOOutputBuilder(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME))
+			return new ComputerDTOOutput.ComputerDTOOutputBuilder(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME))
 						.withIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : ""+result.getDate(COLONNE_DATE_INTRODUCED))
 						.withDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : ""+result.getDate(COLONNE_DATE_DISCONTINUED))
 						.withCompany(  
@@ -54,14 +54,14 @@ public class ComputerMapper {
 								new CompanyDTOOutput( "","") : 
 								new CompanyDTOOutput(result.getString(COLONNE_COMPANY_ID) ,result.getString(COLONNE_COMPANY_NAME))
 								)
-						.build());
+						.build();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			LoggerCdb.logError(ComputerMapper.class.getName(), e);
+			throw new ComputerNotFoundException();
 			
 		}
-		return Optional.empty();
+		
 	}
 	
 	
@@ -69,18 +69,12 @@ public class ComputerMapper {
 		ArrayList<ComputerDTOOutput> res = new ArrayList<>();
 		
 		try {
-			// stream ?
 			while (result.next()) {
-				if (this.mapToComputerDTOOutput(result).isPresent()) {
-					res.add(this.mapToComputerDTOOutput(result).get());
-				}
-				
+				res.add(this.mapToComputerDTOOutput(result));
 				}
 			
 		} catch (SQLException e) {
-			
 			LoggerCdb.logError(ComputerMapper.class.getName(), e);
-			
 			
 		}
 		return res;

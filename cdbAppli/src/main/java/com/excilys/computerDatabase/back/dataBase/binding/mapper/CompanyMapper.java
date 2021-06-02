@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
+import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
 import com.excilys.computerDatabase.back.model.Company;
 
 
@@ -32,36 +33,28 @@ public class CompanyMapper {
 		return instance;
 	}
 
-	public Optional <CompanyDTOOutput> mapToCompanyDTOOutput(ResultSet result) {
+	public CompanyDTOOutput mapToCompanyDTOOutput(ResultSet result) {
 	
 		try {
-				return Optional.of( new CompanyDTOOutput(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME)));	
+			return new CompanyDTOOutput(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME));	
 		} catch (SQLException e) {
 			LoggerCdb.logError(ComputerMapper.class.getName(), e);
-			
+			throw new CompanyNotFoundException();
 		}
-		return Optional.empty();
 	}
 	
 	
 	public List<CompanyDTOOutput> mapToListCompanyDTOOutput(ResultSet result) {
 		ArrayList<CompanyDTOOutput> res = new ArrayList<>();
 		
-		try {
-			// stream ?
-			while (result.next()) {
-				if (this.mapToCompanyDTOOutput(result).isPresent()) {
-					res.add(this.mapToCompanyDTOOutput(result).get());
-				}
+			try {
+				while (result.next()) {
+					res.add(this.mapToCompanyDTOOutput(result));
+					}
+			} catch (SQLException e) {
+				LoggerCdb.logError(ComputerMapper.class.getName(), e);
 				
-				}
-			
-		} catch (SQLException e) {
-			
-			LoggerCdb.logError(ComputerMapper.class.getName(), e);
-			
-			
-		}
+			}
 		return res;
 	}
 	

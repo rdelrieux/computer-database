@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
@@ -29,6 +30,7 @@ public class DashBoardServlet extends HttpServlet {
 	private static final String ATT_SEARCH = "search";
 	private static final String ATT_ORDER_BY = "orderBy";
 	private static final String ATT_PAGE = "page";
+	
 	
 	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
 	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
@@ -47,44 +49,30 @@ public class DashBoardServlet extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-	
 		this.session = request.getSession();
 		
 		if (session.getAttribute(ATT_PAGE) == null) {
 			this.initialisationSession(session);
 		}
 		
+		
 		String paramNombreElementPage = request.getParameter("nombreElementPage");
 		String numPage = request.getParameter("Page");
-		
-		this.updatePage( paramNombreElementPage ,  numPage );
-		Page page = (Page)session.getAttribute(ATT_PAGE);
+		this.updatePage( paramNombreElementPage ,  numPage );		
 		
 		String paramSearch = request.getParameter("search");
 		this.updateSearch( paramSearch);
 		
-		String search =  ""+session.getAttribute(ATT_SEARCH);
-		
 		String paramOrderBy = request.getParameter("orderBy");
 		this.updateOrderBy( paramOrderBy);
 		
-		OrderBy orderBy =  (OrderBy) session.getAttribute(ATT_ORDER_BY);
 		
-		//System.out.println(orderBy.getValeur());
-		//System.out.println(orderBy.isUp());
-		
-		List<ComputerDTOOutput> listComputer = this.getListComputer(page , search, orderBy );
-		
+		List<ComputerDTOOutput> listComputer = this.getListComputer(session);
 		request.setAttribute("listcomputer", listComputer);
 		
         this.getServletContext().getRequestDispatcher(VUE_DASHBOARD).forward(request, response);
 
 	}
-	
-
-
-
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -96,10 +84,10 @@ public class DashBoardServlet extends HttpServlet {
 			selection.stream()
 			.map(s -> Integer.valueOf(s) )
 			.forEach(id -> this.computerService.deletComputer(id) );
-		}catch (RuntimeException e) {
+		}catch (NumberFormatException | DAOException e) {
+			
 			LoggerCdb.logWarn(DashBoardServlet.class.toString(), e);
 		}
-		
 		
 		this.updateSearch(""+session.getAttribute(ATT_SEARCH));
 		response.sendRedirect(VUE_DASHBOARD_REDIRECT);
@@ -152,13 +140,16 @@ public class DashBoardServlet extends HttpServlet {
 		
 	}
 
-	
-	
 
-	private List<ComputerDTOOutput> getListComputer( Page page , String search, OrderBy orderBy) {
+	private List<ComputerDTOOutput> getListComputer( HttpSession session) {
+		Page page = (Page)session.getAttribute(ATT_PAGE);
+		String search = ""+session.getAttribute(ATT_SEARCH);
+		OrderBy orderBy =  (OrderBy) session.getAttribute(ATT_ORDER_BY);
+		
+		
 		List<Computer> listcomputer = new ArrayList<Computer>(); 
 		
-		if (search == "") {
+		if ("".equals(search)) {
 			page.setNombreElementRequet(computerService.searchNombreElement());
 			listcomputer =   computerService.getListComputer(page,orderBy);
 		}else {

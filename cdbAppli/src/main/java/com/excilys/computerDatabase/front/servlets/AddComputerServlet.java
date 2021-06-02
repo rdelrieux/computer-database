@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
 import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
+import com.excilys.computerDatabase.front.binding.exception.ValidateurDTOException;
 import com.excilys.computerDatabase.front.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.logger.LoggerCdb;
@@ -49,8 +51,6 @@ public class AddComputerServlet extends HttpServlet {
 		
 		this.showListCompany();
 		
-
-		
        this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 
 	}
@@ -75,9 +75,9 @@ public class AddComputerServlet extends HttpServlet {
 			
 			response.sendRedirect(VUE_DASHBOARD);
 		
-		}catch (RuntimeException e){
+		}catch (ValidateurDTOException | DAOException e){
 			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
-			 this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
+			this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 		}
 		
 	}
@@ -88,7 +88,6 @@ public class AddComputerServlet extends HttpServlet {
 		.map(c -> this.companyMapper.mapToCompanyDTO(c) )
 		.collect(Collectors.toList());
 		session.setAttribute( ATT_COMPANY_LIST ,  listCompanyDTO );
-		
 	}
 
 

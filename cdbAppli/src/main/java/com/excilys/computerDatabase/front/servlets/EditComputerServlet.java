@@ -2,6 +2,7 @@ package com.excilys.computerDatabase.front.servlets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
+import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
+import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
@@ -19,6 +23,7 @@ import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
+import com.excilys.computerDatabase.front.binding.exception.ValidateurDTOException;
 import com.excilys.computerDatabase.front.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.logger.LoggerCdb;
@@ -56,18 +61,25 @@ public class EditComputerServlet extends HttpServlet {
 		
 		
 		try {
-			ComputerDTOOutput computer = this.findEditComputer(request.getParameter("id")).orElseThrow();
+			ComputerDTOOutput computer = this.findEditComputer(request.getParameter("id"));
 			request.setAttribute("computer", computer);
 			request.setAttribute("companyId", ""+this.companyService.getCompany(computer.getCompanyName()).getId());
 			
-		}catch (NullPointerException e){
+		}catch (DAOException  | ComputerNotFoundException e ){
+			LoggerCdb.logInfo(EditComputerServlet.class.toString(), e);
+			response.sendRedirect(VUE_DASHBOARD);
+		}catch (CompanyNotFoundException e ){
 			LoggerCdb.logInfo(EditComputerServlet.class.toString(), e);
 		}
 		
-		
+		try {
+			this.getServletContext().getRequestDispatcher(VUE_EDIT_COMPUTER).forward(request, response);
+		}catch (IllegalStateException e) {
+			LoggerCdb.logInfo(EditComputerServlet.class.toString(), "Computer to edit Not Found");
+		}
 
 		
-		this.getServletContext().getRequestDispatcher(VUE_EDIT_COMPUTER).forward(request, response);
+		
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -94,9 +106,8 @@ public class EditComputerServlet extends HttpServlet {
 			
 			response.sendRedirect(VUE_DASHBOARD);
 		
-		}catch (RuntimeException e){
-			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
-			
+		}catch (DAOException | ValidateurDTOException e  ){
+			LoggerCdb.logWarn(EditComputerServlet.class.getName(), e);
 			response.sendRedirect(VUE_ERREUR+request.getParameter("id"));
 		}
 		
@@ -104,18 +115,18 @@ public class EditComputerServlet extends HttpServlet {
 	
 	
 	
-	private Optional<ComputerDTOOutput> findEditComputer (String idS ) {
+	private ComputerDTOOutput findEditComputer (String idS ) {
 		if (idS != null) {
 			session.setAttribute("editId", idS);
 		}
 		try {
 			int id = Integer.valueOf((String) session.getAttribute("editId"));
-			return Optional.of( computerMapper.mapToComputerDTOOutput(computerService.getComputer(id)) );
+			return computerMapper.mapToComputerDTOOutput(computerService.getComputer(id)) ;
 			
-		} catch (RuntimeException e) {
-			e.printStackTrace();
+		} catch (NumberFormatException | DAOException | ComputerNotFoundException e) {
+			LoggerCdb.logInfo(EditComputerServlet.class.getName(), e);
+			throw new ComputerNotFoundException();
 		}
-		return Optional.empty();
 	}
 	
 	private void showListCompany() {

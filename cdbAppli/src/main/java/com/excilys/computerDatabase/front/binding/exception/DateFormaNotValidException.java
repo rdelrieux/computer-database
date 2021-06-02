@@ -1,6 +1,6 @@
 package com.excilys.computerDatabase.front.binding.exception;
 
-public class DateFormaNotValidException  extends ValidateurInputException{
+public class DateFormaNotValidException  extends ValidateurDTOException{
 	
 	private static final long serialVersionUID = 1L;
 	
