@@ -1,11 +1,16 @@
 package com.excilys.computerDatabase.front.controleurCLI;
 
+import java.util.stream.Collectors;
+
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
+import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
+import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.cli.CLI;
 import com.excilys.computerDatabase.front.cli.ChoixUtilisateur;
 import com.excilys.computerDatabase.front.cli.ComputerCLI;
@@ -17,13 +22,14 @@ public class ComputerCtr {
 	private ComputerCLI computerCLI;
 	private CompanyService companyService;
 	private ChoixUtilisateur choixutilisateur;
+	private ComputerMapper computerMapper;
 
 	private ComputerCtr() {
 		this.computerService = ComputerService.getInstance();
 		this.computerCLI = ComputerCLI.getInstance();
 		this.companyService = CompanyService.getInstance();
 		this.choixutilisateur = ChoixUtilisateur.getInstance();
-
+		this.computerMapper = ComputerMapper.getInstance();
 	}
 
 	public static ComputerCtr getInstance() {
@@ -40,7 +46,11 @@ public class ComputerCtr {
 		while (!choix.equals("exit")) {
 			page = choixPage( choix,  page);
 			System.out.println(page);
-			this.computerCLI.showListComputer(this.computerService.getListComputer( page));
+			this.computerCLI.showListComputer(
+					this.computerService.getListComputer( page, OrderBy.COMPUTER_NAME).stream()
+					.map(c -> computerMapper.mapToComputerDTOOutput(c))
+					.collect(Collectors.toList())
+					);
 			choix = this.choixutilisateur.choixName(CLI.ENTER_PAGE_MESSAGE);
 		}
 		
@@ -48,24 +58,14 @@ public class ComputerCtr {
 
 	public void showComputer() {
 		Computer computer = this.computerService.getComputer(this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
-		this.computerCLI.showComputer(computer);
+		this.computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computer));
 	}
 
 	public void addComputer() {
-		ComputerDTOAdd computerDTOInput = this.choixutilisateur.choixParametreAddComputer();
-		if (computerDTOInput.getCompanyId().isEmpty()) {
-			this.computerService.addComputer(computerDTOInput);
-			System.out.println("logg ComputerCtr : " + CLI.ADD_REUSSI_MESSAGE);
-		} else {
-			Company company = this.companyService.getCompany(computerDTOInput.getCompanyId());
-			if (company != null) {
-				this.computerService.addComputer(computerDTOInput);
-				System.out.println("logg ComputerCtr : " + CLI.ADD_REUSSI_MESSAGE);
-			} else {
-				System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
-			}
-
-		}
+		ComputerDTOAdd computerDTOAdd = this.choixutilisateur.choixParametreAddComputer();
+		
+		this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOAdd));
+		
 	}
 
 	public void updateComputer() {
@@ -74,23 +74,9 @@ public class ComputerCtr {
 			System.out.println("logg ComputerCtr : " + CLI.COMPUTER_NOT_FOUND_MESSAGE);
 		} else {
 
-			this.computerCLI.showComputer(computer);
-			ComputerDTOAdd computerDTOInput = this.choixutilisateur.choixParametreUpdateComputer(computer);
-
-			if (computerDTOInput.getCompanyId().isEmpty()) {
-				this.computerService.updateComputer(computerDTOInput, "" + computer.getId(), "");
-				System.out.println("logg ComputerCtr : " + CLI.UPDATE_REUSSI_MESSAGE);
-
-			} else {
-				Company company = this.companyService.getCompany(computerDTOInput.getCompanyId());
-				if (company != null) {
-					this.computerService.updateComputer(computerDTOInput, "" + computer.getId(), "" + company.getId());
-					System.out.println("logg ComputerCtr : " + CLI.UPDATE_REUSSI_MESSAGE);
-				} else {
-					System.out.println("logg ComputerCtr : " + CLI.COMPANY_NOT_FOUND_MESSAGE);
-				}
-
-			}
+			this.computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computer));
+			ComputerDTOUpdate computerDTOUpdate = this.choixutilisateur.choixParametreUpdateComputer(computer);
+				this.computerService.updateComputer(computerMapper.mapToComputer(computerDTOUpdate));
 		}
 
 	}
@@ -98,13 +84,15 @@ public class ComputerCtr {
 	public void deletComputer() {
 		int id = choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE);
 		Computer computer = computerService.getComputer(id);
-		computerCLI.showComputer(computerService.getComputer(id));
+		computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computerService.getComputer(id)));
+		
 		if (computer != null && choixutilisateur.messageVerificationAction()) {
 			this.computerService.deletComputer(id);
 			System.out.println("logg ComputerCtr : " + CLI.DELET_REUSSI_MESSAGE);
 		} else {
 			System.out.println("logg ComputerCtr : " + CLI.DELET_CANCELED_MESSAGE);
 		}
+		
 	}
 
 	public void searchComputer() {
@@ -115,7 +103,11 @@ public class ComputerCtr {
 		while (!choix.equals("exit")) {
 			page = choixPage( choix,  page);
 			System.out.println(page);
-			this.computerCLI.showListComputer(this.computerService.searchComputer(search, page));
+			this.computerCLI.showListComputer(
+					this.computerService.searchComputer(search, page, OrderBy.COMPUTER_NAME).stream()
+					.map(c -> this.computerMapper.mapToComputerDTOOutput(c))
+					.collect(Collectors.toList())
+					);
 			choix = this.choixutilisateur.choixName(CLI.ENTER_PAGE_MESSAGE);
 		}
 		

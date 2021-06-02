@@ -27,11 +27,14 @@ public class ComputerDAO {
 			+ "ORDER BY columnname \n"
 			+ "LIMIT ? , ?\n"
 			;
-	private static final String REQUET_NOMBRE_ELEMENT = "SELECT COUNT(computer.id) AS count\n" + "FROM computer \n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n";
+	private static final String REQUET_NOMBRE_ELEMENT = "SELECT COUNT(computer.id) AS count\n" 
+			+ "FROM computer \n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			;
 
 	private static final String REQUET_NOMBRE_ELEMENT_SEARCH = "SELECT COUNT(computer.id) AS count\n"
-			+ "FROM computer \n" + "LEFT JOIN company ON company.id = computer.company_id\n"
+			+ "FROM computer \n" 
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
 			+ "WHERE computer.name LIKE ? "
 			+ "OR company.name LIKE ? "
 			+ "OR introduced LIKE ? "
@@ -45,19 +48,30 @@ public class ComputerDAO {
 			+ "OR introduced LIKE ? "
 			+ "OR discontinued LIKE ? "
 			+"ORDER BY columnname \n"
-			+ "LIMIT ? , ?";
+			+ "LIMIT ? , ?"
+			;
 
-	private static final String REQUET_TROUVER_COMPUTER_FROM_ID = "SELECT *\n" + "FROM computer\n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n" + "WHERE computer.id = ? ";
+	private static final String REQUET_TROUVER_COMPUTER_FROM_ID = "SELECT *\n" 
+			+ "FROM computer\n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n"
+			+ "WHERE computer.id = ? ";
 
-	private static final String REQUET_TROUVER_COMPUTER_FROM_NAME = "SELECT *\n" + "FROM computer\n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n" + "WHERE computer.name = ? ";
+	private static final String REQUET_TROUVER_COMPUTER_FROM_NAME = "SELECT *\n" 
+			+ "FROM computer\n"
+			+ "LEFT JOIN company ON company.id = computer.company_id\n" 
+			+ "WHERE computer.name = ? "
+			;
 
 	private static final String REQUET_ADD_COMPUTER = "INSERT INTO computer (name,introduced,discontinued,company_id)\n"
 			+ " VALUES (?,?,?,?);";
 
-	private static final String REQUET_UPDATE_COMPUTER = " UPDATE computer \n" + "SET name = ? , \n"
-			+ "introduced = ? , \n" + "discontinued = ?, \n" + "company_id = ?  \n" + "WHERE computer.id = ? ;";
+	private static final String REQUET_UPDATE_COMPUTER = " UPDATE computer \n" 
+			+ "SET name = ? , \n"
+			+ "introduced = ? , \n" 
+			+ "discontinued = ?, \n" 
+			+ "company_id = ?  \n" 
+			+ "WHERE computer.id = ? "
+			;
 
 	private static final String REQUET_DELET_COMPUTER = "DELETE FROM computer\n" + "WHERE computer.id = ? ";
 
@@ -77,8 +91,8 @@ public class ComputerDAO {
 		return instance;
 	}
 
-	public PreparedStatement creatStatementFind(Connection connection, int id) {
-		try {
+	public PreparedStatement creatStatementFind(int id) {
+		try (Connection connection = cdbConnection.getConnection();){
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_TROUVER_COMPUTER_FROM_ID);
 			preparedStatement.setInt(1, id);
@@ -94,8 +108,8 @@ public class ComputerDAO {
 
 	public Computer find(int id) {
 
-		try (Connection connection = cdbConnection.getConnection(); ) {
-			PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
+		try {
+			PreparedStatement preparedStatement = this.creatStatementFind( id);
 			ResultSet result = preparedStatement.executeQuery();
 
 			if (result.isBeforeFirst()) {
@@ -113,8 +127,8 @@ public class ComputerDAO {
 		return null;
 	}
 
-	public PreparedStatement creatStatementFind(Connection connection, String name) {
-		try {
+	public PreparedStatement creatStatementFind( String name) {
+		try (Connection connection = cdbConnection.getConnection();){
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_TROUVER_COMPUTER_FROM_NAME);
 			preparedStatement.setString(1, name);
@@ -128,8 +142,8 @@ public class ComputerDAO {
 
 	public Computer find(String name) {
 		
-		try (Connection connection = cdbConnection.getConnection();) {
-			PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
+		try {
+			PreparedStatement preparedStatement = this.creatStatementFind( name);
 			ResultSet result = preparedStatement.executeQuery();
 			if (result.isBeforeFirst()) {
 				Optional <ComputerDTOOutput> cout = this.computerMapping.mapToComputerDTOOutput(result);
@@ -144,8 +158,8 @@ public class ComputerDAO {
 		return null;
 	}
 
-	public PreparedStatement creatStatementSearchNombreElement(Connection connection) {
-		try {
+	public PreparedStatement creatStatementSearchNombreElement() {
+		try (Connection connection = cdbConnection.getConnection();){
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_NOMBRE_ELEMENT);
 
@@ -159,9 +173,8 @@ public class ComputerDAO {
 
 	public int searchNombreElement() {
 		int count = 0;
-		try (Connection connection = cdbConnection.getConnection();
-				ResultSet result = this.creatStatementSearchNombreElement(connection).executeQuery();) {
-
+		try {
+			ResultSet result = this.creatStatementSearchNombreElement().executeQuery();
 			result.next();
 			count = result.getInt("count");
 
@@ -171,8 +184,8 @@ public class ComputerDAO {
 		return count;
 	}
 
-	public PreparedStatement creatStatementFindAll(Connection connection, Page page, OrderBy orderBy) {
-		try {
+	public PreparedStatement creatStatementFindAll(Page page, OrderBy orderBy) {
+		try (Connection connection = cdbConnection.getConnection();){
 			String statement = REQUET_AFFICHER_TOUTE_COMPUTERS;
 			if (orderBy.isUp()) {
 				 statement = statement.replace("columnname", orderBy.getValeur());
@@ -197,9 +210,9 @@ public class ComputerDAO {
 	public List<Computer> findAll(Page page, OrderBy orderBy) {
 		List<Computer> res = new ArrayList<>();
 	
-		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementFindAll(connection, page,orderBy);
-				ResultSet result = preparedStatement.executeQuery();) {
+		try  {
+			PreparedStatement preparedStatement = this.creatStatementFindAll(page,orderBy);
+			ResultSet result = preparedStatement.executeQuery();
 			if (result.isBeforeFirst()) {
 				res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
 				
@@ -210,8 +223,8 @@ public class ComputerDAO {
 		return res;
 	}
 
-	public PreparedStatement creatStatementSearch(Connection connection, String search, Page page, OrderBy orderBy) {
-		try {
+	public PreparedStatement creatStatementSearch( String search, Page page, OrderBy orderBy) {
+		try (Connection connection = cdbConnection.getConnection();){
 
 			String statement = REQUET_AFFICHER_COMPUTERS_SEARCH;
 			if (orderBy.isUp()) {
@@ -238,9 +251,9 @@ public class ComputerDAO {
 
 	public List<Computer> search(String search, Page page,OrderBy orderBy) {
 		List<Computer> res = new ArrayList<Computer>();
-		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementSearch(connection, search, page,orderBy );
-				ResultSet result = preparedStatement.executeQuery();) {
+		try	 {
+			PreparedStatement preparedStatement = this.creatStatementSearch( search, page,orderBy );
+			ResultSet result = preparedStatement.executeQuery();
 			if (result.isBeforeFirst()) {
 				res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
 			}
@@ -250,8 +263,8 @@ public class ComputerDAO {
 		return res;
 	}
 
-	public PreparedStatement creatStatementSearchNombreElement(Connection connection, String search) {
-		try {
+	public PreparedStatement creatStatementSearchNombreElement( String search) {
+		try (Connection connection = cdbConnection.getConnection();){
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_NOMBRE_ELEMENT_SEARCH);
 			preparedStatement.setString(1, "%" + search + "%");
@@ -268,9 +281,8 @@ public class ComputerDAO {
 
 	public int searchNombreElement(String search) {
 		int count = 0;
-		try (Connection connection = cdbConnection.getConnection();
-				ResultSet result = this.creatStatementSearchNombreElement(connection, search).executeQuery();) {
-
+		try  {
+			ResultSet result = this.creatStatementSearchNombreElement( search).executeQuery();
 			result.next();
 			count = result.getInt("count");
 
@@ -280,8 +292,8 @@ public class ComputerDAO {
 		return count;
 	}
 
-	public PreparedStatement creatStatementAddComputer(Connection connection, Computer computer) {
-		try {
+	public PreparedStatement creatStatementAddComputer( Computer computer) {
+		try (Connection connection = cdbConnection.getConnection();){
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_ADD_COMPUTER);
 
 			preparedStatement.setString(1, computer.getName());
@@ -314,9 +326,8 @@ public class ComputerDAO {
 	}
 
 	public void addComputer(Computer computer) {
-		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementAddComputer(connection, computer)) {
-
+		try{
+			PreparedStatement preparedStatement = this.creatStatementAddComputer( computer) ;
 			preparedStatement.execute();
 
 		} catch (SQLException e) {
@@ -325,9 +336,9 @@ public class ComputerDAO {
 
 	}
 
-	public PreparedStatement creatStatementUpdateComputer(Connection connection, Computer computer) {
+	public PreparedStatement creatStatementUpdateComputer(Computer computer) {
 		
-		try {
+		try (Connection connection = cdbConnection.getConnection();){
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_UPDATE_COMPUTER);
 
@@ -364,8 +375,8 @@ public class ComputerDAO {
 	}
 
 	public void updateComputer(Computer computer) {
-		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementUpdateComputer(connection, computer)) {
+		try {
+			PreparedStatement preparedStatement = this.creatStatementUpdateComputer( computer);
 			preparedStatement.execute();
 
 		} catch (SQLException e) {
@@ -374,8 +385,8 @@ public class ComputerDAO {
 
 	}
 
-	public PreparedStatement creatStatementDeletComputer(Connection connection, int id) {
-		try {
+	public PreparedStatement creatStatementDeletComputer( int id) {
+		try (Connection connection = cdbConnection.getConnection();) {
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_DELET_COMPUTER);
 			preparedStatement.setInt(1, id);
@@ -390,17 +401,15 @@ public class ComputerDAO {
 
 	public void deletComputer(int id) {
 
-		try (Connection connection = cdbConnection.getConnection();
-				PreparedStatement preparedStatement = this.creatStatementDeletComputer(connection, id)
-
-		) {
-
+		try   {
+		
+			PreparedStatement preparedStatement = this.creatStatementDeletComputer( id);
 			preparedStatement.execute();
-
+			
 		} catch (SQLException e) {
+			
 			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 		}
-
 	}
 
 }

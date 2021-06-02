@@ -1,7 +1,7 @@
 package com.excilys.computerDatabase.front.cli;
 
-import com.excilys.computerDatabase.controleur.CompanyCtr;
-import com.excilys.computerDatabase.controleur.ComputerCtr;
+import com.excilys.computerDatabase.front.controleurCLI.CompanyCtr;
+import com.excilys.computerDatabase.front.controleurCLI.ComputerCtr;
 
 public class MenuCLI extends CLI {
 	
@@ -82,6 +82,11 @@ public class MenuCLI extends CLI {
 				this.computerCtr.searchComputer();
 					
 				break;
+			case MENU_DELETE_COMPANY:
+				this.companyCtr.deletCompany();
+					
+				break;	
+				
 			case MENU_EXIT:
 				return false;
 

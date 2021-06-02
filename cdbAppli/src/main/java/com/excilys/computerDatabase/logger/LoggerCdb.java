@@ -45,5 +45,12 @@ public class LoggerCdb {
 		logger.fatal(exception.getClass() + " : " + exception.getMessage());
 		exception.printStackTrace();
 	}
+
+	public static void logError(String name, Throwable e) {
+		Logger logger = LogManager.getLogger(name);
+		logger.fatal(e.getClass() + " : " + e.getMessage());
+		e.printStackTrace();
+		
+	}
 	
 }

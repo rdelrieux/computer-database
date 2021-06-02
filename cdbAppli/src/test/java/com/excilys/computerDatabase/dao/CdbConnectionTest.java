@@ -7,7 +7,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import com.excilys.computerDatabase.connection.CdbConnection;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
 public class CdbConnectionTest {
@@ -65,7 +64,7 @@ public class CdbConnectionTest {
 			} /*catch (//ClassNotFoundException e) {
 				LoggerCdb.logFatal(CdbConnection.class.getName(), e);
 			} */catch (SQLException e) {
-				LoggerCdb.logFatal(CdbConnection.class.getName(), e);
+				LoggerCdb.logFatal(CdbConnectionTest.class.getName(), e);
 			}
 			
 				

@@ -1,6 +1,9 @@
 package com.excilys.computerDatabase.front.cli;
 
+import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate.ComputerDTOUpdateBuilder;
 
 public class ChoixUtilisateur extends CLI{
 	
@@ -52,7 +55,7 @@ public class ChoixUtilisateur extends CLI{
 	
 	
 	public ComputerDTOAdd choixParametreAddComputer() {
-		return new ComputerDTOAdd.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE))
+		return new ComputerDTOAdd.ComputerDTOAddBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE))
 	
 		
 			.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE))
@@ -64,28 +67,28 @@ public class ChoixUtilisateur extends CLI{
 		 	.build();
 	}
 
-	public ComputerDTOAdd choixParametreUpdateComputer(Computer computer) {
-		ComputerDTOInputBuilder ComputerDTOInputBuilder = new ComputerDTOAdd.ComputerDTOInputBuilder(computer.getName());
+	public ComputerDTOUpdate choixParametreUpdateComputer(Computer computer) {
+		ComputerDTOUpdateBuilder ComputerDTOUpdateBuilder = new ComputerDTOUpdate.ComputerDTOUpdateBuilder(""+computer.getId() , computer.getName());
 				
 		if (needUpdate(CHANGER_NOM_MESSAGE)) {
-			ComputerDTOInputBuilder = new ComputerDTOAdd.ComputerDTOInputBuilder(this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE));
+			ComputerDTOUpdateBuilder = new ComputerDTOUpdate.ComputerDTOUpdateBuilder(""+computer.getId(),this.choixNameNotEmpty(CLI.ENTER_COMPUTER_NAME_MESSAGE));
 		}
 		if (needUpdate(CHANGER_DATE_INTRODUCED_MESSAGE)) {
-			ComputerDTOInputBuilder.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE));
+			ComputerDTOUpdateBuilder.withIntroduced(this.choixDate(CLI.ENTER_DATE_INTRODUCED_MESSAGE));
 		}else {
-			ComputerDTOInputBuilder.withIntroduced(computer.getIntroduced()== null ? "" : computer.getIntroduced().toString());
+			ComputerDTOUpdateBuilder.withIntroduced(computer.getIntroduced()== null ? "" : computer.getIntroduced().toString());
 		}
 		if (needUpdate(CHANGER_DATE_DISCONTINUD_MESSAGE)) {
-			ComputerDTOInputBuilder.withDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE));
+			ComputerDTOUpdateBuilder.withDiscontinued(this.choixDate(CLI.ENTER_DATE_DISCONTINUED_MESSAGE));
 		}else {
-			ComputerDTOInputBuilder.withDiscontinued(computer.getDiscontinued()== null ? "" : computer.getDiscontinued().toString());
+			ComputerDTOUpdateBuilder.withDiscontinued(computer.getDiscontinued()== null ? "" : computer.getDiscontinued().toString());
 		}
 		if (needUpdate(CHANGER_COMPANY_NAME_MESSAGE)) {
-			ComputerDTOInputBuilder.withCompanyId (""+this.choixId(CLI.ENTER_ID_MESSAGE) );	
+			ComputerDTOUpdateBuilder.withCompanyId (""+this.choixId(CLI.ENTER_ID_MESSAGE) );	
 		}else {
-			ComputerDTOInputBuilder.withCompanyId( computer.getCompany() == null ?  "" : ""+computer.getCompany().getId());	
+			ComputerDTOUpdateBuilder.withCompanyId( computer.getCompany() == null ?  "" : ""+computer.getCompany().getId());	
 		}
-		return 	ComputerDTOInputBuilder.build();
+		return 	ComputerDTOUpdateBuilder.build();
 	}
 	
 	private boolean needUpdate(String message) {

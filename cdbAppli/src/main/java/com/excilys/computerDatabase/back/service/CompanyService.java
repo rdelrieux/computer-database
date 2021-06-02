@@ -31,6 +31,14 @@ public class CompanyService {
 		return this.companyDao.find(name);
 	}
 
+	public Company getCompany(int id) {
+		return this.companyDao.find(id);
+	}
+
+	public void deletCompany(int id) {
+		this.companyDao.delet(id);
+		
+	}
 
 
 

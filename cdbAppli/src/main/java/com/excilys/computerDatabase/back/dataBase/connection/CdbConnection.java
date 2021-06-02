@@ -33,6 +33,7 @@ public class CdbConnection {
 		InputStream stream = getClass().getClassLoader().getResourceAsStream(PROP_FILE_NAME);
 		try {
 			prop.load(stream);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
