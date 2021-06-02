@@ -35,9 +35,9 @@ public class CdbConnection {
 			prop.load(stream);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerCdb.logError(CdbConnection.class.toString(), e);
 		}
+		
 		config = new HikariConfig(prop);
 		ds = new HikariDataSource(config);
 		
