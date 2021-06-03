@@ -14,6 +14,11 @@ public class CompanyDTOOutput {
 		
 	}
 
+	public CompanyDTOOutput() {
+		this.id = "";
+		this.name = "";
+	}
+
 	public String getId() {
 		return id;
 	}

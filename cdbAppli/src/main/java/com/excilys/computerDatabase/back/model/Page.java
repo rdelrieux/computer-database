@@ -63,23 +63,6 @@ public class Page {
 		}
 	}
 
-
-	
-	
-	public void addNumPage(Integer numero) {
-		if (numero < 0) {
-			numero = -numero;
-			for (int i =0 ; i < numero; i++ ) {
-				this.setPageBefore();
-			}
-		}else {
-			for (int i =0 ; i < numero; i++ ) {
-				this.setPageAfter();
-			}
-		}
-		
-		
-	}
 	
 	@Override
 	public String toString() {

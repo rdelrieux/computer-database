@@ -13,6 +13,11 @@ public class CompanyDTO {
 		
 	}
 
+	public CompanyDTO() {
+		this.id = "";
+		this.name = "";
+	}
+
 	public String getId() {
 		return id;
 	}

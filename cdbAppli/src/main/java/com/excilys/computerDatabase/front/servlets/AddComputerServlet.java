@@ -57,10 +57,10 @@ public class AddComputerServlet extends HttpServlet {
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		session = request.getSession();
 		
 		this.showListCompany();
-	
 		
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(request.getParameter("computerName"))
 				.withIntroduced(request.getParameter("introduced"))
@@ -69,24 +69,23 @@ public class AddComputerServlet extends HttpServlet {
 				.build();
 		
 		
-		
 		try {
 			this.computerService.addComputer( this.computerMapper.mapToComputer(computerDTOAdd));
-			
 			response.sendRedirect(VUE_DASHBOARD);
-		
+			
 		}catch (ValidateurDTOException | DAOException e){
 			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
 			this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 		}
-		
 	}
 	
 	private void showListCompany() {
 		List<Company> listCompany = companyService.getListCompany();
+		
 		List<CompanyDTO> listCompanyDTO =  listCompany.stream()
-		.map(c -> this.companyMapper.mapToCompanyDTO(c) )
-		.collect(Collectors.toList());
+				.map(c -> this.companyMapper.mapToCompanyDTO(c) )
+				.collect(Collectors.toList());
+		
 		session.setAttribute( ATT_COMPANY_LIST ,  listCompanyDTO );
 	}
 

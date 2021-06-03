@@ -45,7 +45,7 @@ public class CompanyMapper {
 	
 	
 	public List<CompanyDTOOutput> mapToListCompanyDTOOutput(ResultSet result) {
-		ArrayList<CompanyDTOOutput> res = new ArrayList<>();
+		List<CompanyDTOOutput> res = new ArrayList<>();
 		
 			try {
 				while (result.next()) {

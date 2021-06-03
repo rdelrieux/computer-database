@@ -108,37 +108,37 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?Page=1" aria-label="Previous"> <span
+				<li><a href="?page=1" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 
 				<li><c:if test="${ page.numPage -2 > 0 }" var="variable">
-						<a href="?Page=${page.numPage -2}">${page.numPage -2} </a>
+						<a href="?page=${page.numPage -2}">${page.numPage -2} </a>
 					</c:if></li>
 
 
 				<li><c:if test="${ page.numPage -1 > 0 }" var="variable">
-						<a href="?Page=${page.numPage -1}">${page.numPage -1} </a>
+						<a href="?page=${page.numPage -1}">${page.numPage -1} </a>
 					</c:if></li>
 
 
-				<li><a href="?Page=${page.numPage}"> .. </a></li>
+				<li><a href="?page=${page.numPage}"> .. </a></li>
 
 
 				<li><c:if
 						test="${ page.numPage +1 <= page.getNombrePageMax() }"
 						var="variable">
-						<a href="?Page=${page.numPage +1}">${page.numPage +1} </a>
+						<a href="?page=${page.numPage +1}">${page.numPage +1} </a>
 					</c:if></li>
 
 
 				<li><c:if
 						test="${ page.numPage +2 <= page.getNombrePageMax() }"
 						var="variable">
-						<a href="?Page=${page.numPage +2}">${page.numPage +2} </a>
+						<a href="?page=${page.numPage +2}">${page.numPage +2} </a>
 					</c:if></li>
 
-				<li><a href="?Page=${ page.getNombrePageMax() }"
+				<li><a href="?page=${ page.getNombrePageMax() }"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

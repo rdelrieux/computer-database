@@ -57,7 +57,7 @@ public class DashBoardServlet extends HttpServlet {
 		
 		
 		String paramNombreElementPage = request.getParameter("nombreElementPage");
-		String numPage = request.getParameter("Page");
+		String numPage = request.getParameter("page");
 		this.updatePage( paramNombreElementPage ,  numPage );		
 		
 		String paramSearch = request.getParameter("search");
@@ -65,8 +65,7 @@ public class DashBoardServlet extends HttpServlet {
 		
 		String paramOrderBy = request.getParameter("orderBy");
 		this.updateOrderBy( paramOrderBy);
-		
-		
+				
 		List<ComputerDTOOutput> listComputer = this.getListComputer(session);
 		request.setAttribute("listcomputer", listComputer);
 		
@@ -101,15 +100,22 @@ public class DashBoardServlet extends HttpServlet {
 	}
 	
 
-	private void updatePage( String paramNombreElementPage , String numPage) {
+	private void updatePage( String paramNombreElementPage , String paramNumPage) {
 		Page page = (Page)session.getAttribute(ATT_PAGE);
-		if (paramNombreElementPage != null) {
-		
-			page.setNumPage( 1+(page.getNumPage()-1)*page.getNombreElementPage()/Integer.valueOf(paramNombreElementPage));
-			page.setNombreElementPage(Integer.valueOf(paramNombreElementPage) );
-		}
-		if  (numPage != null &&  Integer.valueOf(numPage) <= page.getNombrePageMax()) {
-			page.setNumPage(Integer.valueOf(numPage));
+		try {
+			int nombreElementPage = Integer.valueOf(paramNombreElementPage);
+			int numPage =  Integer.valueOf(paramNumPage); 
+			if (nombreElementPage>1 && nombreElementPage<100) {
+				page.setNumPage( 1+(page.getNumPage()-1)*page.getNombreElementPage()/nombreElementPage);
+				page.setNombreElementPage(nombreElementPage );
+			}
+			if  (numPage <= page.getNombrePageMax()) {
+				page.setNumPage(numPage);
+			}
+			
+		}catch (NullPointerException | NumberFormatException e) {
+			LoggerCdb.logInfo(DashBoardServlet.class.toString(), e);
+			
 		}
 		session.setAttribute(ATT_PAGE, page);
 
@@ -155,17 +161,14 @@ public class DashBoardServlet extends HttpServlet {
 		}else {
 			page.setNombreElementRequet(computerService.searchNombreElement(search));
 			listcomputer =   computerService.searchComputer(search, page, orderBy);
-			
 		}
 		
 		return listcomputer.stream()
 				.map(c -> this.computerMapper.mapToComputerDTOOutput(c) )
-				.collect(Collectors.toList());
-	
+				.collect(Collectors.toList());	
 	}
 
-
-
+	
 }
 
 	

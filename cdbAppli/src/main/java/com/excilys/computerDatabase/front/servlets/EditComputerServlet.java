@@ -20,7 +20,6 @@ import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
 import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.exception.ValidateurDTOException;
@@ -38,7 +37,6 @@ public class EditComputerServlet extends HttpServlet {
 	private static final String VUE_EDIT_COMPUTER = "/WEB-INF/jsp/editComputer.jsp";
 
 	private ComputerService computerService = ComputerService.getInstance();
-
     private CompanyService companyService = CompanyService.getInstance();
     private ComputerMapper computerMapper = ComputerMapper.getInstance();
     private CompanyMapper companyMapper = CompanyMapper.getInstance();
@@ -46,10 +44,6 @@ public class EditComputerServlet extends HttpServlet {
 	private HttpSession session;
 
 	public EditComputerServlet() {
-		computerService = ComputerService.getInstance();
-		computerMapper = ComputerMapper.getInstance();
-		companyService = CompanyService.getInstance();
-		companyMapper = CompanyMapper.getInstance();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -85,12 +79,7 @@ public class EditComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		session = request.getSession();
 		
-		this.showListCompany();
-		
-
-		
-
-	
+		this.showListCompany();	
 		
 		ComputerDTOUpdate computerDTOUpdate = new ComputerDTOUpdate.ComputerDTOUpdateBuilder(request.getParameter("id"), request.getParameter("computerName"))
 				.withIntroduced(request.getParameter("introduced"))
@@ -98,12 +87,9 @@ public class EditComputerServlet extends HttpServlet {
 				.withCompanyId( request.getParameter("companyId") )
 				.build();
 		
-		
-		
 		try {
 			
 			this.computerService.updateComputer( this.computerMapper.mapToComputer(computerDTOUpdate));
-			
 			response.sendRedirect(VUE_DASHBOARD);
 		
 		}catch (DAOException | ValidateurDTOException e  ){

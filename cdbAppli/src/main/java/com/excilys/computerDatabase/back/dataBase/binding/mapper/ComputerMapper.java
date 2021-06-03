@@ -5,20 +5,16 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
-import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOInput;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput;
+import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput.ComputerDTOOutputBuilder;
 import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
+import com.excilys.computerDatabase.back.model.Computer.ComputerBuilder;
 import com.excilys.computerDatabase.logger.LoggerCdb;
-
-
-
-
 
 public class ComputerMapper {
 
@@ -30,11 +26,10 @@ public class ComputerMapper {
 	private static final String COLONNE_COMPANY_NAME = "company.name";
 
 	private static ComputerMapper instance;
-	
-	
+
 	private ComputerMapper() {
-		
-		}
+
+	}
 
 	public static ComputerMapper getInstance() {
 		if (instance == null) {
@@ -44,81 +39,87 @@ public class ComputerMapper {
 	}
 
 	public ComputerDTOOutput mapToComputerDTOOutput(ResultSet result) {
-		
+
 		try {
-			return new ComputerDTOOutput.ComputerDTOOutputBuilder(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME))
-						.withIntroduced(result.getDate(COLONNE_DATE_INTRODUCED)== null ?  "" : ""+result.getDate(COLONNE_DATE_INTRODUCED))
-						.withDiscontinued(result.getDate(COLONNE_DATE_DISCONTINUED)== null ?  "" : ""+result.getDate(COLONNE_DATE_DISCONTINUED))
-						.withCompany(  
-								result.getString(COLONNE_COMPANY_ID)== null?  
-								new CompanyDTOOutput( "","") : 
-								new CompanyDTOOutput(result.getString(COLONNE_COMPANY_ID) ,result.getString(COLONNE_COMPANY_NAME))
-								)
-						.build();
-			
+			ComputerDTOOutputBuilder computerDTOOutput = new ComputerDTOOutput.ComputerDTOOutputBuilder(
+					result.getString(COLONNE_ID), result.getString(COLONNE_NAME));
+
+			if (result.getDate(COLONNE_DATE_INTRODUCED) != null) {
+				computerDTOOutput.withIntroduced("" + result.getDate(COLONNE_DATE_INTRODUCED));
+			}
+
+			if (result.getDate(COLONNE_DATE_DISCONTINUED) != null) {
+				computerDTOOutput.withDiscontinued("" + result.getDate(COLONNE_DATE_DISCONTINUED));
+			}
+
+			if (result.getString(COLONNE_COMPANY_ID) != null) {
+				computerDTOOutput.withCompany(new CompanyDTOOutput(result.getString(COLONNE_COMPANY_ID),
+						result.getString(COLONNE_COMPANY_NAME)));
+			}
+
+			return computerDTOOutput.build();
+
 		} catch (SQLException e) {
 			LoggerCdb.logError(ComputerMapper.class.getName(), e);
 			throw new ComputerNotFoundException();
-			
+
 		}
-		
+
 	}
-	
-	
+
 	public List<ComputerDTOOutput> mapToListComputerDTOOutput(ResultSet result) {
 		ArrayList<ComputerDTOOutput> res = new ArrayList<>();
-		
+
 		try {
 			while (result.next()) {
 				res.add(this.mapToComputerDTOOutput(result));
-				}
-			
+			}
+
 		} catch (SQLException e) {
 			LoggerCdb.logError(ComputerMapper.class.getName(), e);
-			
+
 		}
 		return res;
 	}
-	
-	
-	public Computer mapToComputer( ComputerDTOOutput computerDTOOutput ) {
-		return new Computer.ComputerBuilder(Integer.valueOf(computerDTOOutput.getId()) ,computerDTOOutput.getName())
-				
-				.withIntroduced(computerDTOOutput.getIntroduced() == "" ? null : LocalDate.parse(computerDTOOutput.getIntroduced()))
-				
-				.withDiscontinued(computerDTOOutput.getDiscontinued() == "" ? null :LocalDate.parse(computerDTOOutput.getDiscontinued()))
-				
-				.withCompany(computerDTOOutput.getCompanyDTOOutput().getId() == "" ? null : new Company(
-						Integer.valueOf( computerDTOOutput.getCompanyDTOOutput().getId()) , computerDTOOutput.getCompanyDTOOutput().getName())
-						)
-				
-				.build();
-	}
-	
-	public List<Computer> maptoListComputer( List<ComputerDTOOutput> listComputerDTOOutput) {
+
+	public Computer mapToComputer(ComputerDTOOutput computerDTOOutput) {
 		
+		ComputerBuilder computerBuilder = new Computer.ComputerBuilder(Integer.valueOf(computerDTOOutput.getId()),
+				computerDTOOutput.getName());
+
+		if ( ! "".equals( computerDTOOutput.getIntroduced())) {
+			computerBuilder.withIntroduced(LocalDate.parse(computerDTOOutput.getIntroduced()));
+		}
+		if ( ! "".equals( computerDTOOutput.getDiscontinued())) {
+			computerBuilder.withDiscontinued(LocalDate.parse(computerDTOOutput.getDiscontinued()));
+		}
+		if ( ! "".equals( computerDTOOutput.getCompanyDTOOutput().getId() )) {
+			computerBuilder.withCompany(new Company(Integer.valueOf(computerDTOOutput.getCompanyDTOOutput().getId()),
+					computerDTOOutput.getCompanyDTOOutput().getName()));
+		}
+
+		return computerBuilder.build();
+	}
+
+	public List<Computer> maptoListComputer(List<ComputerDTOOutput> listComputerDTOOutput) {
 		return listComputerDTOOutput.stream()
-						.map(cOut -> this.mapToComputer(cOut) )
-						.collect(Collectors.toList());
-	}
-	
-
-	public ComputerDTOInput  mapToComputerDTOInput( Computer computer ) {
-		
-		return new ComputerDTOInput.ComputerDTOInputBuilder(computer.getName())
-				.withIntroduced( computer.getIntroduced() == null ? "" : ""+computer.getIntroduced() )
-				.withDiscontinued(computer.getDiscontinued() == null ? "" : ""+computer.getDiscontinued())
-				.withCompanyId( computer.getCompany() == null ? "" : ""+computer.getCompany().getId() )
-				.build();
-		
+			.map(cOut -> this.mapToComputer(cOut))
+			.collect(Collectors.toList());
 	}
 
-	
-	
-	
-	
 
 	
 	
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

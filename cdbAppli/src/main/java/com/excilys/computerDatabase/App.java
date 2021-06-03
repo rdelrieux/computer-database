@@ -13,6 +13,7 @@ import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
+import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.cli.StartApplication;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
@@ -27,20 +28,22 @@ public class App {
 
 	public static void main(String[] args) {
 	
+		
 		try {
-			System.out.println( CompanyDAO.getInstance().find(1).getName());
-			
-
+			CompanyDAO.getInstance().findAll().stream()
+			.forEach( s -> System.out.println(s.getName())
+			);
+	
 		}catch(DAOException e ) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
 		}
 		
 		
 		try {
-			CompanyDAO.getInstance().findAll().stream()
+			/*CompanyDAO.getInstance().findAll().stream()
 					.forEach( s -> System.out.println(s.getName())
 					);
-			
+			*/
 		}catch(DAOException e ) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
 		}

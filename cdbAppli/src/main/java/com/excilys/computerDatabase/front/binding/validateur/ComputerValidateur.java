@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.exception.IdNotValidException;
-import com.excilys.computerDatabase.front.binding.exception.DateFormaNotValidException;
+import com.excilys.computerDatabase.front.binding.exception.DateFormatNotValidException;
 import com.excilys.computerDatabase.front.binding.exception.DateIntervalNotValidException;
 import com.excilys.computerDatabase.front.binding.exception.NameNotValidException;
 import com.excilys.computerDatabase.logger.LoggerCdb;
@@ -87,16 +87,14 @@ public class ComputerValidateur {
 			}
 
 		} catch (Exception e) {
-			throw new DateFormaNotValidException("Date Forma not valid : " + date);
+			throw new DateFormatNotValidException("Date Format not valid : " + date);
 		}
 
 	}
 
 	private void validateCompanyId(String id) {
 		if (!("".equals(id))) {
-			
 			validateId( id);
-
 		}
 	}
 

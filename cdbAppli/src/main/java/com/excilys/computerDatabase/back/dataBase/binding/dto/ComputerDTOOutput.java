@@ -51,11 +51,11 @@ public class ComputerDTOOutput {
 		
 		private String name;
 
-		private String introduced;
+		private String introduced = "";
 
-		private String discontinued;
+		private String discontinued = "";
 
-		private CompanyDTOOutput companyDTOOutput;
+		private CompanyDTOOutput companyDTOOutput = new CompanyDTOOutput() ;
 
 
 		public ComputerDTOOutputBuilder( String id , String name) {
