@@ -56,31 +56,41 @@
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<!-- Table header for Computer Name -->
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall"  /> <span
+							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
+
+						<th><a href="?orderBy=computer.name,up"> <i
+								class="fa fa-fw  fa-angle-up  fa-clickable"></i>
+						</a> Computer name <a href="?orderBy=computer.name,dowm"> <i
+								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
+						</a></th>
+
+						<th><a href="?orderBy=introduced,up"> <i
+								class="fa fa-fw  fa-angle-up  fa-clickable"></i>
+						</a> Introduced date <a href="?orderBy=introduced,down"> <i
+								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
+						</a></th>
 						
-					 <th>Computer name <a href="?orderBy=computer.name" >
-						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
-						
-						<th>Introduced date<a href="?orderBy=introduced" >
-						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date<a href="?orderBy=discontinued" >
-						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
-						<!-- Table header for Company -->
-						<th>Company<a href="?orderBy=company.name" >
-						<i class="fa fa-fw fa-sort pull-right fa-clickable"></i></a></th>
+						<th><a href="?orderBy=discontinued,up"> 
+						<i class="fa fa-fw  fa-angle-ud  fa-clickable"></i>
+						</a> Discontinued date <a href="?orderBy=discontinued,down"> <i
+								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
+						</a></th>
+
+						<th><a href="?orderBy=company.name,up"> <i
+								class="fa fa-fw  fa-angle-up  fa-clickable"></i>
+						</a> Company <a href="?orderBy=company.name,down"> <i
+								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
+						</a></th>
 
 					</tr>
-					
+
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">

@@ -8,15 +8,15 @@ public enum OrderBy {
 	Comany("company.name");
 
 	private String valeur;
-	private boolean up ; 
+	private boolean ascending ; 
 	
 	OrderBy(String valeur) {
 		this.valeur = valeur;
-		this.up = false;
+		this.ascending = true;
 	}
 
-	public boolean isUp() {
-		return up;
+	public boolean isAscending() {
+		return ascending;
 	}
 	
 	public String getValeur() {
@@ -27,11 +27,14 @@ public enum OrderBy {
 	public static OrderBy getOrderBy(String valeur) {
 		for (OrderBy order : OrderBy.values()) {
 			if (valeur.equals(order.valeur)) {
-				order.up = !order.up;
 				return order;
 			}
 		}
 		return COMPUTER_NAME;
+	}
+	
+	public void setAscending(boolean ascending) {
+		this.ascending = ascending;
 	}
 
 }

@@ -178,7 +178,7 @@ public class ComputerDAO {
 	private PreparedStatement creatStatementFindAll(Connection connection, Page page, OrderBy orderBy) {
 		try {
 			String statement = REQUET_AFFICHER_TOUTE_COMPUTERS;
-			if (orderBy.isUp()) {
+			if (orderBy.isAscending()) {
 				statement = statement.replace("columnname", orderBy.getValeur());
 			} else {
 				statement = statement.replace("columnname", orderBy.getValeur() + " DESC");
@@ -217,7 +217,7 @@ public class ComputerDAO {
 		try {
 
 			String statement = REQUET_AFFICHER_COMPUTERS_SEARCH;
-			if (orderBy.isUp()) {
+			if (orderBy.isAscending()) {
 				statement = statement.replace("columnname", orderBy.getValeur());
 			} else {
 				statement = statement.replace("columnname", orderBy.getValeur() + " DESC");

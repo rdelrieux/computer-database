@@ -52,5 +52,10 @@ public class LoggerCdb {
 		e.printStackTrace();
 		
 	}
+
+	public static void logDebug(String name, Exception e) {
+		Logger logger = LogManager.getLogger(name);
+		logger.debug(e.getMessage());
+	}
 	
 }

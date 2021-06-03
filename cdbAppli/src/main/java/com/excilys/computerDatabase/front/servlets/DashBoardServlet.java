@@ -101,22 +101,33 @@ public class DashBoardServlet extends HttpServlet {
 	
 
 	private void updatePage( String paramNombreElementPage , String paramNumPage) {
+		
 		Page page = (Page)session.getAttribute(ATT_PAGE);
 		try {
 			int nombreElementPage = Integer.valueOf(paramNombreElementPage);
-			int numPage =  Integer.valueOf(paramNumPage); 
+			
 			if (nombreElementPage>1 && nombreElementPage<100) {
 				page.setNumPage( 1+(page.getNumPage()-1)*page.getNombreElementPage()/nombreElementPage);
 				page.setNombreElementPage(nombreElementPage );
 			}
-			if  (numPage <= page.getNombrePageMax()) {
-				page.setNumPage(numPage);
-			}
+			
 			
 		}catch (NullPointerException | NumberFormatException e) {
-			LoggerCdb.logInfo(DashBoardServlet.class.toString(), e);
+			LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
 			
 		}
+		
+		try {
+		int numPage =  Integer.valueOf(paramNumPage); 
+		if  (numPage <= page.getNombrePageMax()) {
+			page.setNumPage(numPage);
+		}
+		}catch (NullPointerException | NumberFormatException e) {
+			LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
+			
+		}
+		
+	
 		session.setAttribute(ATT_PAGE, page);
 
 	}
@@ -138,8 +149,14 @@ public class DashBoardServlet extends HttpServlet {
 			Page page = (Page)session.getAttribute(ATT_PAGE);
 			String search = ""+session.getAttribute(ATT_SEARCH);
 			session.setAttribute(ATT_SEARCH, search);
-			
-			session.setAttribute(ATT_ORDER_BY, OrderBy.getOrderBy(paramOrderBy));
+			OrderBy orderBy = OrderBy.getOrderBy(paramOrderBy.split(",")[0]);
+			try {
+				orderBy.setAscending(! "down".equals(paramOrderBy.split(",")[1]));
+
+			}catch(ArrayIndexOutOfBoundsException e){
+				LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
+			}
+			session.setAttribute(ATT_ORDER_BY,orderBy);
 			page.setNumPage(1);
 			session.setAttribute(ATT_PAGE, page);
 		}
