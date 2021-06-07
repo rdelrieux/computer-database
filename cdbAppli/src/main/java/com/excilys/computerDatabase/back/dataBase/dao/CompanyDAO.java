@@ -12,6 +12,10 @@ import java.util.function.Function;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.back.dataBase.connection.CdbConnection;
@@ -21,6 +25,7 @@ import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryExc
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Repository
 public class CompanyDAO {
 
 	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
@@ -35,22 +40,15 @@ public class CompanyDAO {
 	private static final String REQUET_DELET_COMPANY = 
 			"DELET  FROM company " 
 			+ "WHERE company.id = ? \n";
-
-	private static CompanyDAO instance;
-	private CompanyMapper companyMapper;
+	
+	@Autowired
 	private CdbConnection cdbConnection;
+	@Autowired
+	@Qualifier("companyMapperDAO")
+	private CompanyMapper companyMapper;
 
-	private CompanyDAO() {
-		this.cdbConnection = CdbConnection.getInstance();
-		this.companyMapper = CompanyMapper.getInstance();
-	}
 
-	public static CompanyDAO getInstance() {
-		if (instance == null) {
-			instance = new CompanyDAO();
-		}
-		return instance;
-	}
+	
 
 	private PreparedStatement creatStatementFind(Connection connection, int id) {
 		try {
@@ -139,7 +137,7 @@ public class CompanyDAO {
 	}
 
 	public void delet(int id) {
-		try (Connection connection = CdbConnection.getInstance().getConnection();) {
+		try (Connection connection = cdbConnection.getConnection();) {
 
 			try (PreparedStatement preparedStatement1 = connection.prepareStatement(REQUET_DELET_COMPUTER_WITH_COMPANY);
 					PreparedStatement preparedStatement2 = connection.prepareStatement(REQUET_DELET_COMPANY);) {

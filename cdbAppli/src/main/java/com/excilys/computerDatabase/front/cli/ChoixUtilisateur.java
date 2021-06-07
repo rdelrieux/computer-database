@@ -1,55 +1,43 @@
 package com.excilys.computerDatabase.front.cli;
 
+import java.util.Scanner;
+
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate.ComputerDTOUpdateBuilder;
 
+@Component
 public class ChoixUtilisateur extends CLI{
+
+	private Scanner sc = new Scanner(System.in);
+
 	
-	private static ChoixUtilisateur instance ;
-
-
-	private ChoixUtilisateur() {
-		
-	}
-	
-	public static ChoixUtilisateur getInstance()  {
-		if (instance == null) {
-			instance = new ChoixUtilisateur();
-		}
-		return instance;
-	}
-
 	public String choixName(String message) {
 		System.out.println (message);
-		return sc.typeString();
+		return sc.nextLine();
 	}
 	public String choixNameNotEmpty(String message) {
 		System.out.println (message);
-		String name = sc.typeString();
+		String name = sc.nextLine();
 		while ( name.isEmpty()) {
 			System.out.println(CLI.INVALID_INPUT_MESSAGE);
 			System.out.println (message);
-			name = sc.typeString();
+			name = sc.nextLine();
 		}
 		return name;
 	}
 	
-	public int choixId(String message) {
+	public String choixId(String message) {
 		System.out.println (message);
-		return sc.typeIdValid();
+		return sc.nextLine();
 	}
 
 	private String choixDate(String message) {
 		System.out.println(message);
-		String date = this.sc.typeString();
-		while (! sc.isDate(date)) {
-			System.out.println(INVALID_DATE_MESSAGE);
-			System.out.println(message);
-			date= this.sc.typeString();
-		}
-		
+		String date = this.sc.nextLine();		
 		return date;
 	}
 	
@@ -93,11 +81,11 @@ public class ChoixUtilisateur extends CLI{
 	
 	private boolean needUpdate(String message) {
 		System.out.println(message);
-		String validation = this.sc.typeString();
+		String validation = this.sc.nextLine();
 		while ( ! ( validation.equals(VALIDATION) || validation.equals(NOT_VALIDATION) ) ){
 			System.out.println(VALIDATION_NOT_VALID_MESSAGE);
 			System.out.println(message );
-			validation = this.sc.typeString();
+			validation = this.sc.nextLine();
 		}
 		if (validation.equals(VALIDATION)){
 			return true;
@@ -108,11 +96,11 @@ public class ChoixUtilisateur extends CLI{
 	public boolean messageVerificationAction() {
 		System.out.println(VALIDATION_MESSAGE);
 		
-		String validation = this.sc.typeString();
+		String validation = this.sc.nextLine();
 		while ( ! (validation.equals(VALIDATION) || validation.equals(NOT_VALIDATION) ) ){
 			System.out.println(VALIDATION_NOT_VALID_MESSAGE);
 			System.out.println(VALIDATION_MESSAGE);
-			validation = this.sc.typeString();
+			validation = this.sc.nextLine();
 		}
 		if (validation.equals(VALIDATION)) {
 			return true;

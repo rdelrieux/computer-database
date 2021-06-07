@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
 import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
@@ -36,15 +38,17 @@ public class EditComputerServlet extends HttpServlet {
 	private static final String VUE_ERREUR = "editComputer?id=";
 	private static final String VUE_EDIT_COMPUTER = "/WEB-INF/jsp/editComputer.jsp";
 
-	private ComputerService computerService = ComputerService.getInstance();
-    private CompanyService companyService = CompanyService.getInstance();
-    private ComputerMapper computerMapper = ComputerMapper.getInstance();
-    private CompanyMapper companyMapper = CompanyMapper.getInstance();
+	@Autowired
+	private ComputerService computerService ;
+	@Autowired
+    private CompanyService companyService ;
+	@Autowired
+	private ComputerMapper computerMapper ;
+	@Autowired
+	private CompanyMapper companyMapper ;
 
 	private HttpSession session;
 
-	public EditComputerServlet() {
-	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

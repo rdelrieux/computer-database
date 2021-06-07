@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Computer.ComputerBuilder;
@@ -13,24 +17,15 @@ import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput.ComputerDTOOutputBuilder;
 import com.excilys.computerDatabase.front.binding.validateur.ComputerValidateur;
 
+@Component("computerMapperCtr")
 public class ComputerMapper {
 	
-	private static ComputerMapper instance;
+	
+	@Autowired
+	@Qualifier("companyMapperCtr")
 	private CompanyMapper companyMapper;
+	@Autowired
 	private ComputerValidateur computerValidateur;
-	
-	private ComputerMapper() {
-		this.computerValidateur = ComputerValidateur.getInstance();
-		this.companyMapper = CompanyMapper.getInstance();
-		}
-
-	public static ComputerMapper getInstance() {
-		if (instance == null) {
-			instance = new ComputerMapper();
-		}
-		return instance;
-	}
-	
 	
 	
 	public ComputerDTOOutput  mapToComputerDTOOutput(Computer computer) {

@@ -2,25 +2,12 @@ package com.excilys.computerDatabase.front.cli;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.front.binding.dto.CompanyDTO;
 
-
+@Component
 public class CompanyCLI extends CLI{
-
-	private static CompanyCLI instance ;
-
-	
-	private CompanyCLI() {
-		
-	}
-
-	public static CompanyCLI getInstance()  {
-		if (instance == null) {
-			instance = new CompanyCLI();
-		}
-		return instance;
-	}
 
 	public void showListCompany(List<CompanyDTO> listCompany) {
 		for (CompanyDTO company : listCompany) {

@@ -1,8 +1,14 @@
 package com.excilys.computerDatabase.front.cli;
 
+import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerDatabase.front.controleurCLI.CompanyCtr;
 import com.excilys.computerDatabase.front.controleurCLI.ComputerCtr;
 
+@Component
 public class MenuCLI extends CLI {
 	
 	private static final String MENU = "\n\n\t Menu \n\n"
@@ -16,27 +22,13 @@ public class MenuCLI extends CLI {
 			+ "\nPour faire un recherche de Computer tapez "+Menu.MENU_SEARCH_COMPUTERS.getValeur()
 			+ "\nPour partir tapez "+Menu.MENU_EXIT.getValeur();
 	
-	private static final String NOT_IMPLEMENTED = "option en cour de developpement \n";
-	private static final String ENTER_ID_MESSAGE = "Entez l'identifiant du Computer: ";
-	private static final String IDENTIFIANT_NOT_VALID_MESSAGE = "identifiant non valid ";
-	
-	private static MenuCLI instance ;
+	@Autowired
 	private CompanyCtr companyCtr;
+	@Autowired
 	private ComputerCtr computerCtr;
 	
+	private Scanner sc = new Scanner(System.in);
 	
-	private MenuCLI() {
-		
-		companyCtr = CompanyCtr.getInstance();
-		computerCtr = ComputerCtr.getInstance();
-	}
-
-	public static MenuCLI getInstance()  {
-		if (instance == null) {
-			instance = new MenuCLI();
-		}
-		return instance;
-	}
 	
 
 	public boolean isUsed() {
@@ -46,7 +38,7 @@ public class MenuCLI extends CLI {
 		
 		while ( ! isValidImput  ) {
 			isValidImput = true;
-			String imput = this.sc.typeString();
+			String imput = this.sc.nextLine();
 		
 			switch (Menu.getMenu(imput)) {
 			case MENU_SHOW_LIST_COMPANY:
@@ -59,7 +51,7 @@ public class MenuCLI extends CLI {
 					
 				break;
 			case MENU_SHOW_LIST_COMPUTER:
-				this.computerCtr.showListComputer();
+				this.computerCtr.searchComputer();
 				
 				break;
 			case MENU_SHOW_COMPUTER:
@@ -109,26 +101,6 @@ public class MenuCLI extends CLI {
 		}
 		
 		return true;
-	}
-
-
-
-	
-	
-	private int choixComputerId() {
-		System.out.println(ENTER_ID_MESSAGE);
-		String id = this.sc.typeString();
-		while (! sc.isIntegerPositif(id)) {
-			System.out.println(IDENTIFIANT_NOT_VALID_MESSAGE);
-			System.out.println(ENTER_ID_MESSAGE);
-			id=  this.sc.typeString();
-		}
-		return Integer.parseInt(id);
-	}
-	
-	
-	public void notImplemented() {
-		System.out.println(NOT_IMPLEMENTED);
 	}
 	
 }

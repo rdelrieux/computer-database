@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
 import com.excilys.computerDatabase.back.model.Company;
@@ -14,24 +16,14 @@ import com.excilys.computerDatabase.back.model.Company;
 
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Component("companyMapperDAO")
 public class CompanyMapper {
 	
+	
 	private static final String COLONNE_ID = "id";
+	
 	private static final String COLONNE_NAME = "name";
-
-	private static CompanyMapper instance;
 	
-	
-	private CompanyMapper() {
-		
-		}
-
-	public static CompanyMapper getInstance() {
-		if (instance == null) {
-			instance = new CompanyMapper();
-		}
-		return instance;
-	}
 
 	public CompanyDTOOutput mapToCompanyDTOOutput(ResultSet result) {
 	

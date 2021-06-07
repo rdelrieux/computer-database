@@ -2,27 +2,18 @@ package com.excilys.computerDatabase.back.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computerDatabase.back.dataBase.dao.CompanyDAO;
 import com.excilys.computerDatabase.back.model.Company;
 
-
+@Service
 public class CompanyService {
 
-	private static CompanyService instance ;
+	@Autowired
 	private CompanyDAO companyDao;
 	
-	private CompanyService() {
-		this.companyDao = CompanyDAO.getInstance();
-	}
-
-	public static CompanyService getInstance()  {
-		if (instance == null) {
-			instance = new CompanyService();
-		}
-		return instance;
-	}
-	
-
 	public List<Company> getListCompany() {
 		return this.companyDao.findAll();
 	}

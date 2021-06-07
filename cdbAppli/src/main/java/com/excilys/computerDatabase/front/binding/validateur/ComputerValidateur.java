@@ -2,6 +2,8 @@ package com.excilys.computerDatabase.front.binding.validateur;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.exception.IdNotValidException;
@@ -10,20 +12,9 @@ import com.excilys.computerDatabase.front.binding.exception.DateIntervalNotValid
 import com.excilys.computerDatabase.front.binding.exception.NameNotValidException;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Component
 public class ComputerValidateur {
 	
-	private static ComputerValidateur instance;
-
-	private ComputerValidateur() {
-
-	}
-
-	public static ComputerValidateur getInstance() {
-		if (instance == null) {
-			instance = new ComputerValidateur();
-		}
-		return instance;
-	}
 
 	public void validate(ComputerDTOAdd computerDTOAdd) {
 		

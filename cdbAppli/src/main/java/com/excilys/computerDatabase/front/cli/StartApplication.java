@@ -1,21 +1,14 @@
 package com.excilys.computerDatabase.front.cli;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StartApplication extends CLI {
 	
-	private static StartApplication instance ;
+	@Autowired
 	private MenuCLI menuCli;
 
-	private StartApplication() {
-		this.menuCli = MenuCLI.getInstance();
-	}
-	
-	public static StartApplication getInstance()  {
-		if (instance == null) {
-			instance = new StartApplication();
-		}
-		return instance;
-	}
 
 	public void start() {
 		System.out.println(CLI.BIENVENUE_MESSAGE);
@@ -28,7 +21,6 @@ public class StartApplication extends CLI {
 	
 	public void stop() {
 		System.out.println(CLI.BYE_MESSAGE);
-		this.sc.close();
 	}
 
 	

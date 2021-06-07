@@ -2,10 +2,14 @@ package com.excilys.computerDatabase.front.controleurCLI;
 
 import java.util.stream.Collectors;
 
-import com.excilys.computerDatabase.back.model.Company;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+
+import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
+import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
-import com.excilys.computerDatabase.back.service.CompanyService;
 import com.excilys.computerDatabase.back.service.ComputerService;
 import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
@@ -14,47 +18,21 @@ import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.cli.CLI;
 import com.excilys.computerDatabase.front.cli.ChoixUtilisateur;
 import com.excilys.computerDatabase.front.cli.ComputerCLI;
+import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Controller
 public class ComputerCtr {
 
-	private static ComputerCtr instance;
+	@Autowired
 	private ComputerService computerService;
+	@Autowired
 	private ComputerCLI computerCLI;
-	private CompanyService companyService;
+	@Autowired
 	private ChoixUtilisateur choixutilisateur;
+	@Autowired
+	@Qualifier("computerMapperCtr")
 	private ComputerMapper computerMapper;
 
-	private ComputerCtr() {
-		this.computerService = ComputerService.getInstance();
-		this.computerCLI = ComputerCLI.getInstance();
-		this.companyService = CompanyService.getInstance();
-		this.choixutilisateur = ChoixUtilisateur.getInstance();
-		this.computerMapper = ComputerMapper.getInstance();
-	}
-
-	public static ComputerCtr getInstance() {
-		if (instance == null) {
-			instance = new ComputerCtr();
-		}
-		return instance;
-	}
-
-	public void showListComputer() {
-		Page page = new Page();
-		page.setNombreElementRequet(this.computerService.searchNombreElement());
-		String choix = "1";
-		while (!choix.equals("exit")) {
-			page = choixPage( choix,  page);
-			System.out.println(page);
-			this.computerCLI.showListComputer(
-					this.computerService.getListComputer( page, OrderBy.COMPUTER_NAME).stream()
-					.map(c -> computerMapper.mapToComputerDTOOutput(c))
-					.collect(Collectors.toList())
-					);
-			choix = this.choixutilisateur.choixName(CLI.ENTER_PAGE_MESSAGE);
-		}
-		
-	}
 
 	public void showComputer() {
 		Computer computer = this.computerService.getComputer(this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
@@ -69,29 +47,44 @@ public class ComputerCtr {
 	}
 
 	public void updateComputer() {
-		Computer computer = this.computerService.getComputer(this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
-		if (computer == null) {
-			System.out.println("logg ComputerCtr : " + CLI.COMPUTER_NOT_FOUND_MESSAGE);
-		} else {
+		try {
+			Computer computer = this.computerService.getComputer(this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
+			
+			
+			if (computer == null) {
+				System.out.println("logg ComputerCtr : " + CLI.COMPUTER_NOT_FOUND_MESSAGE);
+			} else {
 
-			this.computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computer));
-			ComputerDTOUpdate computerDTOUpdate = this.choixutilisateur.choixParametreUpdateComputer(computer);
-				this.computerService.updateComputer(computerMapper.mapToComputer(computerDTOUpdate));
+				this.computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computer));
+				ComputerDTOUpdate computerDTOUpdate = this.choixutilisateur.choixParametreUpdateComputer(computer);
+					this.computerService.updateComputer(computerMapper.mapToComputer(computerDTOUpdate));
+			}
+		}catch (ComputerNotFoundException e) {
+			LoggerCdb.logInfo(ComputerCtr.class.getName(), e);
 		}
+		
 
 	}
 
 	public void deletComputer() {
-		int id = choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE);
-		Computer computer = computerService.getComputer(id);
-		computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computerService.getComputer(id)));
-		
-		if (computer != null && choixutilisateur.messageVerificationAction()) {
-			this.computerService.deletComputer(id);
-			System.out.println("logg ComputerCtr : " + CLI.DELET_REUSSI_MESSAGE);
-		} else {
-			System.out.println("logg ComputerCtr : " + CLI.DELET_CANCELED_MESSAGE);
+		String idS = choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE);
+		try {
+			int id = Integer.valueOf(idS);
+			
+			Computer computer = computerService.getComputer(id);
+			computerCLI.showComputer(computerMapper.mapToComputerDTOOutput(computerService.getComputer(id)));
+			
+			if (computer != null && choixutilisateur.messageVerificationAction()) {
+				this.computerService.deletComputer(id);
+				System.out.println("logg ComputerCtr : " + CLI.DELET_REUSSI_MESSAGE);
+			} else {
+				System.out.println("logg ComputerCtr : " + CLI.DELET_CANCELED_MESSAGE);
+			}
+		}catch (RuntimeException e) {
+			
 		}
+		
+		
 		
 	}
 

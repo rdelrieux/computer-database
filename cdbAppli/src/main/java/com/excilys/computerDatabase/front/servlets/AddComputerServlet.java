@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.service.CompanyService;
@@ -29,11 +31,14 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private ComputerService computerService = ComputerService.getInstance();
-
-    private CompanyService companyService = CompanyService.getInstance();
-    private ComputerMapper computerMapper = ComputerMapper.getInstance();
-    private CompanyMapper companyMapper = CompanyMapper.getInstance();
+	@Autowired
+	private ComputerService computerService ;
+	@Autowired
+    private CompanyService companyService ;
+	@Autowired
+    private ComputerMapper computerMapper;
+	@Autowired
+    private CompanyMapper companyMapper ;
 
     
 

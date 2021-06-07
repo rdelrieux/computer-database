@@ -53,9 +53,7 @@ public abstract class  CLI {
 	public static final String DELET_REUSSI_MESSAGE = "Computer supprime de la db";
 	public static final String DELET_CANCELED_MESSAGE = "la suppresion est annule";
 
-	
-	protected ScannerVerification sc = ScannerVerification.getInstance() ;
-	
+		
 	
 	
 	

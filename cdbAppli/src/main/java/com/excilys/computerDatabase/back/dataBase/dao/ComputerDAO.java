@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.back.dataBase.connection.CdbConnection;
@@ -20,17 +24,8 @@ import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Repository
 public class ComputerDAO {
-
-	private static final String REQUET_AFFICHER_TOUTE_COMPUTERS = 
-			"SELECT *\n" 
-			+ "FROM computer \n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n" 
-			+ "ORDER BY columnname \n" + "LIMIT ? , ?\n";
-	private static final String REQUET_NOMBRE_ELEMENT = 
-			"SELECT COUNT(computer.id) AS count\n" 
-			+ "FROM computer \n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n";
 
 	private static final String REQUET_NOMBRE_ELEMENT_SEARCH = 
 			"SELECT COUNT(computer.id) AS count\n"
@@ -79,22 +74,14 @@ public class ComputerDAO {
 			"DELETE FROM computer\n"
 			+ "WHERE computer.id = ? ";
 
-	private static ComputerDAO instance;
-	private ComputerMapper computerMapping;
+	@Autowired
 	private CdbConnection cdbConnection;
+	@Autowired
+	@Qualifier("computerMapperDAO")
+	private ComputerMapper computerMapping;
 
-	private ComputerDAO() {
-		this.cdbConnection = CdbConnection.getInstance();
-		this.computerMapping = ComputerMapper.getInstance();
-	}
 
-	public static ComputerDAO getInstance() {
-		if (instance == null) {
-			instance = new ComputerDAO();
-		}
-		return instance;
-	}
-
+	
 	private PreparedStatement creatStatementFind(Connection connection, int id) {
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_TROUVER_COMPUTER_FROM_ID);
@@ -150,67 +137,6 @@ public class ComputerDAO {
 			LoggerCdb.logError(ComputerDAO.class.getName(), e);
 			throw new UnableExecutQueryException();
 		}
-	}
-
-	private PreparedStatement creatStatementSearchNombreElement(Connection connection) {
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_NOMBRE_ELEMENT);
-			return preparedStatement;
-		} catch (SQLException e) {
-			LoggerCdb.logError(ComputerDAO.class.getName(), e);
-			throw new UnableCreatePreparedStatmentException();
-		}
-	}
-
-	public int searchNombreElement() {
-		int count = 0;
-		try (Connection connection = cdbConnection.getConnection();) {
-			ResultSet result = this.creatStatementSearchNombreElement(connection).executeQuery();
-			result.next();
-			count = result.getInt("count");
-
-		} catch (SQLException e) {
-			LoggerCdb.logError(ComputerDAO.class.getName(), e);
-		}
-		return count;
-	}
-
-	private PreparedStatement creatStatementFindAll(Connection connection, Page page, OrderBy orderBy) {
-		try {
-			String statement = REQUET_AFFICHER_TOUTE_COMPUTERS;
-			if (orderBy.isAscending()) {
-				statement = statement.replace("columnname", orderBy.getValeur());
-			} else {
-				statement = statement.replace("columnname", orderBy.getValeur() + " DESC");
-			}
-
-			PreparedStatement preparedStatement = connection.prepareStatement(statement);
-
-			preparedStatement.setInt(1, (page.getNumPage() - 1) * page.getNombreElementPage());
-			preparedStatement.setInt(2, page.getNombreElementPage());
-
-			return preparedStatement;
-
-		} catch (SQLException e) {
-			LoggerCdb.logError(ComputerDAO.class.getName(), e);
-			throw new UnableCreatePreparedStatmentException();
-		}
-	}
-
-	public List<Computer> findAll(Page page, OrderBy orderBy) {
-		List<Computer> res = new ArrayList<>();
-
-		try (Connection connection = cdbConnection.getConnection();) {
-			PreparedStatement preparedStatement = this.creatStatementFindAll(connection, page, orderBy);
-			ResultSet result = preparedStatement.executeQuery();
-			if (result.isBeforeFirst()) {
-				res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
-
-			}
-		} catch (SQLException e) {
-			LoggerCdb.logError(ComputerDAO.class.getName(), e);
-		}
-		return res;
 	}
 
 	private PreparedStatement creatStatementSearch(Connection connection, String search, Page page, OrderBy orderBy) {

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput.ComputerDTOOutputBuilder;
@@ -16,6 +18,7 @@ import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Computer.ComputerBuilder;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Component("computerMapperDAO")
 public class ComputerMapper {
 
 	private static final String COLONNE_ID = "id";
@@ -24,19 +27,7 @@ public class ComputerMapper {
 	private static final String COLONNE_DATE_DISCONTINUED = "discontinued";
 	private static final String COLONNE_COMPANY_ID = "company_id";
 	private static final String COLONNE_COMPANY_NAME = "company.name";
-
-	private static ComputerMapper instance;
-
-	private ComputerMapper() {
-
-	}
-
-	public static ComputerMapper getInstance() {
-		if (instance == null) {
-			instance = new ComputerMapper();
-		}
-		return instance;
-	}
+	
 
 	public ComputerDTOOutput mapToComputerDTOOutput(ResultSet result) {
 

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
@@ -35,16 +37,13 @@ public class DashBoardServlet extends HttpServlet {
 	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
 	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
 	
-	
+	@Autowired
 	private ComputerService computerService;
+	@Autowired
 	private ComputerMapper computerMapper;
+	
 	private HttpSession session;
     
-
-    public DashBoardServlet() {
-    	computerService  = ComputerService.getInstance(); 
-    	computerMapper = ComputerMapper.getInstance();
-    }
     
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -172,13 +171,8 @@ public class DashBoardServlet extends HttpServlet {
 		
 		List<Computer> listcomputer = new ArrayList<Computer>(); 
 		
-		if ("".equals(search)) {
-			page.setNombreElementRequet(computerService.searchNombreElement());
-			listcomputer =   computerService.getListComputer(page,orderBy);
-		}else {
-			page.setNombreElementRequet(computerService.searchNombreElement(search));
-			listcomputer =   computerService.searchComputer(search, page, orderBy);
-		}
+		page.setNombreElementRequet(computerService.searchNombreElement(search));
+		listcomputer =   computerService.searchComputer(search, page, orderBy);
 		
 		return listcomputer.stream()
 				.map(c -> this.computerMapper.mapToComputerDTOOutput(c) )
