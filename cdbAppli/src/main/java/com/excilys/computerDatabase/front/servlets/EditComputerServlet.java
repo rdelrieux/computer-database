@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
 import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
@@ -27,8 +29,10 @@ import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.exception.ValidateurDTOException;
 import com.excilys.computerDatabase.front.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
+import com.excilys.computerDatabase.front.binding.validateur.ComputerValidateur;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
+@Component
 @WebServlet("/editComputer")
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -46,10 +50,12 @@ public class EditComputerServlet extends HttpServlet {
 	private ComputerMapper computerMapper ;
 	@Autowired
 	private CompanyMapper companyMapper ;
-
+	@Autowired
+	private ComputerValidateur computerValidateur;
+	
 	private HttpSession session;
 
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -92,9 +98,10 @@ public class EditComputerServlet extends HttpServlet {
 				.build();
 		
 		try {
-			
-			this.computerService.updateComputer( this.computerMapper.mapToComputer(computerDTOUpdate));
-			response.sendRedirect(VUE_DASHBOARD);
+			if (computerValidateur.validate(computerDTOUpdate).isEmpty()) {
+				this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOUpdate) );
+				response.sendRedirect(VUE_DASHBOARD);
+			}
 		
 		}catch (DAOException | ValidateurDTOException e  ){
 			LoggerCdb.logWarn(EditComputerServlet.class.getName(), e);

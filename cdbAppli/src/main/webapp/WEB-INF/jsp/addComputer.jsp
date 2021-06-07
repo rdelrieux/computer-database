@@ -34,16 +34,20 @@
 									type="text" class="form-control" id="computerName"
 									name="computerName" placeholder="Computer name"
 									required="required">
+									<span class="error"><c:out value="${errors['nameInput'].message}" /></span>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
 									name="introduced" placeholder="Introduced date">
+									<span class="error"><c:out value="${errors['introducedInput'].message}" /></span>
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
 									name="discontinued" placeholder="Discontinued date">
+									<span class="error"><c:out value="${errors['discontinuedInput'].message}" /></span>
+									
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> 
@@ -54,6 +58,7 @@
 										<option value="${company.id }">${company.name }</option>
 									</c:forEach>
 								</select>
+								<span class="error"><c:out value="${errors['companyIdInput'].message}" /></span>
 
 							</div>
 						</fieldset>

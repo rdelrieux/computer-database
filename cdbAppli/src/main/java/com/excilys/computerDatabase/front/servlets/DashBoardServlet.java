@@ -14,17 +14,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
+import com.excilys.computerDatabase.configuration.CdbConfiguration;
 import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
 
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+@Component
 @WebServlet("/dashboard")
 public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -37,13 +44,22 @@ public class DashBoardServlet extends HttpServlet {
 	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
 	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
 	
-	@Autowired
+	
 	private ComputerService computerService;
-	@Autowired
+	
 	private ComputerMapper computerMapper;
 	
 	private HttpSession session;
     
+	@Override 
+	public void init(){
+		
+		ApplicationContext context = new AnnotationConfigApplicationContext(CdbConfiguration.class);
+		this.computerService = context.getBean(ComputerService.class);
+		this.computerMapper = context.getBean(ComputerMapper.class);
+
+		//SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+	}
     
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

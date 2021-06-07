@@ -25,7 +25,7 @@ public class CompanyDAOTest {
 	
 	
 
-	
+	/*
 	@Test
 	public void testGetAllCompaniesShouldReturnListOfCompanies() {
 		System.out.println("test");
@@ -47,5 +47,5 @@ public class CompanyDAOTest {
 			fail("Should not return an exception");
 		}
 	}
-
+*/
 }

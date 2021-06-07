@@ -5,6 +5,7 @@ import com.excilys.computerDatabase.configuration.CdbConfiguration;
 import com.excilys.computerDatabase.front.cli.StartApplication;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
@@ -17,14 +18,16 @@ static int[][] game ;
 
 	public static void main(String[] args) {
 		
-		 ApplicationContext ctx = new AnnotationConfigApplicationContext(CdbConfiguration.class);
+		 ApplicationContext context = new AnnotationConfigApplicationContext(CdbConfiguration.class);
 		 
-
 		 
-		StartApplication application = (StartApplication) ctx.getBean("startApplication");
+		StartApplication application = (StartApplication) context.getBean("startApplication");
 		application.start();
 		application.playMenu();
 		application.stop();
+		
+		 
+		((ConfigurableApplicationContext) context).close();
 
 	}
 }
