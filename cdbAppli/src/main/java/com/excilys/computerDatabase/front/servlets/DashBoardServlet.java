@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,21 +45,17 @@ public class DashBoardServlet extends HttpServlet {
 	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
 	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
 	
-	
+	@Autowired
 	private ComputerService computerService;
-	
+	@Autowired
 	private ComputerMapper computerMapper;
 	
 	private HttpSession session;
     
-	@Override 
-	public void init(){
-		
-		ApplicationContext context = new AnnotationConfigApplicationContext(CdbConfiguration.class);
-		this.computerService = context.getBean(ComputerService.class);
-		this.computerMapper = context.getBean(ComputerMapper.class);
-
-		//SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		super.init(config);
 	}
     
     

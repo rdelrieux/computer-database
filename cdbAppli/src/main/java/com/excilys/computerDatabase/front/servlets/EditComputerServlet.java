@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,6 +56,12 @@ public class EditComputerServlet extends HttpServlet {
 	
 	private HttpSession session;
 
+	 
+		@Override
+		public void init(ServletConfig config) throws ServletException {
+			SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+			super.init(config);
+		}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

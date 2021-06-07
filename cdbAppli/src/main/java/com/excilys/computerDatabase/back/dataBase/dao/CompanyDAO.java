@@ -65,7 +65,7 @@ public class CompanyDAO {
 	}
 
 	public Company find(int id) {
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 			ResultSet result = preparedStatement.executeQuery();
@@ -94,7 +94,7 @@ public class CompanyDAO {
 	}
 
 	public Company find(String name) {
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 			ResultSet result = preparedStatement.executeQuery();
 			result.next();
@@ -121,7 +121,7 @@ public class CompanyDAO {
 
 	public List<Company> findAll() {
 		List<Company> res = new ArrayList<>();
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFindAll(connection);
 			ResultSet result = preparedStatement.executeQuery();
 
@@ -137,7 +137,7 @@ public class CompanyDAO {
 	}
 
 	public void delet(int id) {
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 
 			try (PreparedStatement preparedStatement1 = connection.prepareStatement(REQUET_DELET_COMPUTER_WITH_COMPANY);
 					PreparedStatement preparedStatement2 = connection.prepareStatement(REQUET_DELET_COMPANY);) {

@@ -98,7 +98,7 @@ public class ComputerDAO {
 
 	public Computer find(int id) {
 
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 			ResultSet result = preparedStatement.executeQuery();
 
@@ -127,7 +127,7 @@ public class ComputerDAO {
 
 	public Computer find(String name) {
 
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 			ResultSet result = preparedStatement.executeQuery();
 			ComputerDTOOutput cout = this.computerMapping.mapToComputerDTOOutput(result);
@@ -166,7 +166,7 @@ public class ComputerDAO {
 
 	public List<Computer> search(String search, Page page, OrderBy orderBy) {
 		List<Computer> res = new ArrayList<Computer>();
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementSearch(connection, search, page, orderBy);
 			ResultSet result = preparedStatement.executeQuery();
 			res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
@@ -194,7 +194,7 @@ public class ComputerDAO {
 
 	public int searchNombreElement(String search) {
 		int count = 0;
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			ResultSet result = this.creatStatementSearchNombreElement(connection, search).executeQuery();
 			result.next();
 			count = result.getInt("count");
@@ -239,7 +239,7 @@ public class ComputerDAO {
 	}
 
 	public void addComputer(Computer computer) {
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementAddComputer(connection, computer);
 			preparedStatement.execute();
 
@@ -289,7 +289,7 @@ public class ComputerDAO {
 	}
 
 	public void updateComputer(Computer computer) {
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementUpdateComputer(connection, computer);
 			preparedStatement.execute();
 
@@ -316,7 +316,7 @@ public class ComputerDAO {
 	}
 
 	public void deletComputer(int id) {
-		try (Connection connection = cdbConnection.getConnection();) {
+		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementDeletComputer(connection, id);
 			preparedStatement.execute();
 		} catch (SQLException e) {
