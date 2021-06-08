@@ -53,9 +53,9 @@ public class LoggerCdb {
 		
 	}
 
-	public static void logDebug(String name, Exception e) {
+	public static void logDebug(String name, String string) {
 		Logger logger = LogManager.getLogger(name);
-		logger.debug(e.getMessage());
+		logger.debug(string);
 	}
 	
 }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
@@ -31,7 +32,7 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 
 
 
-@Component
+@Controller
 @WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -57,8 +58,9 @@ public class AddComputerServlet extends HttpServlet {
 	 
 		@Override
 		public void init(ServletConfig config) throws ServletException {
-			SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 			super.init(config);
+			SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+			
 		}
 
 	

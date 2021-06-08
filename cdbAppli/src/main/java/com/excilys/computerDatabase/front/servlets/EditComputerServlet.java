@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
@@ -33,7 +34,7 @@ import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.binding.validateur.ComputerValidateur;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
-@Component
+@Controller
 @WebServlet("/editComputer")
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -59,8 +60,9 @@ public class EditComputerServlet extends HttpServlet {
 	 
 		@Override
 		public void init(ServletConfig config) throws ServletException {
-			SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 			super.init(config);
+			SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+			
 		}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

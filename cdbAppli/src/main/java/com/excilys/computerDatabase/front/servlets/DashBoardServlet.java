@@ -18,12 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.configuration.CdbConfiguration;
+import com.excilys.computerDatabase.configuration.RootConfig;
 import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
@@ -32,7 +33,7 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-@Component
+@Controller
 @WebServlet("/dashboard")
 public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -54,8 +55,9 @@ public class DashBoardServlet extends HttpServlet {
     
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		
 	}
     
     
@@ -125,7 +127,7 @@ public class DashBoardServlet extends HttpServlet {
 			
 			
 		}catch (NullPointerException | NumberFormatException e) {
-			LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
+			LoggerCdb.logInfo(DashBoardServlet.class.toString(), e);
 			
 		}
 		
@@ -135,7 +137,7 @@ public class DashBoardServlet extends HttpServlet {
 			page.setNumPage(numPage);
 		}
 		}catch (NullPointerException | NumberFormatException e) {
-			LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
+			LoggerCdb.logInfo(DashBoardServlet.class.toString(), e);
 			
 		}
 		
@@ -166,7 +168,7 @@ public class DashBoardServlet extends HttpServlet {
 				orderBy.setAscending(! "down".equals(paramOrderBy.split(",")[1]));
 
 			}catch(ArrayIndexOutOfBoundsException e){
-				LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
+				LoggerCdb.logInfo(DashBoardServlet.class.toString(), e);
 			}
 			session.setAttribute(ATT_ORDER_BY,orderBy);
 			page.setNumPage(1);
