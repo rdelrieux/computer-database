@@ -92,7 +92,22 @@ public class AddComputerServlet extends HttpServlet {
 				this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOAdd) );
 				response.sendRedirect(VUE_DASHBOARD);
 			}else {
-				session.setAttribute( "errors" , errors  );
+				request.setAttribute( "errors" , errors  );
+				request.setAttribute( "computer" , computerDTOAdd  );
+				
+				List<Company> listCompany = companyService.getListCompany();
+				
+				List<CompanyDTO> listCompanyDTO =  listCompany.stream()
+						.map(c -> this.companyMapper.mapToCompanyDTO(c) )
+						.collect(Collectors.toList());
+				
+				List<CompanyDTO> listCompanyDTO2  = listCompanyDTO.stream()
+				.filter(c ->(""+c.getId()).equals(request.getParameter("companyId")))
+				.collect(Collectors.toList());
+				
+				request.setAttribute("companyName", listCompanyDTO2.get(0).getName());
+				
+				this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
 			}
 			
 			

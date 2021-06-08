@@ -30,7 +30,7 @@ public class CompanyMapper {
 		try {
 			return new CompanyDTOOutput(result.getString(COLONNE_ID) ,result.getString(COLONNE_NAME));	
 		} catch (SQLException e) {
-			LoggerCdb.logError(ComputerMapper.class.getName(), e);
+			LoggerCdb.logInfo(ComputerMapper.class.getName(), e);
 			throw new CompanyNotFoundException();
 		}
 	}

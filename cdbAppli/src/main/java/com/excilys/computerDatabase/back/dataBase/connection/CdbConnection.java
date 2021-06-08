@@ -11,11 +11,10 @@ import com.zaxxer.hikari.HikariDataSource;
 public class CdbConnection {
 	
 	private static final String PROP_FILE_NAME = "/datasource.properties";
+	HikariDataSource dataSource = new HikariDataSource( new HikariConfig(PROP_FILE_NAME)); 
 	
 	public HikariDataSource getDataSource() {	
-		return new HikariDataSource( new HikariConfig(PROP_FILE_NAME));
+		return dataSource ;
 	}
-
-
 
 }

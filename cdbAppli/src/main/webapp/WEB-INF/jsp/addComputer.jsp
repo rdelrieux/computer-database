@@ -33,26 +33,32 @@
 								<label for="computerName">Computer name</label> <input
 									type="text" class="form-control" id="computerName"
 									name="computerName" placeholder="Computer name"
-									required="required">
+									required="required"
+									value=${computer.name }>
 									<span class="error"><c:out value="${errors['nameInput'].message}" /></span>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date">
+									name="introduced" placeholder="Introduced date"
+									value=${computer.introduced }>
 									<span class="error"><c:out value="${errors['introducedInput'].message}" /></span>
+									<span class="error"><c:out value="${errors['dateIntervalInput'].message}" /></span>
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date">
+									name="discontinued" placeholder="Discontinued date"
+									value=${computer.discontinued }>
 									<span class="error"><c:out value="${errors['discontinuedInput'].message}" /></span>
+									<span class="error"><c:out value="${errors['dateIntervalInput'].message}" /></span>
 									
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> 
 								<select
 									class="form-control" id="companyId" name="companyId">
+									<option value="${companyId }" >${companyName }</option>
 									<option value="">--</option>
 									<c:forEach var="company" items="${listCompany }">
 										<option value="${company.id }">${company.name }</option>
@@ -84,6 +90,6 @@
 	</section>
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
-	<script src="./js/addComputer.js"></script>
+	<!--  script src="./js/addComputer.js"></script-->
 </body>
 </html>

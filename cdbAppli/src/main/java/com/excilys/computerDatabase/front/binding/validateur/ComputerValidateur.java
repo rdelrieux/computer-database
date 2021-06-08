@@ -89,7 +89,7 @@ public class ComputerValidateur {
 
 		if (!("".equals(introduced) || "".equals(discontinued))) {
 			if (!LocalDate.parse(introduced).isBefore(LocalDate.parse(discontinued))) {
-				this.errors.put("dateInput", new DateIntervalNotValidException(
+				this.errors.put("dateIntervalInput", new DateIntervalNotValidException(
 						"Date Interval not valid : " + introduced + ">" + discontinued));
 			}
 		}
