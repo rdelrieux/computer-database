@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,184 +16,126 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.configuration.CdbConfiguration;
+import com.excilys.computerDatabase.configuration.RootConfig;
+import com.excilys.computerDatabase.enumeration.Order;
 import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
+import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.servlet.ModelAndView;
 
-@Component
-@WebServlet("/dashboard")
+@Controller
 public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	private static final String ATT_SEARCH = "search";
-	private static final String ATT_ORDER_BY = "orderBy";
-	private static final String ATT_PAGE = "page";
-	
-	
-	private static final String VUE_DASHBOARD_REDIRECT = "dashboard";
-	private static final String VUE_DASHBOARD = "/WEB-INF/jsp/dashboard.jsp";
-	
-	@Autowired
+
+
+	private static final String VUE_DASHBOARD_REDIRECT = "redirect:/dashboard";
+	private static final String VUE_DASHBOARD = "dashboard";
+
 	private ComputerService computerService;
-	@Autowired
+
+	// @Qualifier("computerMapperCtr")
 	private ComputerMapper computerMapper;
-	
-	private HttpSession session;
-    
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-		super.init(config);
+
+	private Session session;
+
+	public DashBoardServlet(ComputerService computerService, ComputerMapper computerMapper, Session session) {
+		super();
+		System.out.println("const");
+
+		this.computerService = computerService;
+		this.computerMapper = computerMapper;
+		this.session = session;
 	}
-    
-    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		this.session = request.getSession();
-		
-		if (session.getAttribute(ATT_PAGE) == null) {
-			this.initialisationSession(session);
+
+	
+
+	@GetMapping(value = "/search", params = "page")
+	public String updateNumPage(@RequestParam("page") int numPage) {
+		this.session.getPage().setNumPage(numPage);
+		return VUE_DASHBOARD_REDIRECT;
+	}
+	
+	@GetMapping(value = "/search", params = "nombreElementPage")
+	public String updateNombreElementPage(@RequestParam("nombreElementPage") int nombreElementPage) {
+		if (nombreElementPage > 1 && nombreElementPage < 100) {
+			this.session.getPage().setNumPage(1 + (this.session.getPage().getNumPage() - 1) * this.session.getPage().getNombreElementPage() / nombreElementPage);
+			this.session.getPage().setNombreElementPage(nombreElementPage);
 		}
-		
-		
-		String paramNombreElementPage = request.getParameter("nombreElementPage");
-		String numPage = request.getParameter("page");
-		this.updatePage( paramNombreElementPage ,  numPage );		
-		
-		String paramSearch = request.getParameter("search");
-		this.updateSearch( paramSearch);
-		
-		String paramOrderBy = request.getParameter("orderBy");
-		this.updateOrderBy( paramOrderBy);
-				
-		List<ComputerDTOOutput> listComputer = this.getListComputer(session);
-		request.setAttribute("listcomputer", listComputer);
-		
-        this.getServletContext().getRequestDispatcher(VUE_DASHBOARD).forward(request, response);
-
+		return VUE_DASHBOARD_REDIRECT;
 	}
 	
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.session = request.getSession();
-		
-		List<String> selection = Arrays.asList(request.getParameter("selection").split(","));
+	@GetMapping(value = "/search", params = "search")
+	public String updateSearch(@RequestParam("search") String search) {
+		this.session.setSearch(search);
+		this.session.getPage().goToFirstPage();
+		this.session.setOrderBy(OrderBy.COMPUTER_NAME);
+		this.session.setOrder(Order.ASCENDANT);
+		return VUE_DASHBOARD_REDIRECT;
+	}
+	
+	@GetMapping(value = "/search", params = {"orderBy", "order"} )
+	public String updateOrder(@RequestParam("orderBy") String orderBy, @RequestParam("order") String order) {
+		this.session.getPage().goToFirstPage();
+		this.session.setOrderBy(OrderBy.getOrderBy(orderBy));
+		this.session.setOrder(Order.getOrder(order));
+		return VUE_DASHBOARD_REDIRECT;
+	}
+	
+	@GetMapping(value = "/reset")
+	public String reset() {
+		this.session.setSearch("");
+		this.session.getPage().goToFirstPage();
+		this.session.setOrderBy(OrderBy.COMPUTER_NAME);
+		this.session.setOrder(Order.ASCENDANT);
+		return VUE_DASHBOARD_REDIRECT;
+	}
+	
+	@PostMapping(value = "/delet")
+	public String delet(@RequestParam("selection") String selection) {
 		
 		try {
-			selection.stream()
-			.map(s -> Integer.valueOf(s) )
-			.forEach(id -> this.computerService.deletComputer(id) );
-		}catch (NumberFormatException | DAOException e) {
-			
+			List<String> listSelection = Arrays.asList(selection.split(","));
+			listSelection.stream().map(s -> Integer.valueOf(s)).forEach(id -> this.computerService.deletComputer(id));
+		} catch (NumberFormatException | DAOException e) {
 			LoggerCdb.logWarn(DashBoardServlet.class.toString(), e);
 		}
-		
-		this.updateSearch(""+session.getAttribute(ATT_SEARCH));
-		response.sendRedirect(VUE_DASHBOARD_REDIRECT);
-		
-    }
-	
-	private void initialisationSession(HttpSession session) {
-		session.setAttribute( ATT_PAGE , new Page());
-		session.setAttribute(ATT_SEARCH, "");
-		session.setAttribute(ATT_ORDER_BY,  OrderBy.COMPUTER_NAME );
+		return VUE_DASHBOARD_REDIRECT;
 	}
 	
 
-	private void updatePage( String paramNombreElementPage , String paramNumPage) {
-		
-		Page page = (Page)session.getAttribute(ATT_PAGE);
-		try {
-			int nombreElementPage = Integer.valueOf(paramNombreElementPage);
-			
-			if (nombreElementPage>1 && nombreElementPage<100) {
-				page.setNumPage( 1+(page.getNumPage()-1)*page.getNombreElementPage()/nombreElementPage);
-				page.setNombreElementPage(nombreElementPage );
-			}
-			
-			
-		}catch (NullPointerException | NumberFormatException e) {
-			LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
-			
-		}
-		
-		try {
-		int numPage =  Integer.valueOf(paramNumPage); 
-		if  (numPage <= page.getNombrePageMax()) {
-			page.setNumPage(numPage);
-		}
-		}catch (NullPointerException | NumberFormatException e) {
-			LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
-			
-		}
-		
-	
-		session.setAttribute(ATT_PAGE, page);
-
+	@GetMapping(value = "/dashboard")
+	protected ModelAndView displayDashboard()
+			throws ServletException, IOException {
+		ModelAndView mv = new ModelAndView(VUE_DASHBOARD);
+		mv.addObject("listcomputer", this.getListComputer()	);
+		mv.addObject("session", this.session );
+		return mv;
 	}
 
-	private void updateSearch( String paramSearch) {
-		if  (paramSearch != null  ) {
-			Page page = (Page)session.getAttribute(ATT_PAGE);
-			session.setAttribute(ATT_SEARCH, paramSearch);
-			session.setAttribute(ATT_ORDER_BY, OrderBy.COMPUTER_NAME);
-			page.setNumPage(1);
-			session.setAttribute(ATT_PAGE, page);
-		}
-		
+	private List<ComputerDTOOutput> getListComputer() {
+		this.session.getPage().setNombreElementRequet(this.computerService.searchNombreElementRequet(session.getSearch()));
+		return computerService.searchComputer(session).stream().map(c -> this.computerMapper.mapToComputerDTOOutput(c))
+				.collect(Collectors.toList());
 	}
 
 
-	private void updateOrderBy(String paramOrderBy) {
-		if  (paramOrderBy != null  ) {
-			Page page = (Page)session.getAttribute(ATT_PAGE);
-			String search = ""+session.getAttribute(ATT_SEARCH);
-			session.setAttribute(ATT_SEARCH, search);
-			OrderBy orderBy = OrderBy.getOrderBy(paramOrderBy.split(",")[0]);
-			try {
-				orderBy.setAscending(! "down".equals(paramOrderBy.split(",")[1]));
-
-			}catch(ArrayIndexOutOfBoundsException e){
-				LoggerCdb.logDebug(DashBoardServlet.class.toString(), e);
-			}
-			session.setAttribute(ATT_ORDER_BY,orderBy);
-			page.setNumPage(1);
-			session.setAttribute(ATT_PAGE, page);
-		}
-		
-	}
-
-
-	private List<ComputerDTOOutput> getListComputer( HttpSession session) {
-		Page page = (Page)session.getAttribute(ATT_PAGE);
-		String search = ""+session.getAttribute(ATT_SEARCH);
-		OrderBy orderBy =  (OrderBy) session.getAttribute(ATT_ORDER_BY);
-		
-		
-		List<Computer> listcomputer = new ArrayList<Computer>(); 
-		
-		page.setNombreElementRequet(computerService.searchNombreElement(search));
-		listcomputer =   computerService.searchComputer(search, page, orderBy);
-		
-		return listcomputer.stream()
-				.map(c -> this.computerMapper.mapToComputerDTOOutput(c) )
-				.collect(Collectors.toList());	
-	}
-
-	
 }
-
-	

@@ -2,7 +2,7 @@ package com.excilys.computerDatabase.back.model;
 
 public class Page {
 	
-	private int nombreElementRequet = 0;
+	private int nombreElementRequet ;
 	private int nombreElementPage = 10;
 	private int numPage = 1;
 	
@@ -48,6 +48,12 @@ public class Page {
 				(nombreElementRequet%nombreElementPage == 0? 0 : 1);
 		
 	}
+	
+	public void goToFirstPage(){
+		this.numPage = 1;
+}
+
+	
 	
 	public void setPageAfter() {
 		if (numPage != this.getNombrePageMax()) {

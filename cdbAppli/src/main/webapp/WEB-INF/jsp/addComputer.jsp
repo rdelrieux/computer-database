@@ -7,11 +7,11 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
 	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css"
+<link href="${pageContext.request.contextPath}/resources/css/main.css"
 	rel="stylesheet" media="screen">
 </head>
 <body>
@@ -31,8 +31,8 @@
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" placeholder="Computer name"
+									type="text" class="form-control" id="name"
+									name="name" placeholder="Computer name"
 									required="required"
 									value=${computer.name }>
 									<span class="error"><c:out value="${errors['nameInput'].message}" /></span>
@@ -58,7 +58,7 @@
 								<label for="companyId">Company</label> 
 								<select
 									class="form-control" id="companyId" name="companyId">
-									<option value="${companyId }" >${companyName }</option>
+									<option value="${computer.companyId }" >${companyName }</option>
 									<option value="">--</option>
 									<c:forEach var="company" items="${listCompany }">
 										<option value="${company.id }">${company.name }</option>
@@ -88,8 +88,8 @@
 			</div>
 		</div>
 	</section>
-	<script src="./js/jquery.min.js"></script>
-	<script src="./js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 	<!--  script src="./js/addComputer.js"></script-->
 </body>
 </html>

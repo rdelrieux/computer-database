@@ -23,16 +23,22 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 @Controller
 public class ComputerCtr {
 
-	@Autowired
 	private ComputerService computerService;
-	@Autowired
 	private ComputerCLI computerCLI;
-	@Autowired
 	private ChoixUtilisateur choixutilisateur;
-	@Autowired
 	@Qualifier("computerMapperCtr")
 	private ComputerMapper computerMapper;
 
+
+	
+	
+	public ComputerCtr(ComputerService computerService, ComputerCLI computerCLI, ChoixUtilisateur choixutilisateur,
+			ComputerMapper computerMapper) {
+		this.computerService = computerService;
+		this.computerCLI = computerCLI;
+		this.choixutilisateur = choixutilisateur;
+		this.computerMapper = computerMapper;
+	}
 
 	public void showComputer() {
 		Computer computer = this.computerService.getComputer(this.choixutilisateur.choixId(CLI.ENTER_ID_MESSAGE));
@@ -97,7 +103,7 @@ public class ComputerCtr {
 			page = choixPage( choix,  page);
 			System.out.println(page);
 			this.computerCLI.showListComputer(
-					this.computerService.searchComputer(search, page, OrderBy.COMPUTER_NAME).stream()
+					this.computerService.searchComputer(search, page, OrderBy.COMPUTER_NAME_ASC).stream()
 					.map(c -> this.computerMapper.mapToComputerDTOOutput(c))
 					.collect(Collectors.toList())
 					);

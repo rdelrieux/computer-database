@@ -20,15 +20,21 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 @Controller
 public class CompanyCtr {
 	
-	@Autowired
 	private CompanyService companyService;
-	@Autowired
 	private CompanyCLI companyCLI;
-	@Autowired
 	private ChoixUtilisateur choixutilisateur;
-	@Autowired
 	@Qualifier("companyMapperCtr")
 	private CompanyMapper companyMapper ;
+
+	
+	
+	public CompanyCtr(CompanyService companyService, CompanyCLI companyCLI, ChoixUtilisateur choixutilisateur,
+			CompanyMapper companyMapper) {
+		this.companyService = companyService;
+		this.companyCLI = companyCLI;
+		this.choixutilisateur = choixutilisateur;
+		this.companyMapper = companyMapper;
+	}
 
 	public void showListCompany() {
 		

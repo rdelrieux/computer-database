@@ -19,10 +19,15 @@ import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput.Computer
 @Component("computerMapperCtr")
 public class ComputerMapper {
 
-	@Autowired
+	
 	@Qualifier("companyMapperCtr")
 	private CompanyMapper companyMapper;
+	
 
+	
+	public ComputerMapper(CompanyMapper companyMapper) {
+		this.companyMapper = companyMapper;
+	}
 
 	public ComputerDTOOutput mapToComputerDTOOutput(Computer computer) {
 
@@ -79,6 +84,24 @@ public class ComputerMapper {
 		}
 
 		return builder.build();
+	}
+
+	public ComputerDTOUpdate mapToComputerDTOUpdate(Computer computer) {
+		ComputerDTOUpdate computerDTOUpdate = new ComputerDTOUpdate("" + computer.getId());
+
+		computerDTOUpdate.setName(computer.getName());
+
+		
+		if (computer.getIntroduced() != null) {
+			computerDTOUpdate.setIntroduced("" + computer.getIntroduced());
+		}
+		if (computer.getDiscontinued() != null) {
+			computerDTOUpdate.setDiscontinued("" + computer.getDiscontinued());
+		}
+		if (computer.getCompany() != null) {
+			computerDTOUpdate.setCompanyId("" + computer.getCompany().getId());
+		}
+		return computerDTOUpdate;
 	}
 
 	

@@ -18,12 +18,12 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.CompanyMapper;
-import com.excilys.computerDatabase.back.dataBase.connection.CdbConnection;
 import com.excilys.computerDatabase.back.dataBase.exception.ConnectionException;
 import com.excilys.computerDatabase.back.dataBase.exception.UnableCreatePreparedStatmentException;
 import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.logger.LoggerCdb;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
 public class CompanyDAO {
@@ -41,14 +41,19 @@ public class CompanyDAO {
 			"DELET  FROM company " 
 			+ "WHERE company.id = ? \n";
 	
-	@Autowired
-	private CdbConnection cdbConnection;
-	@Autowired
+	
+	private HikariDataSource dataSource;
+	
 	@Qualifier("companyMapperDAO")
 	private CompanyMapper companyMapper;
-
-
 	
+	
+
+	public CompanyDAO(HikariDataSource dataSource, CompanyMapper companyMapper) {
+		super();
+		this.dataSource = dataSource;
+		this.companyMapper = companyMapper;
+	}
 
 	private PreparedStatement creatStatementFind(Connection connection, int id) {
 		try {
@@ -65,7 +70,7 @@ public class CompanyDAO {
 	}
 
 	public Company find(int id) {
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 			ResultSet result = preparedStatement.executeQuery();
@@ -94,7 +99,7 @@ public class CompanyDAO {
 	}
 
 	public Company find(String name) {
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 			ResultSet result = preparedStatement.executeQuery();
 			result.next();
@@ -121,7 +126,7 @@ public class CompanyDAO {
 
 	public List<Company> findAll() {
 		List<Company> res = new ArrayList<>();
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFindAll(connection);
 			ResultSet result = preparedStatement.executeQuery();
 
@@ -137,7 +142,7 @@ public class CompanyDAO {
 	}
 
 	public void delet(int id) {
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 
 			try (PreparedStatement preparedStatement1 = connection.prepareStatement(REQUET_DELET_COMPUTER_WITH_COMPANY);
 					PreparedStatement preparedStatement2 = connection.prepareStatement(REQUET_DELET_COMPANY);) {

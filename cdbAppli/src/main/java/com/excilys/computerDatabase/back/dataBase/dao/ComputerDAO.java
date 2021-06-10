@@ -16,13 +16,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.ComputerMapper;
-import com.excilys.computerDatabase.back.dataBase.connection.CdbConnection;
 import com.excilys.computerDatabase.back.dataBase.exception.UnableCreatePreparedStatmentException;
 import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
+import com.excilys.computerDatabase.enumeration.Order;
 import com.excilys.computerDatabase.enumeration.OrderBy;
+import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
 public class ComputerDAO {
@@ -74,14 +76,22 @@ public class ComputerDAO {
 			"DELETE FROM computer\n"
 			+ "WHERE computer.id = ? ";
 
-	@Autowired
-	private CdbConnection cdbConnection;
-	@Autowired
+	
+	private HikariDataSource dataSource;
+	
 	@Qualifier("computerMapperDAO")
 	private ComputerMapper computerMapping;
 
+	
 
 	
+
+	public ComputerDAO(HikariDataSource dataSource, ComputerMapper computerMapping) {
+		super();
+		this.dataSource = dataSource;
+		this.computerMapping = computerMapping;
+	}
+
 	private PreparedStatement creatStatementFind(Connection connection, int id) {
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_TROUVER_COMPUTER_FROM_ID);
@@ -98,7 +108,7 @@ public class ComputerDAO {
 
 	public Computer find(int id) {
 
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection =dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, id);
 			ResultSet result = preparedStatement.executeQuery();
 
@@ -127,7 +137,7 @@ public class ComputerDAO {
 
 	public Computer find(String name) {
 
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementFind(connection, name);
 			ResultSet result = preparedStatement.executeQuery();
 			ComputerDTOOutput cout = this.computerMapping.mapToComputerDTOOutput(result);
@@ -139,15 +149,20 @@ public class ComputerDAO {
 		}
 	}
 
-	private PreparedStatement creatStatementSearch(Connection connection, String search, Page page, OrderBy orderBy) {
+	private PreparedStatement creatStatementSearch(Connection connection,Session session) {
 		try {
 
+			Page page = session.getPage();
+			OrderBy orderBy = session.getOrderBy();
+			Order order = session.getOrder();
+			String search = session.getSearch();
+			
 			String statement = REQUET_AFFICHER_COMPUTERS_SEARCH;
-			if (orderBy.isAscending()) {
-				statement = statement.replace("columnname", orderBy.getValeur());
-			} else {
-				statement = statement.replace("columnname", orderBy.getValeur() + " DESC");
-			}
+			
+			
+			
+			statement = statement.replace("columnname", orderBy.getColumn() +" "+ order.getParamOrder());
+
 
 			PreparedStatement preparedStatement = connection.prepareStatement(statement);
 			preparedStatement.setString(1, "%" + search + "%");
@@ -164,10 +179,10 @@ public class ComputerDAO {
 		}
 	}
 
-	public List<Computer> search(String search, Page page, OrderBy orderBy) {
+	public List<Computer> search(Session session ) {
 		List<Computer> res = new ArrayList<Computer>();
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
-			PreparedStatement preparedStatement = this.creatStatementSearch(connection, search, page, orderBy);
+		try (Connection connection = dataSource.getConnection();) {
+			PreparedStatement preparedStatement = this.creatStatementSearch(connection,session);
 			ResultSet result = preparedStatement.executeQuery();
 			res = this.computerMapping.maptoListComputer(this.computerMapping.mapToListComputerDTOOutput(result));
 		} catch (SQLException e) {
@@ -176,7 +191,7 @@ public class ComputerDAO {
 		return res;
 	}
 
-	private PreparedStatement creatStatementSearchNombreElement(Connection connection, String search) {
+	private PreparedStatement creatStatementSearchNombreElementRequet(Connection connection, String search) {
 		try {
 
 			PreparedStatement preparedStatement = connection.prepareStatement(REQUET_NOMBRE_ELEMENT_SEARCH);
@@ -192,10 +207,10 @@ public class ComputerDAO {
 		}
 	}
 
-	public int searchNombreElement(String search) {
+	public int searchNombreElementRequet(String search) {
 		int count = 0;
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
-			ResultSet result = this.creatStatementSearchNombreElement(connection, search).executeQuery();
+		try (Connection connection = dataSource.getConnection();) {
+			ResultSet result = this.creatStatementSearchNombreElementRequet(connection, search).executeQuery();
 			result.next();
 			count = result.getInt("count");
 
@@ -239,7 +254,7 @@ public class ComputerDAO {
 	}
 
 	public void addComputer(Computer computer) {
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementAddComputer(connection, computer);
 			preparedStatement.execute();
 
@@ -289,7 +304,7 @@ public class ComputerDAO {
 	}
 
 	public void updateComputer(Computer computer) {
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementUpdateComputer(connection, computer);
 			preparedStatement.execute();
 
@@ -316,7 +331,7 @@ public class ComputerDAO {
 	}
 
 	public void deletComputer(int id) {
-		try (Connection connection = cdbConnection.getDataSource().getConnection();) {
+		try (Connection connection = dataSource.getConnection();) {
 			PreparedStatement preparedStatement = this.creatStatementDeletComputer(connection, id);
 			preparedStatement.execute();
 		} catch (SQLException e) {
