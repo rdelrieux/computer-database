@@ -8,9 +8,9 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -32,8 +32,8 @@
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName"
+									type="text" class="form-control" id="name"
+									name="name"
 									value=${computer.name }>
 							</div>
 							<div class="form-group">
@@ -77,7 +77,7 @@
 									class="form-control" id="companyId" 
 									name="companyId">
 									
-									<option value="${companyId }" >${computer.companyName }</option>
+									<option value="${computer.companyId  }" >${companyName }</option>
 									<option value="">--</option>
 									<c:forEach var="company" items="${listCompany }">
 										<option value="${company.id }">${company.name }</option>

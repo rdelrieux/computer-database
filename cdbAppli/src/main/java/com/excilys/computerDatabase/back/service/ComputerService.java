@@ -9,19 +9,23 @@ import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.enumeration.OrderBy;
+import com.excilys.computerDatabase.front.session.Session;
 
 @Service
 public class ComputerService {
 
-	@Autowired
 	private ComputerDAO computerDAO;
-
-	public List<Computer> searchComputer(String search, Page page, OrderBy orderBy) {
-		return this.computerDAO.search(search, page, orderBy);
+	
+	public ComputerService(ComputerDAO computerDAO) {
+		this.computerDAO = computerDAO;
 	}
 
-	public int searchNombreElement(String search) {
-		return this.computerDAO.searchNombreElement(search);
+	public List<Computer> searchComputer(Session session) {
+		return this.computerDAO.search(session);
+	}
+
+	public int searchNombreElementRequet(String search) {
+		return this.computerDAO.searchNombreElementRequet(search);
 	}
 
 	public Computer getComputer(int id) {

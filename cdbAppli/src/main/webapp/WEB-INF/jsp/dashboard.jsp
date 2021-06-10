@@ -9,21 +9,21 @@
 <meta charset="utf-8">
 <!-- Bootstrap -->
 
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
 	rel="stylesheet" media="screen">
-<!--link href="${pageContext.request.contextPath}/css/main.css"
-	rel="stylesheet" media="screen"-->
+<link href="${pageContext.request.contextPath}/resources/css/main.css"
+	rel="stylesheet" media="screen">
 	
-<link href="<c:url value="resources/static/css/main.css" />"
- rel="stylesheet" media="screen" >
+<!--  link href="<c:url value="resources/static/css/main.css" />"
+ rel="stylesheet" media="screen" -->
 
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard?search=#"> Application -
+			<a class="navbar-brand" href="reset"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -31,12 +31,12 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<c:out value="${ page.nombreElementRequet }" />
+				<c:out value="${ session.page.nombreElementRequet }" />
 				Computers found
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="search#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="delet#" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -69,27 +69,27 @@
 							</a>
 						</span></th>
 
-						<th><a href="?orderBy=computer.name,up"> <i
+						<th><a href="search?orderBy=computer.name&order=ASC"> <i
 								class="fa fa-fw  fa-angle-up  fa-clickable"></i>
-						</a> Computer name <a href="?orderBy=computer.name,dowm"> <i
+						</a> Computer name <a href="search?orderBy=computer.name&order=DESC"> <i
 								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
 						</a></th>
 
-						<th><a href="?orderBy=introduced,up"> <i
+						<th><a href="search?orderBy=introduced&order=ASC"> <i
 								class="fa fa-fw  fa-angle-up  fa-clickable"></i>
-						</a> Introduced date <a href="?orderBy=introduced,down"> <i
+						</a> Introduced date <a href="search?orderBy=introduced&order=DESC"> <i
 								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
 						</a></th>
 						
-						<th><a href="?orderBy=discontinued,up"> 
+						<th><a href="search?orderBy=discontinued&order=ASC"> 
 						<i class="fa fa-fw  fa-angle-ud  fa-clickable"></i>
-						</a> Discontinued date <a href="?orderBy=discontinued,down"> <i
+						</a> Discontinued date <a href="search?orderBy=discontinued&order=DESC"> <i
 								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
 						</a></th>
 
-						<th><a href="?orderBy=company.name,up"> <i
+						<th><a href="search?orderBy=company.name&order=ASC"> <i
 								class="fa fa-fw  fa-angle-up  fa-clickable"></i>
-						</a> Company <a href="?orderBy=company.name,down"> <i
+						</a> Company <a href="search?orderBy=company.name&order=DESC"> <i
 								class="fa fa-fw  fa-angle-down  fa-clickable"></i>
 						</a></th>
 
@@ -122,43 +122,43 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="?page=1" aria-label="Previous"> <span
+				<li><a href="search?page=1" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 
-				<li><c:if test="${ page.numPage -2 > 0 }" var="variable">
-						<a href="?page=${page.numPage -2}">${page.numPage -2} </a>
+				<li><c:if test="${ session.page.numPage -2 > 0 }" var="variable">
+						<a href="search?page=${session.page.numPage -2}">${session.page.numPage -2} </a>
 					</c:if></li>
 
 
-				<li><c:if test="${ page.numPage -1 > 0 }" var="variable">
-						<a href="?page=${page.numPage -1}">${page.numPage -1} </a>
+				<li><c:if test="${ session.page.numPage -1 > 0 }" var="variable">
+						<a href="search?page=${session.page.numPage -1}">${session.page.numPage -1} </a>
 					</c:if></li>
 
 
-				<li><a href="?page=${page.numPage}"> .. </a></li>
+				<li><a href="search?page=${session.page.numPage}"> .. </a></li>
 
 
 				<li><c:if
-						test="${ page.numPage +1 <= page.getNombrePageMax() }"
+						test="${ session.page.numPage +1 <= session.page.getNombrePageMax() }"
 						var="variable">
-						<a href="?page=${page.numPage +1}">${page.numPage +1} </a>
+						<a href="search?page=${session.page.numPage +1}">${session.page.numPage +1} </a>
 					</c:if></li>
 
 
 				<li><c:if
-						test="${ page.numPage +2 <= page.getNombrePageMax() }"
+						test="${ session.page.numPage +2 <= session.page.getNombrePageMax() }"
 						var="variable">
-						<a href="?page=${page.numPage +2}">${page.numPage +2} </a>
+						<a href="search?page=${session.page.numPage +2}">${session.page.numPage +2} </a>
 					</c:if></li>
 
-				<li><a href="?page=${ page.getNombrePageMax() }"
+				<li><a href="search?page=${ session.page.getNombrePageMax() }"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<form id="nombreElementPage" action="#" method="GET">
+				<form id="nombreElementPage" action="search#" method="GET">
 					<button type="submit" class="btn btn-default"
 						name="nombreElementPage" value="10">10</button>
 					<button type="submit" class="btn btn-default"
@@ -172,9 +172,9 @@
 
 	
 
-	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script >
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 
 
 </body>

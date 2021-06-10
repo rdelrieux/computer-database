@@ -11,9 +11,15 @@ import com.excilys.computerDatabase.back.model.Company;
 @Service
 public class CompanyService {
 
-	@Autowired
+	
 	private CompanyDAO companyDao;
 	
+	
+	
+	public CompanyService(CompanyDAO companyDao) {
+		this.companyDao = companyDao;
+	}
+
 	public List<Company> getListCompany() {
 		return this.companyDao.findAll();
 	}

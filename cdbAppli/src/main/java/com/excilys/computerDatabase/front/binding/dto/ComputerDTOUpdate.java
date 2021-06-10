@@ -13,13 +13,45 @@ public class ComputerDTOUpdate {
 
 	private String companyId ;
 
-	private ComputerDTOUpdate(ComputerDTOUpdateBuilder computerDTOUpdateBuilder) {
-		this.id = computerDTOUpdateBuilder.id;
-		this.name = computerDTOUpdateBuilder.name;
-		this.introduced = computerDTOUpdateBuilder.introduced;
-		this.discontinued = computerDTOUpdateBuilder.discontinued;
-		this.companyId = computerDTOUpdateBuilder.companyId;
+	
+	
+	public ComputerDTOUpdate() {
+		
 	}
+	
+	
+	public ComputerDTOUpdate(String id) {
+		super();
+		this.id = id;
+		this.name = "";
+		this.introduced = "";
+		this.discontinued = "";
+		this.companyId = "";
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+
 
 	public String getId() {
 		return id;
@@ -41,53 +73,15 @@ public class ComputerDTOUpdate {
 		return companyId;
 	}
 
+
 	@Override
 	public String toString() {
-		return "ComputerDTOInput [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", companyId=" + companyId + "]";
+		return "ComputerDTOUpdate [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", companyId=" + companyId + "]";
 	}
 
-	public static class ComputerDTOUpdateBuilder {
-
-		private String id ;
-		
-		private String name ;
-
-		private String introduced ;
-		
-		private String discontinued ;
-
-		private String companyId ;
 
 
-		public ComputerDTOUpdateBuilder(String id,String name) {
-			this.id = id;
-			this.name = name;
-			this.introduced = "";
-			this.discontinued = "";
-			this.companyId ="";
-		}
 	
-
-		public ComputerDTOUpdateBuilder withIntroduced(String introduced) {
-			this.introduced = introduced;
-			return this;
-		}
-
-		public ComputerDTOUpdateBuilder withDiscontinued(String discontinued) {
-			this.discontinued = discontinued;
-			return this;
-		}
-
-		public ComputerDTOUpdateBuilder withCompanyId(String companyId) {
-			this.companyId = companyId;
-			return this;
-		}
-		
-		public ComputerDTOUpdate build() {
-			return new ComputerDTOUpdate(this);
-		}
-
-	}
 }
 

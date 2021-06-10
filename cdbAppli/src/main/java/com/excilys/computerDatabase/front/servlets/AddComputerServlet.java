@@ -1,6 +1,7 @@
 package com.excilys.computerDatabase.front.servlets;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,7 +17,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Company;
@@ -28,110 +35,81 @@ import com.excilys.computerDatabase.front.binding.exception.ValidateurDTOExcepti
 import com.excilys.computerDatabase.front.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.binding.validateur.ComputerValidateur;
+import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
-
-
 @Controller
-@WebServlet("/addComputer")
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	@Autowired
-	private ComputerService computerService ;
-	@Autowired
-    private CompanyService companyService ;
-	@Autowired
-    private ComputerMapper computerMapper;
-	@Autowired
-    private CompanyMapper companyMapper ;
-	@Autowired
+
+	private static final String ATT_COMPANY_LIST = "listCompany";
+	private static final String VUE_DASHBOARD = "redirect:/dashboard";
+	private static final String VUE_ADD_COMPUTER = "addComputer";
+	private static final String VUE_ADD_COMPUTER_REDIRECT = "redirect:/addComputer";
+
+	private ComputerService computerService;
+	private CompanyService companyService;
+	private ComputerMapper computerMapper;
+	private CompanyMapper companyMapper;
 	private ComputerValidateur computerValidateur;
-    
 
-    private static final String ATT_COMPANY_LIST = "listCompany";
-	private static final String VUE_DASHBOARD = "dashboard";
-	private static final String VUE_ADD_COMPUTER = "/WEB-INF/jsp/addComputer.jsp";
+	private Session session;
 
-	private HttpSession session;
-   
-	 
-		@Override
-		public void init(ServletConfig config) throws ServletException {
-			super.init(config);
-			SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-			
+	public AddComputerServlet(ComputerService computerService, CompanyService companyService,
+			ComputerMapper computerMapper, CompanyMapper companyMapper, ComputerValidateur computerValidateur,
+			Session session) {
+		this.computerService = computerService;
+		this.companyService = companyService;
+		this.computerMapper = computerMapper;
+		this.companyMapper = companyMapper;
+		this.computerValidateur = computerValidateur;
+		this.session = session;
+	}
+
+	@GetMapping(value = "/addComputer")
+	protected ModelAndView displayComputer() {
+
+		ModelAndView mv = new ModelAndView(VUE_ADD_COMPUTER);
+		List<CompanyDTO> listcompany = this.getListCompany();
+		mv.addObject(ATT_COMPANY_LIST, listcompany);
+		mv.addObject("computer", session.getComputerDTOAdd());
+		if (! "".equals(session.getComputerDTOAdd().getCompanyId()) ) {
+			mv.addObject("companyName", listcompany.stream()
+					.filter(c -> c.getId().toString().equals(session.getComputerDTOAdd().getCompanyId()))
+					.collect(Collectors.toList()).get(0).getName()
+					);
 		}
-
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		session = request.getSession();
-		
-		this.showListCompany();
-		
-       this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
+		return mv;
 
 	}
-	
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		session = request.getSession();
-		
-		this.showListCompany();
-		
-		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(request.getParameter("computerName"))
-				.withIntroduced(request.getParameter("introduced"))
-				.withDiscontinued(request.getParameter("discontinued"))
-				.withCompanyId( request.getParameter("companyId"))
-				.build();
-		
-		
-		try {
-			Map<String, ValidateurDTOException> errors = computerValidateur.validate(computerDTOAdd);
-			if (errors.isEmpty()) {
-				this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOAdd) );
-				response.sendRedirect(VUE_DASHBOARD);
-			}else {
-				request.setAttribute( "errors" , errors  );
-				request.setAttribute( "computer" , computerDTOAdd  );
-				
-				List<Company> listCompany = companyService.getListCompany();
-				
-				List<CompanyDTO> listCompanyDTO =  listCompany.stream()
-						.map(c -> this.companyMapper.mapToCompanyDTO(c) )
-						.collect(Collectors.toList());
-				
-				List<CompanyDTO> listCompanyDTO2  = listCompanyDTO.stream()
-				.filter(c ->(""+c.getId()).equals(request.getParameter("companyId")))
+
+	private List<CompanyDTO> getListCompany() {
+		return this.companyService.getListCompany().stream().map(c -> this.companyMapper.mapToCompanyDTO(c))
 				.collect(Collectors.toList());
+	}
+
+	@PostMapping(value = "/addComputer")
+	protected ModelAndView addComputer(@ModelAttribute("computer") @Validated ComputerDTOAdd computerDTOAdd,
+			BindingResult bindingResult ) {
+		ModelAndView mv = new ModelAndView(VUE_ADD_COMPUTER_REDIRECT);
+		session.setComputerDTOAdd(computerDTOAdd);
+
+
+		computerValidateur.validate(computerDTOAdd, bindingResult);
+		if (! bindingResult.hasErrors() ) {
+			try {
+				this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOAdd));
+				this.session.setComputerDTOAdd(new ComputerDTOAdd());
+				return new ModelAndView(VUE_DASHBOARD);
 				
-				request.setAttribute("companyName", listCompanyDTO2.get(0).getName());
-				
-				this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
-			}
-			
-			
-			
-			
-			
-		}catch ( DAOException e){
-			LoggerCdb.logWarn(AddComputerServlet.class.getName(), e);
-			this.getServletContext().getRequestDispatcher(VUE_ADD_COMPUTER).forward(request, response);
+		 }catch ( DAOException e){
+			  LoggerCdb.logError(AddComputerServlet.class.getName(), e);
+			  
+		 }
+		
 		}
+				
+		return mv;
 	}
-	
-	private void showListCompany() {
-		List<Company> listCompany = companyService.getListCompany();
-		
-		List<CompanyDTO> listCompanyDTO =  listCompany.stream()
-				.map(c -> this.companyMapper.mapToCompanyDTO(c) )
-				.collect(Collectors.toList());
-		
-		session.setAttribute( ATT_COMPANY_LIST ,  listCompanyDTO );
-	}
-
-
 
 }

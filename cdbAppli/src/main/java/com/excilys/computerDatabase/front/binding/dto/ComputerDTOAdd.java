@@ -10,12 +10,43 @@ public class ComputerDTOAdd {
 
 	private String companyId ;
 
-	private ComputerDTOAdd(ComputerDTOAddBuilder computerDTOAddBuilder) {
-		this.name = computerDTOAddBuilder.name;
-		this.introduced = computerDTOAddBuilder.introduced;
-		this.discontinued = computerDTOAddBuilder.discontinued;
-		this.companyId = computerDTOAddBuilder.companyId;
+	
+
+	public ComputerDTOAdd(String name, String introduced, String discontinued, String companyId) {
+		super();
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyId = companyId;
 	}
+
+	
+	
+	public ComputerDTOAdd() {
+		this.name = "";
+		this.introduced = "";
+		this.discontinued = "";
+		this.companyId = "";
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
 
 	public String getName() {
 		return name;
@@ -35,49 +66,8 @@ public class ComputerDTOAdd {
 
 	@Override
 	public String toString() {
-		return "ComputerDTOInput [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+		return "ComputerDTOAdd [name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
 				+ ", companyId=" + companyId + "]";
 	}
 
-	public static class ComputerDTOAddBuilder {
-
-		
-		
-		private String name ;
-
-		private String introduced ;
-		
-		private String discontinued ;
-
-		private String companyId ;
-
-
-		public ComputerDTOAddBuilder(String name) {
-			this.name = name;
-			this.introduced = "";
-			this.discontinued = "";
-			this.companyId ="";
-		}
-	
-
-		public ComputerDTOAddBuilder withIntroduced(String introduced) {
-			this.introduced = introduced;
-			return this;
-		}
-
-		public ComputerDTOAddBuilder withDiscontinued(String discontinued) {
-			this.discontinued = discontinued;
-			return this;
-		}
-
-		public ComputerDTOAddBuilder withCompanyId(String companyId) {
-			this.companyId = companyId;
-			return this;
-		}
-		
-		public ComputerDTOAdd build() {
-			return new ComputerDTOAdd(this);
-		}
-
-	}
 }
