@@ -15,15 +15,9 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @ComponentScan(basePackages = { "com.excilys.computerDatabase.front.servlets"
 })
-
 public class ServletConfig extends DelegatingWebMvcConfiguration {
 	
-	/*
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
-	}
-*/
+
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -38,5 +32,7 @@ public class ServletConfig extends DelegatingWebMvcConfiguration {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/static/");
 
 	}
+
+	
 
 }

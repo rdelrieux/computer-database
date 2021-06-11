@@ -18,6 +18,7 @@ import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.cli.CLI;
 import com.excilys.computerDatabase.front.cli.ChoixUtilisateur;
 import com.excilys.computerDatabase.front.cli.ComputerCLI;
+import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
 @Controller
@@ -97,13 +98,13 @@ public class ComputerCtr {
 	public void searchComputer() {
 		String search = this.choixutilisateur.choixNameNotEmpty(CLI.ENTER_SEARCH_MESSAGE);
 		Page page = new Page();
-		page.setNombreElementRequet(this.computerService.searchNombreElement(search));
+		page.setNombreElementRequet(this.computerService.searchNombreElementRequet(search));
 		String choix = "1";
 		while (!choix.equals("exit")) {
 			page = choixPage( choix,  page);
 			System.out.println(page);
 			this.computerCLI.showListComputer(
-					this.computerService.searchComputer(search, page, OrderBy.COMPUTER_NAME_ASC).stream()
+					this.computerService.searchComputer(new Session()).stream()
 					.map(c -> this.computerMapper.mapToComputerDTOOutput(c))
 					.collect(Collectors.toList())
 					);

@@ -37,7 +37,6 @@ public class AddComputerServlet extends HttpServlet {
 	private ComputerMapper computerMapper;
 	private CompanyMapper companyMapper;
 	private ComputerValidateur computerValidateur;
-
 	private Session session;
 
 	public AddComputerServlet(ComputerService computerService, CompanyService companyService,
@@ -65,7 +64,6 @@ public class AddComputerServlet extends HttpServlet {
 					);
 		}
 		return mv;
-
 	}
 
 	private List<CompanyDTO> getListCompany() {

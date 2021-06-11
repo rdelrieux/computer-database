@@ -51,7 +51,6 @@ public class ComputerMapper {
 
 	public Computer mapToComputer(ComputerDTOAdd computerDTOAdd) {
 
-
 		ComputerBuilder builder = new Computer.ComputerBuilder(0, computerDTOAdd.getName());
 
 		if (!"".equals(computerDTOAdd.getIntroduced())) {
@@ -68,7 +67,6 @@ public class ComputerMapper {
 	}
 
 	public Computer mapToComputer(ComputerDTOUpdate computerDTOUpdate) {
-
 
 		ComputerBuilder builder = new Computer.ComputerBuilder(Integer.parseInt(computerDTOUpdate.getId()),
 				computerDTOUpdate.getName());

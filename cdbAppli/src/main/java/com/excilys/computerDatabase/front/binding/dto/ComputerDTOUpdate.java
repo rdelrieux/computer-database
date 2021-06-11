@@ -16,7 +16,9 @@ public class ComputerDTOUpdate {
 	
 	
 	public ComputerDTOUpdate() {
-		
+		this.introduced = "";
+		this.discontinued = "";
+		this.companyId = "";
 	}
 	
 	

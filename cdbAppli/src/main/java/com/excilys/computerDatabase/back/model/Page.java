@@ -1,11 +1,11 @@
 package com.excilys.computerDatabase.back.model;
 
 public class Page {
-	
-	private int nombreElementRequet ;
+
+	private int nombreElementRequet;
 	private int nombreElementPage = 10;
 	private int numPage = 1;
-	
+
 	public Page(int nombreElementRequet, int nombreElementPage, int numPage) {
 		this.nombreElementRequet = nombreElementRequet;
 		this.nombreElementPage = nombreElementPage;
@@ -15,9 +15,6 @@ public class Page {
 	public Page() {
 	}
 
-	
-	
-	
 	public void setNombreElementRequet(int nombreElementRequet) {
 		this.nombreElementRequet = nombreElementRequet;
 	}
@@ -27,14 +24,12 @@ public class Page {
 	}
 
 	public void setNumPage(int numPage) {
-			this.numPage = numPage;
+		this.numPage = numPage;
 	}
 
 	public int getNombreElementRequet() {
 		return nombreElementRequet;
 	}
-	
-	
 
 	public int getNombreElementPage() {
 		return nombreElementPage;
@@ -43,42 +38,36 @@ public class Page {
 	public int getNumPage() {
 		return numPage;
 	}
-	public int getNombrePageMax() {
-		return nombreElementRequet /nombreElementPage + 
-				(nombreElementRequet%nombreElementPage == 0? 0 : 1);
-		
-	}
-	
-	public void goToFirstPage(){
-		this.numPage = 1;
-}
 
-	
-	
+	public int getNombrePageMax() {
+		return nombreElementRequet / nombreElementPage + (nombreElementRequet % nombreElementPage == 0 ? 0 : 1);
+
+	}
+
+	public void goToFirstPage() {
+		this.numPage = 1;
+	}
+
 	public void setPageAfter() {
 		if (numPage != this.getNombrePageMax()) {
-			this.numPage ++;
+			this.numPage++;
 		}
 	}
-	
-	
-	
+
 	public void setPageBefore() {
 		if (numPage != 1) {
-			this.numPage --;
+			this.numPage--;
 		}
 	}
 
-	
-	@Override
-	public String toString() {
-		return "Page : "+numPage+ "/"+(nombreElementRequet/nombreElementPage+1) ;
+	public int getOffset() {
+
+		return (numPage - 1) * nombreElementPage;
 	}
 
-	
-	
+	@Override
+	public String toString() {
+		return "Page : " + numPage + "/" + (nombreElementRequet / nombreElementPage + 1);
+	}
 
-	
-	
-	
 }

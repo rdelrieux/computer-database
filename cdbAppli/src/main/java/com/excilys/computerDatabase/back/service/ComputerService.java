@@ -31,11 +31,6 @@ public class ComputerService {
 	public Computer getComputer(int id) {
 		return this.computerDAO.find(id);
 	}
-
-	public Computer getComputer(String name) {
-		return this.computerDAO.find(name);
-	}
-
 	public void addComputer(Computer computer) {
 		this.computerDAO.addComputer(computer);
 	}
@@ -45,7 +40,7 @@ public class ComputerService {
 	}
 
 	public void deletComputer(int id) {
-		this.computerDAO.deletComputer(id);
+		this.computerDAO.delet(id);
 	}
 
 }

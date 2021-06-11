@@ -11,17 +11,6 @@ public class ComputerDTOAdd {
 	private String companyId ;
 
 	
-
-	public ComputerDTOAdd(String name, String introduced, String discontinued, String companyId) {
-		super();
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.companyId = companyId;
-	}
-
-	
-	
 	public ComputerDTOAdd() {
 		this.name = "";
 		this.introduced = "";
