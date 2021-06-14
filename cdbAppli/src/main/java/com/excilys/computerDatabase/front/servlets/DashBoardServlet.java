@@ -1,31 +1,16 @@
 package com.excilys.computerDatabase.front.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
-import com.excilys.computerDatabase.back.model.Computer;
-import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.configuration.RootConfig;
 import com.excilys.computerDatabase.enumeration.Order;
 import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
@@ -35,10 +20,7 @@ import com.excilys.computerDatabase.logger.LoggerCdb;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -91,9 +73,12 @@ public class DashBoardServlet extends HttpServlet {
 	
 	@GetMapping(value = "/search", params = {"orderBy", "order"} )
 	public String updateOrder(@RequestParam("orderBy") String orderBy, @RequestParam("order") String order) {
+		
 		this.session.getPage().goToFirstPage();
 		this.session.setOrderBy(OrderBy.getOrderBy(orderBy));
 		this.session.setOrder(Order.getOrder(order));
+		
+		
 		return VUE_DASHBOARD_REDIRECT;
 	}
 	

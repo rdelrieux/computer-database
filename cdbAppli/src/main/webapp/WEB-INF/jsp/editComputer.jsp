@@ -5,18 +5,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><fmt:message key="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
+<link href="./resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="./resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="./resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="dashboard"><fmt:message key="label.home" /> </a>
 		</div>
 	</header>
 	<section id="main">
@@ -24,7 +23,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id: ${computer.id }</div>
-					<h1>Edit Computer</h1>
+					<h1><fmt:message key="label.editComputer" /></h1>
 
 					<form action="editComputer" method="POST">
 						<input type="hidden" value=${computer.id } id="id" name="id"/>
@@ -39,7 +38,7 @@
 							<div class="form-group">
 											
 								
-								<label for="introduced">Introduced date</label> 
+								<label for="introduced"><fmt:message key="label.introducedDate" /></label> 
 								
 							
 								 <c:set var = "date" value = "${computer.introduced  }" />
@@ -56,7 +55,7 @@
 									
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label>
+								<label for="discontinued"><fmt:message key="label.discontinuedDate" /></label>
 								
 								
 								 <c:set var = "date" value = "${computer.discontinued  }" />
@@ -72,7 +71,7 @@
 								
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> 
+								<label for="companyId"><fmt:message key="label.companyName" /></label> 
 								<select
 									class="form-control" id="companyId" 
 									name="companyId">
@@ -87,8 +86,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard" class="btn btn-default">Cancel</a>
+							<input type="submit" value=<fmt:message key="label.edit" /> class="btn btn-primary">
+							<fmt:message key="label.or" /> <a href="dashboard" class="btn btn-default"><fmt:message key="label.cancel" /></a>
 						</div>
 					</form>
 				</div>

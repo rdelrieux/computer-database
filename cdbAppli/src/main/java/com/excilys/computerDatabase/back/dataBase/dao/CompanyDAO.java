@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.CompanyRowMapper;
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.model.Company;
-import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,12 +112,12 @@ public class CompanyDAO {
 	}
 
 	@Transactional
-	public void delet(int id) {
+	public void delete(int id) {
 		try {			
-			SqlParameterSource requet = new MapSqlParameterSource().addValue("id", id);
+			SqlParameterSource request = new MapSqlParameterSource().addValue("id", id);
 			
-			namedParameterJdbcTemplate.update(REQUET_DELET_COMPUTER_WITH_COMPANY, requet);			
-			namedParameterJdbcTemplate.update(REQUET_DELET_COMPANY, requet);
+			namedParameterJdbcTemplate.update(REQUET_DELET_COMPUTER_WITH_COMPANY, request);			
+			namedParameterJdbcTemplate.update(REQUET_DELET_COMPANY, request);
 			
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);

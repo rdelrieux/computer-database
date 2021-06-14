@@ -33,7 +33,7 @@ public class CompanyService {
 	}
 
 	public void deletCompany(int id) {
-		this.companyDao.delet(id);
+		this.companyDao.delete(id);
 		
 	}
 
