@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.enumeration;
+package com.excilys.computerDatabase.front.session;
 
 public enum OrderBy {
 

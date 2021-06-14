@@ -10,7 +10,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.CompanyRowMapper;
+import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
+import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,19 +22,19 @@ public class CompanyDAO {
 
 	
 
-	private static final String REQUET_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
-	private static final String REQUET_COUNT_TOUTE_COMPANIES = "SELECT COUNT(*) FROM company";
-	private static final String REQUET_TROUVER_COMPANY_FROM_ID = "SELECT id,name FROM company WHERE id = :id"
+	private static final String REQUEST_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
+	private static final String REQUEST_COUNT_TOUTE_COMPANIES = "SELECT COUNT(*) FROM company";
+	private static final String REQUEST_TROUVER_COMPANY_FROM_ID = "SELECT id,name FROM company WHERE id = :id"
 			;
-	private static final String REQUET_TROUVER_COMPANY_FROM_NAME = "SELECT * FROM company WHERE name = :name"
+	private static final String REQUEST_TROUVER_COMPANY_FROM_NAME = "SELECT * FROM company WHERE name = :name"
 			;
-	private static final String REQUET_ADD_COMPANY = 
+	private static final String REQUEST_ADD_COMPANY = 
 			"INSERT INTO company (name)\n"
 			+ " VALUES (:name);";
 
-	private static final String REQUET_DELET_COMPUTER_WITH_COMPANY = "DELETE FROM computer WHERE company_id=:id";
+	private static final String REQUEST_DELETE_COMPUTER_WITH_COMPANY = "DELETE FROM computer WHERE company_id=:id";
 
-	private static final String REQUET_DELET_COMPANY = "DELETE  FROM company " + "WHERE company.id = :id \n";
+	private static final String REQUEST_DELETE_COMPANY = "DELETE  FROM company " + "WHERE company.id = :id \n";
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private JdbcTemplate jdbcTemplate;
@@ -51,77 +53,78 @@ public class CompanyDAO {
 		List<Company> res = new ArrayList<>();
 		try {
 
-			res = jdbcTemplate.query(REQUET_AFFICHER_TOUTE_COMPANIES, companyRowMapper);
+			res = jdbcTemplate.query(REQUEST_AFFICHER_TOUTE_COMPANIES, companyRowMapper);
 
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
+			throw new UnableExecutQueryException("number of company not found");
 		}
 		return res;
 	}
 
 	public int countAll() {
 		try {
-			return jdbcTemplate.queryForObject(REQUET_COUNT_TOUTE_COMPANIES, Integer.class);
+			return jdbcTemplate.queryForObject(REQUEST_COUNT_TOUTE_COMPANIES, Integer.class);
 
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new DAOException("number of company not found");
+			throw new UnableExecutQueryException("number of company not found");
 		}
 	}
 
 	public Company find(int id) {
 		try {
 
-			MapSqlParameterSource requet = new MapSqlParameterSource().addValue("id", id);
-			return namedParameterJdbcTemplate.query(REQUET_TROUVER_COMPANY_FROM_ID, requet, companyRowMapper).get(0);
+			MapSqlParameterSource request = new MapSqlParameterSource().addValue("id", id);
+			return namedParameterJdbcTemplate.query(REQUEST_TROUVER_COMPANY_FROM_ID, request, companyRowMapper).get(0);
 
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new DAOException("company not found");
+			throw new UnableExecutQueryException("company not found");
 		} catch (IndexOutOfBoundsException e) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
-			throw new DAOException("company not found");
+			throw new CompanyNotFoundException();
 		}
 	}
 
 	public Company find(String name) {
 		try {
 
-			MapSqlParameterSource requet = new MapSqlParameterSource().addValue("name", name);
-			return namedParameterJdbcTemplate.query(REQUET_TROUVER_COMPANY_FROM_NAME, requet, companyRowMapper).get(0);
+			MapSqlParameterSource request = new MapSqlParameterSource().addValue("name", name);
+			return namedParameterJdbcTemplate.query(REQUEST_TROUVER_COMPANY_FROM_NAME, request, companyRowMapper).get(0);
 
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new DAOException("company not found");
+			throw new UnableExecutQueryException("company not found");
 		} catch (IndexOutOfBoundsException e) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
-			throw new DAOException("company not found");
+			throw new CompanyNotFoundException();
 		}
 	}
 	
 	public void addCompany(String name) {
 		try  {
 			SqlParameterSource companyparams = new MapSqlParameterSource().addValue("name", name);
-			namedParameterJdbcTemplate.update(REQUET_ADD_COMPANY, companyparams);
+			namedParameterJdbcTemplate.update(REQUEST_ADD_COMPANY, companyparams);
 			
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new DAOException("company not added");
+			throw new UnableExecutQueryException("company not added");
 		}
 
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = { DAOException.class })
 	public void delete(int id) {
 		try {			
 			SqlParameterSource request = new MapSqlParameterSource().addValue("id", id);
 			
-			namedParameterJdbcTemplate.update(REQUET_DELET_COMPUTER_WITH_COMPANY, request);			
-			namedParameterJdbcTemplate.update(REQUET_DELET_COMPANY, request);
+			namedParameterJdbcTemplate.update(REQUEST_DELETE_COMPUTER_WITH_COMPANY, request);			
+			namedParameterJdbcTemplate.update(REQUEST_DELETE_COMPANY, request);
 			
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new DAOException("company not deleted");
+			throw new UnableExecutQueryException("company not deleted");
 		}
 	}
 	

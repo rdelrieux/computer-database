@@ -2,13 +2,10 @@ package com.excilys.computerDatabase.back.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.back.model.Computer;
-import com.excilys.computerDatabase.back.model.Page;
-import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.session.Session;
 
 @Service
@@ -39,8 +36,12 @@ public class ComputerService {
 		this.computerDAO.updateComputer(computer);
 	}
 
-	public void deletComputer(int id) {
-		this.computerDAO.delet(id);
+	public void deleteComputer(int id) {
+		this.computerDAO.delete(id);
+	}
+
+	public void delete(String listid) {
+		this.computerDAO.delete(listid);		
 	}
 
 }

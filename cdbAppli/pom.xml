@@ -23,9 +23,10 @@
 		<mysql-connector-java.version>8.0.23</mysql-connector-java.version>
 		<jstl.version>1.2</jstl.version>
 		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
+		<javax-validation.version>2.0.1.Final</javax-validation.version>
 		<hikari.version>3.4.5</hikari.version>
+		
 		<slf4j.version>1.7.30</slf4j.version>
-
 		<log4j.version>2.13.3</log4j.version>
 		<junit.version>5.4.2</junit.version>
 		<mockito-all.version>1.10.19</mockito-all.version>
@@ -93,6 +94,12 @@
 			<version>${javax-servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${javax-validation.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.zaxxer</groupId>

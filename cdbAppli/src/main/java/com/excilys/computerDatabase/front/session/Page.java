@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.back.model;
+package com.excilys.computerDatabase.front.session;
 
 public class Page {
 

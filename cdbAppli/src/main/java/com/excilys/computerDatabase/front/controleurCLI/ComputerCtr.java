@@ -9,15 +9,15 @@ import org.springframework.stereotype.Controller;
 import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
 import com.excilys.computerDatabase.back.model.Computer;
-import com.excilys.computerDatabase.back.model.Page;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.cli.CLI;
 import com.excilys.computerDatabase.front.cli.ChoixUtilisateur;
 import com.excilys.computerDatabase.front.cli.ComputerCLI;
+import com.excilys.computerDatabase.front.session.OrderBy;
+import com.excilys.computerDatabase.front.session.Page;
 import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 

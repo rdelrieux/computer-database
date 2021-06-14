@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.enumeration.Order;
-import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
+import com.excilys.computerDatabase.front.session.Order;
+import com.excilys.computerDatabase.front.session.OrderBy;
 import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
@@ -55,10 +55,11 @@ public class DashBoardServlet extends HttpServlet {
 	
 	@GetMapping(value = "/search", params = "nombreElementPage")
 	public String updateNombreElementPage(@RequestParam("nombreElementPage") int nombreElementPage) {
-		if (nombreElementPage > 1 && nombreElementPage < 100) {
+		if (nombreElementPage > 1 && nombreElementPage <= 100) {
 			this.session.getPage().setNumPage(1 + (this.session.getPage().getNumPage() - 1) * this.session.getPage().getNombreElementPage() / nombreElementPage);
 			this.session.getPage().setNombreElementPage(nombreElementPage);
 		}
+		
 		return VUE_DASHBOARD_REDIRECT;
 	}
 	
@@ -73,12 +74,9 @@ public class DashBoardServlet extends HttpServlet {
 	
 	@GetMapping(value = "/search", params = {"orderBy", "order"} )
 	public String updateOrder(@RequestParam("orderBy") String orderBy, @RequestParam("order") String order) {
-		
 		this.session.getPage().goToFirstPage();
 		this.session.setOrderBy(OrderBy.getOrderBy(orderBy));
 		this.session.setOrder(Order.getOrder(order));
-		
-		
 		return VUE_DASHBOARD_REDIRECT;
 	}
 	
@@ -91,13 +89,11 @@ public class DashBoardServlet extends HttpServlet {
 		return VUE_DASHBOARD_REDIRECT;
 	}
 	
-	@PostMapping(value = "/delet")
-	public String delet(@RequestParam("selection") String selection) {
-		
+	@PostMapping(value = "/delete")
+	public String delete(@RequestParam("selection") String selection) {
 		try {
-			List<String> listSelection = Arrays.asList(selection.split(","));
-			listSelection.stream().map(s -> Integer.valueOf(s)).forEach(id -> this.computerService.deletComputer(id));
-		} catch (NumberFormatException | DAOException e) {
+			this.computerService.delete(selection);
+		} catch ( DAOException e) {
 			LoggerCdb.logWarn(DashBoardServlet.class.toString(), e);
 		}
 		return VUE_DASHBOARD_REDIRECT;
@@ -107,9 +103,17 @@ public class DashBoardServlet extends HttpServlet {
 	@GetMapping(value = "/dashboard")
 	protected ModelAndView displayDashboard()
 			throws ServletException, IOException {
+		
 		ModelAndView mv = new ModelAndView(VUE_DASHBOARD);
-		mv.addObject("listcomputer", this.getListComputer()	);
 		mv.addObject("session", this.session );
+		
+		try {
+		mv.addObject("listcomputer", this.getListComputer()	);
+		} catch ( DAOException e) {
+			LoggerCdb.logWarn(DashBoardServlet.class.toString(), e);
+		}
+		
+		
 		return mv;
 	}
 

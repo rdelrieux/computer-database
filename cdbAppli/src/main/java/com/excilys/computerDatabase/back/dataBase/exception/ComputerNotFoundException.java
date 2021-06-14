@@ -1,6 +1,6 @@
 package com.excilys.computerDatabase.back.dataBase.exception;
 
-public class ComputerNotFoundException extends RuntimeException{
+public class ComputerNotFoundException extends DAOException{
 
 
 	private static final long serialVersionUID = 1L;

@@ -15,7 +15,7 @@ import com.excilys.computerDatabase.back.dataBase.dao.CompanyDAO;
 import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.back.model.Computer;
-import com.excilys.computerDatabase.back.model.Page;
+import com.excilys.computerDatabase.front.session.Page;
 
 
 

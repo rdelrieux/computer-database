@@ -3,10 +3,11 @@ package com.excilys.computerDatabase.front.servlets;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import javax.servlet.http.HttpServlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final String ATT_COMPANY_LIST = "listCompany";
-	private static final String VUE_DASHBOARD = "redirect:/dashboard";
+	private static final String VUE_DASHBOARD_REDIRECT = "redirect:/dashboard";
 	private static final String VUE_ADD_COMPUTER = "addComputer";
 	private static final String VUE_ADD_COMPUTER_REDIRECT = "redirect:/addComputer";
 
@@ -57,12 +58,14 @@ public class AddComputerServlet extends HttpServlet {
 		List<CompanyDTO> listcompany = this.getListCompany();
 		mv.addObject(ATT_COMPANY_LIST, listcompany);
 		mv.addObject("computer", session.getComputerDTOAdd());
-		if (! "".equals(session.getComputerDTOAdd().getCompanyId()) ) {
-			mv.addObject("companyName", listcompany.stream()
-					.filter(c -> c.getId().toString().equals(session.getComputerDTOAdd().getCompanyId()))
-					.collect(Collectors.toList()).get(0).getName()
-					);
+		
+		if (!"".equals(session.getComputerDTOAdd().getCompanyId())) {
+			mv.addObject("companyName",
+					listcompany.stream()
+							.filter(c -> c.getId().toString().equals(session.getComputerDTOAdd().getCompanyId()))
+							.collect(Collectors.toList()).get(0).getName());
 		}
+		
 		return mv;
 	}
 
@@ -72,27 +75,32 @@ public class AddComputerServlet extends HttpServlet {
 	}
 
 	@PostMapping(value = "/addComputer")
-	protected ModelAndView addComputer(@ModelAttribute("computer") @Validated ComputerDTOAdd computerDTOAdd,
-			BindingResult bindingResult ) {
+	protected ModelAndView addComputer(@ModelAttribute("computer") @Valid ComputerDTOAdd computerDTOAdd,
+			BindingResult bindingResult) {
 		ModelAndView mv = new ModelAndView(VUE_ADD_COMPUTER_REDIRECT);
 		session.setComputerDTOAdd(computerDTOAdd);
 
-
 		computerValidateur.validate(computerDTOAdd, bindingResult);
-		if (! bindingResult.hasErrors() ) {
+		if (!bindingResult.hasErrors()) {
 			try {
 				this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOAdd));
 				this.session.setComputerDTOAdd(new ComputerDTOAdd());
-				return new ModelAndView(VUE_DASHBOARD);
+				return new ModelAndView(VUE_DASHBOARD_REDIRECT);
+
+			} catch (DAOException e) {
+				LoggerCdb.logError(AddComputerServlet.class.getName(), e);
 				
-		 }catch ( DAOException e){
-			  LoggerCdb.logError(AddComputerServlet.class.getName(), e);
-			  
-		 }
-		
+			}
+
 		}
-				
+
 		return mv;
+	}
+
+	@GetMapping("/addComputer/cancel")
+	public String cancel() {
+		this.session.setComputerDTOAdd(new ComputerDTOAdd());
+		return VUE_DASHBOARD_REDIRECT;
 	}
 
 }

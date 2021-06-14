@@ -110,6 +110,11 @@ public class EditComputerServlet extends HttpServlet {
 		return mv;
 	}
 	
+	@GetMapping("/editComputer/cancel")
+	public String cancel () {
+		this.session.setComputerDTOUpdate(new ComputerDTOUpdate());
+		return VUE_DASHBOARD_REDIRECT;
+	}
 	
 	
 	

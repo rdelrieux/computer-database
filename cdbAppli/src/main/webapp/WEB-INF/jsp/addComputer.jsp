@@ -32,7 +32,7 @@
 							<div class="form-group">
 								<label for="computerName"><fmt:message key="label.computerName" /></label> <input
 									type="text" class="form-control" id="name"
-									name="name" placeholder="Computer name"
+									name="name" placeholder="<fmt:message key="label.computerName" />"
 									required="required"
 									value=${computer.name }>
 									<span class="error"><c:out value="${errors['nameInput'].message}" /></span>
@@ -81,7 +81,7 @@
 
 						<div class="actions pull-right">
 							<input type="submit" value=<fmt:message key="label.add" /> class="btn btn-primary">
-							<fmt:message key="label.or" /> <a href="dashboard" class="btn btn-default"><fmt:message key="label.cancel" /></a>
+							<fmt:message key="label.or" /> <a href="addComputer/cancel" class="btn btn-default"><fmt:message key="label.cancel" /></a>
 						</div>
 					</form>
 				</div>

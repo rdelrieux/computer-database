@@ -4,9 +4,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.ScopedProxyMode;
 
-import com.excilys.computerDatabase.back.model.Page;
-import com.excilys.computerDatabase.enumeration.Order;
-import com.excilys.computerDatabase.enumeration.OrderBy;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 
