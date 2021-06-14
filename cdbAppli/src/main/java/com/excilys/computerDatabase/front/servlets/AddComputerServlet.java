@@ -29,7 +29,8 @@ public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final String ATT_COMPANY_LIST = "listCompany";
-	private static final String VUE_DASHBOARD_REDIRECT = "redirect:/dashboard";
+	private static final String VUE_DASHBOARD_REDIRECT = "redirect:/addComputer/cancel";
+	private static final String VUE_DASHBOARD = "redirect:/dashboard";
 	private static final String VUE_ADD_COMPUTER = "addComputer";
 	private static final String VUE_ADD_COMPUTER_REDIRECT = "redirect:/addComputer";
 
@@ -58,6 +59,8 @@ public class AddComputerServlet extends HttpServlet {
 		List<CompanyDTO> listcompany = this.getListCompany();
 		mv.addObject(ATT_COMPANY_LIST, listcompany);
 		mv.addObject("computer", session.getComputerDTOAdd());
+		mv.addObject("errors", session.getError());
+
 		
 		if (!"".equals(session.getComputerDTOAdd().getCompanyId())) {
 			mv.addObject("companyName",
@@ -79,7 +82,8 @@ public class AddComputerServlet extends HttpServlet {
 			BindingResult bindingResult) {
 		ModelAndView mv = new ModelAndView(VUE_ADD_COMPUTER_REDIRECT);
 		session.setComputerDTOAdd(computerDTOAdd);
-
+		session.getError().clear();
+		
 		computerValidateur.validate(computerDTOAdd, bindingResult);
 		if (!bindingResult.hasErrors()) {
 			try {
@@ -89,18 +93,21 @@ public class AddComputerServlet extends HttpServlet {
 
 			} catch (DAOException e) {
 				LoggerCdb.logError(AddComputerServlet.class.getName(), e);
-				
+				this.session.getError().put("DAOException", e.getMessage());
 			}
 
+		}else {
+			bindingResult.getFieldErrors().stream().forEach(e -> this.session.getError().put(e.getField(), e.getDefaultMessage()) );
 		}
 
 		return mv;
 	}
-
+	
 	@GetMapping("/addComputer/cancel")
 	public String cancel() {
 		this.session.setComputerDTOAdd(new ComputerDTOAdd());
-		return VUE_DASHBOARD_REDIRECT;
+		this.session.getError().clear();
+		return VUE_DASHBOARD;
 	}
 
 }

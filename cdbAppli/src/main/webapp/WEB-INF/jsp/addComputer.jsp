@@ -8,17 +8,18 @@
 <title><fmt:message key="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="./resources/css/bootstrap.min.css"
-	rel="stylesheet" media="screen">
-<link href="./resources/css/font-awesome.css"
-	rel="stylesheet" media="screen">
-<link href="./resources/css/main.css"
-	rel="stylesheet" media="screen">
+<link href="./resources/css/bootstrap.min.css" rel="stylesheet"
+	media="screen">
+<link href="./resources/css/font-awesome.css" rel="stylesheet"
+	media="screen">
+<link href="./resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> <fmt:message key="label.home" /> </a>
+			<a class="navbar-brand" href="dashboard"> <fmt:message
+					key="label.home" />
+			</a>
 		</div>
 	</header>
 
@@ -26,45 +27,51 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><fmt:message key="label.addComputer" /></h1>
+					<h1>
+						<fmt:message key="label.addComputer" />
+					</h1>
 					<form action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName"><fmt:message key="label.computerName" /></label> <input
-									type="text" class="form-control" id="name"
-									name="name" placeholder="<fmt:message key="label.computerName" />"
-									required="required"
-									value=${computer.name }>
-									<span class="error"><c:out value="${errors['nameInput'].message}" /></span>
+								<label for="computerName"><fmt:message
+										key="label.computerName" /></label> <input type="text"
+									class="form-control" id="name" name="name"
+									placeholder="<fmt:message key="label.computerName" />"
+									required="required" value=${computer.name }>
+								
+								<span class="error">
+								<c:out value="${errors['name']}" />
+								</span>
+								
 							</div>
 							<div class="form-group">
-								<label for="introduced"><fmt:message key="label.introducedDate" /></label> <input
-									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date"
-									value=${computer.introduced }>
-									<span class="error"><c:out value="${errors['introducedInput'].message}" /></span>
-									<span class="error"><c:out value="${errors['dateIntervalInput'].message}" /></span>
+								<label for="introduced"><fmt:message
+										key="label.introducedDate" /></label> <input type="date"
+									class="form-control" id="introduced" name="introduced"
+									placeholder="Introduced date" value=${computer.introduced }>
+									<span class="error"><c:out
+										value="${errors['discontinued']}" /></span> 
 							</div>
 							<div class="form-group">
-								<label for="discontinued"><fmt:message key="label.discontinuedDate" /></label> <input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date"
-									value=${computer.discontinued }>
-									<span class="error"><c:out value="${errors['discontinuedInput'].message}" /></span>
-									<span class="error"><c:out value="${errors['dateIntervalInput'].message}" /></span>
-									
+								<label for="discontinued"><fmt:message
+										key="label.discontinuedDate" /></label> <input type="date"
+									class="form-control" id="discontinued" name="discontinued"
+									placeholder="Discontinued date" value=${computer.discontinued }>
+								<span class="error"><c:out
+										value="${errors['discontinued']}" /></span> 
+
 							</div>
 							<div class="form-group">
-								<label for="companyId"><fmt:message key="label.companyName" /></label> 
-								<select
-									class="form-control" id="companyId" name="companyId">
-									<option value="${computer.companyId }" >${companyName }</option>
+								<label for="companyId"><fmt:message
+										key="label.companyName" /></label> <select class="form-control"
+									id="companyId" name="companyId">
+									<option value="${computer.companyId }">${companyName }</option>
 									<option value="">--</option>
 									<c:forEach var="company" items="${listCompany }">
 										<option value="${company.id }">${company.name }</option>
 									</c:forEach>
-								</select>
-								<span class="error"><c:out value="${errors['companyIdInput'].message}" /></span>
+								</select> <span class="error"><c:out
+										value="${errors['companyId']}" /></span>
 
 							</div>
 						</fieldset>
@@ -73,15 +80,22 @@
 							style="display: none;">
 							<button type="button" class="close" data-dismiss="alert"
 								aria-label="Close">
-								<span aria-hidden="true">×</span>
+								
+							<span aria-hidden="true">×</span>
 							</button>
 							<strong>Action add Canceled ! </strong> <label id=erroradd></label>
+						
+						
+						
 						</div>
 
 
 						<div class="actions pull-right">
-							<input type="submit" value=<fmt:message key="label.add" /> class="btn btn-primary">
-							<fmt:message key="label.or" /> <a href="addComputer/cancel" class="btn btn-default"><fmt:message key="label.cancel" /></a>
+							<input type="submit" value=<fmt:message key="label.add" />
+								class="btn btn-primary">
+							<fmt:message key="label.or" />
+							<a href="addComputer/cancel" class="btn btn-default"><fmt:message
+									key="label.cancel" /></a>
 						</div>
 					</form>
 				</div>

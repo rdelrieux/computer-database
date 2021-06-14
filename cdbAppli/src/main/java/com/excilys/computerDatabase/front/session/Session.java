@@ -1,5 +1,8 @@
 package com.excilys.computerDatabase.front.session;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -22,6 +25,8 @@ public class Session {
 	
 	private Order order;
 	
+	private HashMap<String, String> error;
+	
 	private ComputerDTOAdd computerDTOAdd;
 	
 	private ComputerDTOUpdate computerDTOUpdate;
@@ -32,6 +37,7 @@ public class Session {
 		 this.orderBy = OrderBy.COMPUTER_NAME;
 		 this.order = Order.ASCENDANT;
 		 this.computerDTOAdd = new ComputerDTOAdd();
+		 this.error = new HashMap<>();
 	}
 	
 
@@ -81,6 +87,10 @@ public class Session {
 
 	public void setComputerDTOUpdate(ComputerDTOUpdate computerDTOUpdate) {
 		this.computerDTOUpdate = computerDTOUpdate;
+	}
+	
+	public HashMap<String,String> getError() {
+		return this.error;
 	}
 
 	

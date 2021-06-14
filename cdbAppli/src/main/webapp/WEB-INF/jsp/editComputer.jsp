@@ -34,6 +34,9 @@
 									type="text" class="form-control" id="name"
 									name="name"
 									value=${computer.name }>
+									<span class="error">
+								<c:out value="${errors['name']}" />
+								</span>
 							</div>
 							<div class="form-group">
 											
@@ -52,7 +55,9 @@
 									name="introduced"
 									value=${formDate }>
 									
-									
+									<span class="error">
+								<c:out value="${errors['discontinued']}" />
+								</span>
 							</div>
 							<div class="form-group">
 								<label for="discontinued"><fmt:message key="label.discontinuedDate" /></label>
@@ -68,8 +73,13 @@
 									class="form-control" id="discontinued"
 									name="discontinued"
 									value=${formDate }>
-								
+
+								<span class="error">
+								<c:out value="${errors['discontinued']}" />
+								</span>
 							</div>
+							
+							
 							<div class="form-group">
 								<label for="companyId"><fmt:message key="label.companyName" /></label> 
 								<select
@@ -83,6 +93,10 @@
 									</c:forEach>
 									
 								</select>
+								<span class="error">
+								<c:out value="${errors['companyId']}" />
+								</span>
+								
 							</div>
 						</fieldset>
 						<div class="actions pull-right">

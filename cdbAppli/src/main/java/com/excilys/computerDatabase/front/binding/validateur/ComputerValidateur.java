@@ -25,7 +25,7 @@ public class ComputerValidateur implements Validator{
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "computer name required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "computer name required , name is required");
 		
 		if (target instanceof ComputerDTOAdd) {
 			ComputerDTOAdd computerDto = (ComputerDTOAdd) target;
@@ -41,11 +41,18 @@ public class ComputerValidateur implements Validator{
 		
 	}
 	
+	private void nameValidator(Errors errors, String name) {
+		if (name == null || "null".equals(name) || !name.matches(COMPUTER_NAME_FORMAT)) {
+			errors.rejectValue("name", "computer name invalid" , name +" is not a valid name ");
+		}
+		
+	}
+	
 	private void companyValidator(Errors errors, String companyId) {
 		if (! companyId.isEmpty() ) {
 			int company = Integer.parseInt(companyId);
 			if (company < 0) {
-				errors.rejectValue("companyId", "computer company invalid" );
+				errors.rejectValue("companyId", "computer company invalid" , "this company doesn't exist " );
 			}
 		}
 		
@@ -57,19 +64,14 @@ public class ComputerValidateur implements Validator{
 			if (!discontinued.isEmpty() && discontinued != null) {
 				LocalDate dateDiscontinued = LocalDate.parse(discontinued);
 				if (dateIntroduced.isAfter(dateDiscontinued)) {
-					errors.rejectValue("discontinued", "computer discontinued invalid");
+					errors.rejectValue("discontinued", "computer discontinued invalid" , "introduced date should be before discontinued date ");
 				}
 			}
 		}
 		
 	}
 
-	private void nameValidator(Errors errors, String name) {
-		if (name == null || "null".equals(name) || !name.matches(COMPUTER_NAME_FORMAT)) {
-			errors.rejectValue("name", "computer name invalid");
-		}
-		
-	}
+
 
 
 

@@ -95,6 +95,7 @@ public class DashBoardServlet extends HttpServlet {
 			this.computerService.delete(selection);
 		} catch ( DAOException e) {
 			LoggerCdb.logWarn(DashBoardServlet.class.toString(), e);
+			this.session.getError().put("DAOException", e.getMessage());
 		}
 		return VUE_DASHBOARD_REDIRECT;
 	}
