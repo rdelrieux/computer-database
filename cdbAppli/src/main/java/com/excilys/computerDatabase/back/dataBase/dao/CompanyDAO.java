@@ -15,6 +15,8 @@ import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.logger.LoggerCdb;
+import com.excilys.computerDatabase.logger.time.Timed;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -49,6 +51,7 @@ public class CompanyDAO {
 
 	}
 
+	@Timed
 	public List<Company> findAll() {
 		List<Company> res = new ArrayList<>();
 		try {
@@ -62,6 +65,7 @@ public class CompanyDAO {
 		return res;
 	}
 
+	@Timed
 	public int countAll() {
 		try {
 			return jdbcTemplate.queryForObject(REQUEST_COUNT_TOUTE_COMPANIES, Integer.class);
@@ -72,6 +76,7 @@ public class CompanyDAO {
 		}
 	}
 
+	@Timed
 	public Company find(int id) {
 		try {
 
@@ -87,6 +92,7 @@ public class CompanyDAO {
 		}
 	}
 
+	@Timed
 	public Company find(String name) {
 		try {
 
@@ -102,6 +108,7 @@ public class CompanyDAO {
 		}
 	}
 	
+	@Timed
 	public void addCompany(String name) {
 		try  {
 			SqlParameterSource companyparams = new MapSqlParameterSource().addValue("name", name);
@@ -114,6 +121,7 @@ public class CompanyDAO {
 
 	}
 
+	@Timed
 	@Transactional(rollbackFor = { DAOException.class })
 	public void delete(int id) {
 		try {			

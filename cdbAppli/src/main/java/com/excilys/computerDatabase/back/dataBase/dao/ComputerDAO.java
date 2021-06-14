@@ -14,11 +14,13 @@ import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.back.dataBase.binding.mapper.ComputerRowMapper;
 import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
-import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
+
+
+import com.excilys.computerDatabase.logger.time.Timed;
 
 @Repository
 public class ComputerDAO {
@@ -86,6 +88,7 @@ public class ComputerDAO {
 
 	}
 	
+	@Timed
 	public List<Computer> search(Session session) {
 		List<Computer> res = new ArrayList<>();
 		try {
@@ -109,6 +112,7 @@ public class ComputerDAO {
 		return res;
 	}
 
+	@Timed
 	public int searchNombreElementRequet(String search) {
 		try {
 			
@@ -127,6 +131,7 @@ public class ComputerDAO {
 		}
 	}
 
+	@Timed
 	public Computer find(int id) {
 		try {
 
@@ -142,7 +147,7 @@ public class ComputerDAO {
 		}
 	}
 	
-	
+	@Timed
 	public void addComputer(Computer computer) {
 		try  {
 			ComputerDTOAdd computerAdd = this.computerRowMapper.mapToComputerDTOAdd(computer);
@@ -156,6 +161,7 @@ public class ComputerDAO {
 
 	}
 	
+	@Timed
 	public void updateComputer(Computer computer) {
 		try  {
 			ComputerDTOUpdate computerUpdate = this.computerRowMapper.mapToComputerDTOUpdate(computer);
@@ -169,6 +175,7 @@ public class ComputerDAO {
 
 	}
 	
+	@Timed
 	public void delete(int id) {
 		try {
 			SqlParameterSource requestParam = new MapSqlParameterSource().addValue("id", id);
@@ -180,6 +187,7 @@ public class ComputerDAO {
 		} 
 	}
 
+	@Timed
 	public void delete(String listid) {
 		try {
 			

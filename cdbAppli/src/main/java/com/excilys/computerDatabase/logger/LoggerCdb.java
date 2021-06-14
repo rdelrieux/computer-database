@@ -57,5 +57,10 @@ public class LoggerCdb {
 		Logger logger = LogManager.getLogger(name);
 		logger.debug(string);
 	}
+
+	public  static void  logTime(String string) {
+		Logger logger = LogManager.getLogger("");
+		logger.info(string);
+	}
 	
 }

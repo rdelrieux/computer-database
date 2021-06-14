@@ -1,8 +1,10 @@
 package com.excilys.computerDatabase;
 
 
+import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.configuration.RootConfig;
 import com.excilys.computerDatabase.front.cli.StartApplication;
+import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
 import java.util.function.Predicate;
@@ -26,6 +28,8 @@ static int[][] game ;
 
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);	 
 	
+		ComputerDAO dao = context.getBean(ComputerDAO.class);
+		dao.search(new Session()).stream().forEach(e -> System.out.println(e));
 		
 		context.close();
 	}
