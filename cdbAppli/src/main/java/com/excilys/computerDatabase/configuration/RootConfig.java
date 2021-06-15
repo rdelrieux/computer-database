@@ -31,7 +31,7 @@ import com.zaxxer.hikari.HikariDataSource;
 })
 
 @EnableTransactionManagement
-@EnableAspectJAutoProxy
+//@EnableAspectJAutoProxy
 public class RootConfig {
 
 	private static final String PROP_FILE_NAME = "/datasource.properties";

@@ -1,5 +1,7 @@
 package com.excilys.computerDatabase.configuration;
 
+import java.util.Locale;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
@@ -44,7 +47,9 @@ public class ServletConfig extends DelegatingWebMvcConfiguration {
 
 		@Bean
 		public LocaleResolver localeResolver() {
-		    return new CookieLocaleResolver();
+		    SessionLocaleResolver  sessionLocalResolver = new SessionLocaleResolver();
+		    sessionLocalResolver.setDefaultLocale(Locale.ENGLISH);
+		    return sessionLocalResolver;
 		}
 
 		@Override

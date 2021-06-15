@@ -62,5 +62,11 @@ public class LoggerCdb {
 		Logger logger = LogManager.getLogger("");
 		logger.info(string);
 	}
+
+	public static void logInfo(String string) {
+		Logger logger = LogManager.getLogger("");
+		logger.info(string);
+		
+	}
 	
 }

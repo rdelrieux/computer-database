@@ -19,15 +19,22 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 
+
+
 		<spring.version>5.3.7</spring.version>
+
 		<mysql-connector-java.version>8.0.23</mysql-connector-java.version>
+		<hibernate.version>5.4.29.Final</hibernate.version>
+		<hikari.version>3.4.5</hikari.version>
+
 		<jstl.version>1.2</jstl.version>
 		<javax-servlet-api.version>4.0.1</javax-servlet-api.version>
 		<javax-validation.version>2.0.1.Final</javax-validation.version>
-		<hikari.version>3.4.5</hikari.version>
-		
+
+
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j.version>2.13.3</log4j.version>
+
 		<junit.version>5.4.2</junit.version>
 		<mockito-all.version>1.10.19</mockito-all.version>
 		<h2database.version>1.4.198</h2database.version>
@@ -63,23 +70,31 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<artifactId>spring-orm</artifactId>
 		</dependency>
 
 
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql-connector-java.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikari.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 
@@ -102,13 +117,6 @@
 
 
 		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${hikari.version}</version>
-		</dependency>
-
-
-		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-jcl</artifactId>
 			<version>${log4j.version}</version>
@@ -118,31 +126,13 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-<dependency>
-    <groupId>org.aspectj</groupId>
-    <artifactId>aspectjweaver</artifactId>
-    <version>1.8.5</version>
-</dependency >
 
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-
 
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
 		<dependency>

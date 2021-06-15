@@ -21,7 +21,7 @@ public class AppTest {
 		
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(TestConfig.class);	
 		DAO dao = context.getBean(DAO.class);
-		dao.search(new Session()).stream().forEach(e ->  LoggerCdb.logDebug(e.toString()) );
+		dao.search(new Session()).stream().forEach(e ->  LoggerCdb.logTime(e.toString()) );
 		context.close();
 
 	}

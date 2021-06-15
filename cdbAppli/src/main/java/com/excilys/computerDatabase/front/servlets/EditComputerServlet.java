@@ -3,7 +3,6 @@ package com.excilys.computerDatabase.front.servlets;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -25,8 +24,7 @@ import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
 @Controller
-public class EditComputerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class EditComputerServlet  {
 
 	private static final String ATT_COMPANY_LIST = "listCompany";
 	private static final String VUE_DASHBOARD_REDIRECT = "redirect:/addComputer/cancel";

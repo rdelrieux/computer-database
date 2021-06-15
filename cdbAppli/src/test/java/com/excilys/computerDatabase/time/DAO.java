@@ -47,7 +47,7 @@ public class DAO {
 	public List<Computer> search(Session session) {
 		List<Computer> res = new ArrayList<>();
 		try {
-			LoggerCdb.logDebug("start search");
+			LoggerCdb.logInfo("start search");
 			
 			String sql = REQUEST_AFFICHER_COMPUTERS_SEARCH.replace(":column", session.getOrderBy().getColumn());
 			sql = sql.replace(":order", session.getOrder().getParamOrder());
@@ -72,7 +72,7 @@ public class DAO {
 			LoggerCdb.logError(CompanyDAO.class.getName(), e);
 			throw new UnableExecutQueryException("search erreur");
 		}
-		LoggerCdb.logDebug("end search");
+		LoggerCdb.logInfo("end search");
 		return res;
 	}
 	

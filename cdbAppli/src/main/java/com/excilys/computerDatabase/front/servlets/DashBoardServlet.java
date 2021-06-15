@@ -1,12 +1,10 @@
 package com.excilys.computerDatabase.front.servlets;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
@@ -24,8 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class DashBoardServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class DashBoardServlet  {
 
 
 	private static final String VUE_DASHBOARD_REDIRECT = "redirect:/dashboard";
