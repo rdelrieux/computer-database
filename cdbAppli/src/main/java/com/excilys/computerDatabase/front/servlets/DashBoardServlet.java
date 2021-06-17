@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
 import com.excilys.computerDatabase.back.service.ComputerService;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTO;
 import com.excilys.computerDatabase.front.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.front.session.Order;
 import com.excilys.computerDatabase.front.session.OrderBy;
@@ -115,9 +115,9 @@ public class DashBoardServlet  {
 		return mv;
 	}
 
-	private List<ComputerDTOOutput> getListComputer() {
+	private List<ComputerDTO> getListComputer() {
 		this.session.getPage().setNombreElementRequet(this.computerService.searchNombreElementRequet(session.getSearch()));
-		return computerService.searchComputer(session).stream().map(c -> this.computerMapper.mapToComputerDTOOutput(c))
+		return computerService.searchComputer(session).stream().map(c -> this.computerMapper.mapToComputerDTO(c))
 				.collect(Collectors.toList());
 	}
 

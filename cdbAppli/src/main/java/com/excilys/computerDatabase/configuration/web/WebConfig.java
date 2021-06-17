@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.configuration;
+package com.excilys.computerDatabase.configuration.web;
 
 import java.util.Locale;
 
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @ComponentScan(basePackages = { "com.excilys.computerDatabase.front.servlets"
 })
-public class ServletConfig extends DelegatingWebMvcConfiguration {
+public class WebConfig extends DelegatingWebMvcConfiguration {
 	
 
 	@Bean

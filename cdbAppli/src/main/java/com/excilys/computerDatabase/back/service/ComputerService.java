@@ -21,7 +21,7 @@ public class ComputerService {
 		return this.computerDAO.search(session);
 	}
 
-	public int searchNombreElementRequet(String search) {
+	public long searchNombreElementRequet(String search) {
 		return this.computerDAO.searchNombreElementRequet(search);
 	}
 

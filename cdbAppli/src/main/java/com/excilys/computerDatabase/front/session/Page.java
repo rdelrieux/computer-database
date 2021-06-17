@@ -2,11 +2,11 @@ package com.excilys.computerDatabase.front.session;
 
 public class Page {
 
-	private int nombreElementRequet;
+	private long nombreElementRequet;
 	private int nombreElementPage = 10;
 	private int numPage = 1;
 
-	public Page(int nombreElementRequet, int nombreElementPage, int numPage) {
+	public Page(long nombreElementRequet, int nombreElementPage, int numPage) {
 		this.nombreElementRequet = nombreElementRequet;
 		this.nombreElementPage = nombreElementPage;
 		this.numPage = numPage;
@@ -15,7 +15,7 @@ public class Page {
 	public Page() {
 	}
 
-	public void setNombreElementRequet(int nombreElementRequet) {
+	public void setNombreElementRequet(long nombreElementRequet) {
 		this.nombreElementRequet = nombreElementRequet;
 	}
 
@@ -27,7 +27,7 @@ public class Page {
 		this.numPage = numPage;
 	}
 
-	public int getNombreElementRequet() {
+	public long getNombreElementRequet() {
 		return nombreElementRequet;
 	}
 
@@ -39,7 +39,7 @@ public class Page {
 		return numPage;
 	}
 
-	public int getNombrePageMax() {
+	public long getNombrePageMax() {
 		return nombreElementRequet / nombreElementPage + (nombreElementRequet % nombreElementPage == 0 ? 0 : 1);
 
 	}

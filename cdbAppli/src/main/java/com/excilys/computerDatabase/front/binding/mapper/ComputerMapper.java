@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +12,8 @@ import com.excilys.computerDatabase.back.model.Computer;
 import com.excilys.computerDatabase.back.model.Computer.ComputerBuilder;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOUpdate;
 import com.excilys.computerDatabase.front.binding.dto.ComputerDTOAdd;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput;
-import com.excilys.computerDatabase.front.binding.dto.ComputerDTOOutput.ComputerDTOOutputBuilder;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTO;
+import com.excilys.computerDatabase.front.binding.dto.ComputerDTO.ComputerDTOOutputBuilder;
 
 @Component("computerMapperCtr")
 public class ComputerMapper {
@@ -29,9 +28,9 @@ public class ComputerMapper {
 		this.companyMapper = companyMapper;
 	}
 
-	public ComputerDTOOutput mapToComputerDTOOutput(Computer computer) {
+	public ComputerDTO mapToComputerDTO(Computer computer) {
 
-		ComputerDTOOutputBuilder builder = new ComputerDTOOutput.ComputerDTOOutputBuilder("" + computer.getId(),
+		ComputerDTOOutputBuilder builder = new ComputerDTO.ComputerDTOOutputBuilder("" + computer.getId(),
 				computer.getName());
 
 		if (computer.getIntroduced() != null) {
@@ -45,8 +44,8 @@ public class ComputerMapper {
 		return builder.build();
 	}
 
-	public List<ComputerDTOOutput> mapToListComputerDTOOutput(List<Computer> listComputer) {
-		return listComputer.stream().map(c -> this.mapToComputerDTOOutput(c)).collect(Collectors.toList());
+	public List<ComputerDTO> mapToListComputerDTO(List<Computer> listComputer) {
+		return listComputer.stream().map(c -> this.mapToComputerDTO(c)).collect(Collectors.toList());
 	}
 
 	public Computer mapToComputer(ComputerDTOAdd computerDTOAdd) {

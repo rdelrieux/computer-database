@@ -1,18 +1,22 @@
 package com.excilys.computerDatabase.back.dataBase.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerDatabase.back.dataBase.binding.mapper.CompanyRowMapper;
+import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyEntity;
+import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerEntity;
+import com.excilys.computerDatabase.back.dataBase.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.back.dataBase.exception.CompanyNotFoundException;
-import com.excilys.computerDatabase.back.dataBase.exception.DAOException;
-import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Company;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 import com.excilys.computerDatabase.logger.time.Timed;
@@ -22,70 +26,55 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class CompanyDAO {
 
+	private CompanyMapper companyMapper;
+	private CriteriaBuilder critriaBuilder;
+	private EntityManager entityManager;
+	private EntityManagerFactory entityManagerFactory;
 	
-
-	private static final String REQUEST_AFFICHER_TOUTE_COMPANIES = "SELECT * FROM company";
-	private static final String REQUEST_COUNT_TOUTE_COMPANIES = "SELECT COUNT(*) FROM company";
-	private static final String REQUEST_TROUVER_COMPANY_FROM_ID = "SELECT id,name FROM company WHERE id = :id"
-			;
-	private static final String REQUEST_TROUVER_COMPANY_FROM_NAME = "SELECT * FROM company WHERE name = :name"
-			;
-	private static final String REQUEST_ADD_COMPANY = 
-			"INSERT INTO company (name)\n"
-			+ " VALUES (:name);";
-
-	private static final String REQUEST_DELETE_COMPUTER_WITH_COMPANY = "DELETE FROM computer WHERE company_id=:id";
-
-	private static final String REQUEST_DELETE_COMPANY = "DELETE  FROM company " + "WHERE company.id = :id \n";
-
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	private JdbcTemplate jdbcTemplate;
-	private CompanyRowMapper companyRowMapper;
-
-	public CompanyDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate,
-			CompanyRowMapper companyRowMapper) {
+	public CompanyDAO(CompanyMapper companyMapper, EntityManagerFactory entityManagerFactory) {
 		super();
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-		this.jdbcTemplate = jdbcTemplate;
-		this.companyRowMapper = companyRowMapper;
+		this.companyMapper = companyMapper;
+		this.entityManagerFactory = entityManagerFactory;
+		this.entityManager = this.entityManagerFactory.createEntityManager();
+		this.critriaBuilder = this.entityManager.getCriteriaBuilder();
 
+	}
+
+	@Timed
+	public long countAll() {
+		CriteriaQuery<Long> criteriaQuery = critriaBuilder.createQuery(Long.class);
+		Root<CompanyEntity> root = criteriaQuery.from(CompanyEntity.class);
+		criteriaQuery.select(critriaBuilder.count(root));
+
+		return entityManager.createQuery(criteriaQuery).getSingleResult();
 	}
 
 	@Timed
 	public List<Company> findAll() {
-		List<Company> res = new ArrayList<>();
-		try {
 
-			res = jdbcTemplate.query(REQUEST_AFFICHER_TOUTE_COMPANIES, companyRowMapper);
+		CriteriaQuery<CompanyEntity> criteriaQuery = critriaBuilder.createQuery(CompanyEntity.class);
+		Root<CompanyEntity> root = criteriaQuery.from(CompanyEntity.class);
+		criteriaQuery.select(root);
 
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("number of company not found");
-		}
-		return res;
-	}
-
-	@Timed
-	public int countAll() {
-		try {
-			return jdbcTemplate.queryForObject(REQUEST_COUNT_TOUTE_COMPANIES, Integer.class);
-
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("number of company not found");
-		}
+		TypedQuery<CompanyEntity> query = this.entityManager.createQuery(criteriaQuery);
+		List<CompanyEntity> companyEntity = query.getResultList();
+		return this.companyMapper.maptoCompany(companyEntity);
 	}
 
 	@Timed
 	public Company find(int id) {
+		CriteriaQuery<CompanyEntity> criteriaQuery = critriaBuilder.createQuery(CompanyEntity.class);
+		Root<CompanyEntity> root = criteriaQuery.from(CompanyEntity.class);
+
+		Predicate withId = critriaBuilder.equal(root.get("id"), id);
+
+		criteriaQuery.select(root).where(withId);
+
+		TypedQuery<CompanyEntity> query = this.entityManager.createQuery(criteriaQuery);
+		List<CompanyEntity> companyEntity = query.getResultList();
+
 		try {
-
-			MapSqlParameterSource request = new MapSqlParameterSource().addValue("id", id);
-			return namedParameterJdbcTemplate.query(REQUEST_TROUVER_COMPANY_FROM_ID, request, companyRowMapper).get(0);
-
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("company not found");
+			return this.companyMapper.maptoCompany(companyEntity).get(0);
 		} catch (IndexOutOfBoundsException e) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
 			throw new CompanyNotFoundException();
@@ -94,48 +83,57 @@ public class CompanyDAO {
 
 	@Timed
 	public Company find(String name) {
+		CriteriaQuery<CompanyEntity> criteriaQuery = critriaBuilder.createQuery(CompanyEntity.class);
+		Root<CompanyEntity> root = criteriaQuery.from(CompanyEntity.class);
+
+		Predicate withId = critriaBuilder.equal(root.get("name"), name);
+
+		criteriaQuery.select(root).where(withId);
+
+		TypedQuery<CompanyEntity> query = this.entityManager.createQuery(criteriaQuery);
+		List<CompanyEntity> companyEntity = query.getResultList();
+
 		try {
-
-			MapSqlParameterSource request = new MapSqlParameterSource().addValue("name", name);
-			return namedParameterJdbcTemplate.query(REQUEST_TROUVER_COMPANY_FROM_NAME, request, companyRowMapper).get(0);
-
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("company not found");
+			return this.companyMapper.maptoCompany(companyEntity).get(0);
 		} catch (IndexOutOfBoundsException e) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
 			throw new CompanyNotFoundException();
 		}
 	}
-	
+
 	@Timed
 	public void addCompany(String name) {
-		try  {
-			SqlParameterSource companyparams = new MapSqlParameterSource().addValue("name", name);
-			namedParameterJdbcTemplate.update(REQUEST_ADD_COMPANY, companyparams);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("company not added");
-		}
-
+		CompanyEntity companyAdd= new CompanyEntity();
+		companyAdd.setName(name);
+		this.entityManager.getTransaction().begin();
+		this.entityManager.persist(companyAdd);
+		this.entityManager.getTransaction().commit();
 	}
 
+	
 	@Timed
-	@Transactional(rollbackFor = { DAOException.class })
+	@Transactional
 	public void delete(int id) {
-		try {			
-			SqlParameterSource request = new MapSqlParameterSource().addValue("id", id);
-			
-			namedParameterJdbcTemplate.update(REQUEST_DELETE_COMPUTER_WITH_COMPANY, request);			
-			namedParameterJdbcTemplate.update(REQUEST_DELETE_COMPANY, request);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("company not deleted");
-		}
+	
+		CriteriaDelete<ComputerEntity> criteriaDeleteComputer = critriaBuilder.createCriteriaDelete(ComputerEntity.class);
+		Root<ComputerEntity> rootComputer = criteriaDeleteComputer.from(ComputerEntity.class);
+		criteriaDeleteComputer.where(critriaBuilder.equal(rootComputer.get("copany_id"), id));
+		
+		this.entityManager.getTransaction().begin();
+		this.entityManager.createQuery(criteriaDeleteComputer).executeUpdate();
+		this.entityManager.getTransaction().commit();
+		
+		
+		CriteriaDelete<CompanyEntity> criteriaDeleteCompany = critriaBuilder.createCriteriaDelete(CompanyEntity.class);
+		Root<CompanyEntity> rootCompany = criteriaDeleteCompany.from(CompanyEntity.class);
+		criteriaDeleteCompany.where(critriaBuilder.equal(rootCompany.get("id"), id));
+		
+		this.entityManager.getTransaction().begin();
+		this.entityManager.createQuery(criteriaDeleteCompany).executeUpdate();
+		this.entityManager.getTransaction().commit();
+		
+		
+		
 	}
-	
-	
-	
+
 }

@@ -2,6 +2,8 @@ package com.excilys.computerDatabase.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.excilys.computerDatabase.configuration.web.WebConfig;
+
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
 
@@ -12,7 +14,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return  new Class<?>[] { ServletConfig.class };
+		return  new Class<?>[] { WebConfig.class };
 	}
 
 	@Override
@@ -20,8 +22,5 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 		return new String[] { "/" };
 	}
 
-	
-	
-	
 	
 }

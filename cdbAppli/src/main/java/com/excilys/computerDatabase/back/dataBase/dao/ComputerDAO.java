@@ -1,21 +1,29 @@
 package com.excilys.computerDatabase.back.dataBase.dao;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import org.springframework.stereotype.Repository;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOAdd;
-import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerDTOUpdate;
-import com.excilys.computerDatabase.back.dataBase.binding.mapper.ComputerRowMapper;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.springframework.stereotype.Repository;
+import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyEntity;
+import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerEntity;
+import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerEntityAdd;
+import com.excilys.computerDatabase.back.dataBase.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.back.dataBase.exception.ComputerNotFoundException;
-import com.excilys.computerDatabase.back.dataBase.exception.UnableExecutQueryException;
 import com.excilys.computerDatabase.back.model.Computer;
+import com.excilys.computerDatabase.front.session.Order;
+import com.excilys.computerDatabase.front.session.OrderBy;
 import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
@@ -25,122 +33,92 @@ import com.excilys.computerDatabase.logger.time.Timed;
 @Repository
 public class ComputerDAO {
 
-	private static final String REQUEST_NOMBRE_ELEMENT_SEARCH = 
-			"SELECT COUNT(computer.id) AS count\n"
-			+ "FROM computer \n" + "LEFT JOIN company ON company.id = computer.company_id\n"
-			+ "WHERE computer.name LIKE :name " 
-			+ "OR company.name LIKE :companyName " 
-			+ "OR introduced LIKE :introduced "
-			+ "OR discontinued LIKE :discontinued "
-			;
-
-	private static final String REQUEST_AFFICHER_COMPUTERS_SEARCH = 
-			"SELECT *\n" 
-			+ "FROM computer \n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n" 
-			+ "WHERE computer.name LIKE :name \n"
-			+ "OR company.name LIKE :companyName " 
-			+ "OR introduced LIKE :introduced " 
-			+ "OR discontinued LIKE :discontinued " 
-			+ "ORDER BY :column :order \n"
-			+ "LIMIT :offset , :nombreElement "
-			;
-
-	private static final String REQUEST_TROUVER_COMPUTER_FROM_ID = 
-			"SELECT *\n"
-			+ "FROM computer\n"
-			+ "LEFT JOIN company ON company.id = computer.company_id\n"
-			+ "WHERE computer.id = :id ";
-
-
-	private static final String REQUEST_ADD_COMPUTER = 
-			"INSERT INTO computer (name,introduced,discontinued,company_id)\n"
-			+ " VALUES (:name,:introduced,:discontinued,:companyId);";
-
-	private static final String REQUEST_UPDATE_COMPUTER = 
-			" UPDATE computer \n"
-			+ "SET name = :name , \n"
-			+ "introduced = :introduced , \n"
-			+ "discontinued = :discontinued , \n" 
-			+ "company_id = :companyId  \n" 
-			+ "WHERE computer.id = :id ";
-
-	private static final String REQUEST_DELETE_COMPUTER = 
-			"DELETE FROM computer \n"
-			+ "WHERE computer.id = :id ";
-
-	private static final String REQUEST_DELETE_LIST_COMPUTER = 
-			"DELETE FROM computer \n"
-			+ "WHERE computer.id IN (:id) ";
-
 	
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	private ComputerRowMapper computerRowMapper;
-	private JdbcTemplate jdbcTemplate;
-
-	public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
-			ComputerRowMapper computerRowMapper, JdbcTemplate jdbcTemplate) {
+	private ComputerMapper computerMapper;
+	private CriteriaBuilder critriaBuilder;
+	private EntityManager entityManager;
+	private EntityManagerFactory entityManagerFactory;
+	
+	public ComputerDAO(ComputerMapper computerMapper, EntityManagerFactory entityManagerFactory) {
 		super();
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-		this.computerRowMapper = computerRowMapper;
-		this.jdbcTemplate = jdbcTemplate;
-
+		this.computerMapper = computerMapper;
+		this.entityManagerFactory = entityManagerFactory;
+		this.entityManager = this.entityManagerFactory.createEntityManager();
+		this.critriaBuilder = this.entityManager.getCriteriaBuilder();
 
 	}
-	
+
+
+	@Timed
+	public long searchNombreElementRequet(String search) {
+		
+		CriteriaQuery<Long> criteriaQuery = critriaBuilder.createQuery(Long.class);
+		Root<ComputerEntity> rootComputer = criteriaQuery.from(ComputerEntity.class);
+		
+		Join<ComputerEntity, CompanyEntity> rootCompany = rootComputer.join("company", JoinType.LEFT);
+		Predicate withComputerNameContainSearch = critriaBuilder.like(rootComputer.get("name"), "%"+search+"%");
+		Predicate withCompanyNameContainSearch = critriaBuilder.like(rootCompany.get("name"), "%"+search+"%");
+		
+		criteriaQuery.select(critriaBuilder.count( rootComputer))
+		.where(critriaBuilder.or(withComputerNameContainSearch,withCompanyNameContainSearch));
+		
+		return  entityManager.createQuery(criteriaQuery).getSingleResult();
+	}
+
+
 	@Timed
 	public List<Computer> search(Session session) {
-		List<Computer> res = new ArrayList<>();
-		try {
-			String sql = REQUEST_AFFICHER_COMPUTERS_SEARCH.replace(":column", session.getOrderBy().getColumn());
-			sql = sql.replace(":order", session.getOrder().getParamOrder());
-			
-			MapSqlParameterSource requestParam = new MapSqlParameterSource();
-			requestParam.addValue("name", "%"+session.getSearch()+"%");
-			requestParam.addValue("companyName", "%"+session.getSearch()+"%");
-			requestParam.addValue("introduced", "%"+session.getSearch()+"%");
-			requestParam.addValue("discontinued", "%"+session.getSearch()+"%");
-			requestParam.addValue("offset", session.getPage().getOffset());
-			requestParam.addValue("nombreElement", session.getPage().getNombreElementPage());
-			
-			res = namedParameterJdbcTemplate.query(sql,requestParam, computerRowMapper);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("search erreur");
+		
+		CriteriaQuery<ComputerEntity> criteriaQuery = critriaBuilder.createQuery(ComputerEntity.class);	
+		Root<ComputerEntity> rootComputer = criteriaQuery.from(ComputerEntity.class);
+		Join<ComputerEntity, CompanyEntity> rootCompany = rootComputer.join("company", JoinType.LEFT);
+		Predicate withComputerNameContainSearch = critriaBuilder.like(rootComputer.get("name"), "%"+session.getSearch()+"%");
+		Predicate withCompanyNameContainSearch = critriaBuilder.like(rootCompany.get("name"), "%"+session.getSearch()+"%");
+		
+		//Predicate withIntroducedContainSearch = critriaBuilder.like(rootComputer.get("introduced"), "%"+session.getSearch()+"%");
+		//Predicate withDiscontinuedContainSearch = critriaBuilder.like(root.get("discontinued"), "%"+session.getSearch()+"%");
+		
+		criteriaQuery.select( rootComputer)
+		.where(critriaBuilder.or(withComputerNameContainSearch,withCompanyNameContainSearch));
+		
+		if (session.getOrder().equals(Order.ASCENDANT)) {
+			if(session.getOrderBy().equals(OrderBy.COMPANY)) {
+				criteriaQuery.orderBy( critriaBuilder.asc(rootCompany.get(session.getOrderBy().getColumnDataBase())));
+			}else {
+				criteriaQuery.orderBy( critriaBuilder.asc(rootComputer.get(session.getOrderBy().getColumnDataBase())));
+			}
+		}else {
+			if(session.getOrderBy().equals(OrderBy.COMPANY)) {
+				criteriaQuery.orderBy( critriaBuilder.desc(rootCompany.get(session.getOrderBy().getColumnDataBase())));
+			}else {
+				criteriaQuery.orderBy( critriaBuilder.desc(rootComputer.get(session.getOrderBy().getColumnDataBase())));
+
+			}
 		}
-		return res;
+		
+		
+		TypedQuery<ComputerEntity> query  = entityManager.createQuery(criteriaQuery);
+		query.setFirstResult(session.getPage().getOffset());
+		query.setMaxResults( session.getPage().getNombreElementPage());
+		
+		List<ComputerEntity> companyEntity = query.getResultList();
+		return this.computerMapper.mapToComputer(companyEntity);
 	}
-
-	@Timed
-	public int searchNombreElementRequet(String search) {
-		try {
-			
-			MapSqlParameterSource requestParam = new MapSqlParameterSource();
-			requestParam.addValue("name", "%"+search+"%");
-			requestParam.addValue("companyName", "%"+search+"%");
-			requestParam.addValue("introduced","%"+search+"%");
-			requestParam.addValue("discontinued", "%"+search+"%");
-			
-			
-			return namedParameterJdbcTemplate.queryForObject(REQUEST_NOMBRE_ELEMENT_SEARCH,requestParam, Integer.class);
-
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("number of computer not found");
-		}
-	}
-
+	
 	@Timed
 	public Computer find(int id) {
+		CriteriaQuery<ComputerEntity> criteriaQuery = critriaBuilder.createQuery(ComputerEntity.class);
+		Root<ComputerEntity> root = criteriaQuery.from(ComputerEntity.class);
+
+		Predicate withId = critriaBuilder.equal(root.get("id"), id);
+
+		criteriaQuery.select(root).where(withId);
+
+		TypedQuery<ComputerEntity> query = this.entityManager.createQuery(criteriaQuery);
+		List<ComputerEntity> companyEntity = query.getResultList();
+
 		try {
-
-			SqlParameterSource request = new MapSqlParameterSource().addValue("id", id);
-			return namedParameterJdbcTemplate.query(REQUEST_TROUVER_COMPUTER_FROM_ID, request, computerRowMapper).get(0);
-
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("computer not found");
+			return this.computerMapper.mapToComputer(companyEntity).get(0);
 		} catch (IndexOutOfBoundsException e) {
 			LoggerCdb.logInfo(CompanyDAO.class.getName(), e);
 			throw new ComputerNotFoundException();
@@ -149,57 +127,92 @@ public class ComputerDAO {
 	
 	@Timed
 	public void addComputer(Computer computer) {
-		try  {
-			ComputerDTOAdd computerAdd = this.computerRowMapper.mapToComputerDTOAdd(computer);
-			SqlParameterSource computerparams = new BeanPropertySqlParameterSource(computerAdd);
-			namedParameterJdbcTemplate.update(REQUEST_ADD_COMPUTER, computerparams);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("computer not added");
-		}
-
+		ComputerEntityAdd computerAdd = this.computerMapper.mapToComputerEntity(computer);
+		this.entityManager.getTransaction().begin();
+		this.entityManager.persist(computerAdd);
+		this.entityManager.getTransaction().commit();
+		// transaction commit vs flush
+		// this.entityManager.flush();
+		//flush allows rollback entity still in transaction 
 	}
+	
 	
 	@Timed
 	public void updateComputer(Computer computer) {
-		try  {
-			ComputerDTOUpdate computerUpdate = this.computerRowMapper.mapToComputerDTOUpdate(computer);
-			SqlParameterSource computerparams = new BeanPropertySqlParameterSource(computerUpdate);
-			namedParameterJdbcTemplate.update(REQUEST_UPDATE_COMPUTER, computerparams);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("computer not updated");
+		CriteriaUpdate<ComputerEntity> criteriaUpdate = critriaBuilder.createCriteriaUpdate(ComputerEntity.class);
+		Root<ComputerEntity> root = criteriaUpdate.from(ComputerEntity.class);
+		
+		criteriaUpdate.set("name", computer.getName());
+		criteriaUpdate.set("introduced", computer.getIntroduced());
+		criteriaUpdate.set("discontinued" , computer.getDiscontinued());
+		
+		if (computer.getCompany() != null) {
+			criteriaUpdate.set("company_id", computer.getCompany().getId());
+		}else {
+			criteriaUpdate.set("company_id", null);
 		}
+		
+		criteriaUpdate.where(critriaBuilder.equal(root.get("id"), computer.getId()));
+
+		
+		this.entityManager.getTransaction().begin();
+		this.entityManager.createQuery(criteriaUpdate).executeUpdate();
+		this.entityManager.getTransaction().commit();
+		
+		
 
 	}
 	
 	@Timed
 	public void delete(int id) {
-		try {
-			SqlParameterSource requestParam = new MapSqlParameterSource().addValue("id", id);
-			namedParameterJdbcTemplate.update(REQUEST_DELETE_COMPUTER, requestParam);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("computer not deleted");
-		} 
+		CriteriaDelete<ComputerEntity> criteriaDelete = critriaBuilder.createCriteriaDelete(ComputerEntity.class);
+		Root<ComputerEntity> root = criteriaDelete.from(ComputerEntity.class);
+		criteriaDelete.where(critriaBuilder.equal(root.get("id"), id));
+		
+		this.entityManager.getTransaction().begin();
+		this.entityManager.createQuery(criteriaDelete).executeUpdate();
+		this.entityManager.getTransaction().commit();
 	}
 
 	@Timed
-	public void delete(String listid) {
-		try {
-			
-			String sql = REQUEST_DELETE_LIST_COMPUTER.replace(":id", listid);
-			this.jdbcTemplate.update(sql);
-			
-		} catch (DataAccessException e) {
-			LoggerCdb.logError(CompanyDAO.class.getName(), e);
-			throw new UnableExecutQueryException("computer not deleted");
-		} 
+	public void delete(String idSelected) {
 		
+		List<String> listId = Arrays.asList(idSelected.split(","));
+		
+		CriteriaDelete<ComputerEntity> criteriaDelete = critriaBuilder.createCriteriaDelete(ComputerEntity.class);
+		Root<ComputerEntity> root = criteriaDelete.from(ComputerEntity.class);
+		
+		criteriaDelete.where(root.get("id").in(listId));
+		
+		this.entityManager.getTransaction().begin();
+		this.entityManager.createQuery(criteriaDelete).executeUpdate();
+		this.entityManager.getTransaction().commit();
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

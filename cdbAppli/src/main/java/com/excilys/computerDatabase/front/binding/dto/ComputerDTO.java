@@ -1,7 +1,7 @@
 package com.excilys.computerDatabase.front.binding.dto;
 
 
-public class ComputerDTOOutput {
+public class ComputerDTO {
 
 	private String id;
 	
@@ -13,7 +13,7 @@ public class ComputerDTOOutput {
 
 	private String companyName ;
 
-	private ComputerDTOOutput(ComputerDTOOutputBuilder computerDTOOutputBuilder) {
+	private ComputerDTO(ComputerDTOOutputBuilder computerDTOOutputBuilder) {
 		this.id = computerDTOOutputBuilder.id;
 		this.name = computerDTOOutputBuilder.name;
 		this.introduced = computerDTOOutputBuilder.introduced;
@@ -84,8 +84,8 @@ public class ComputerDTOOutput {
 			return this;
 		}
 		
-		public ComputerDTOOutput build() {
-			return new ComputerDTOOutput(this);
+		public ComputerDTO build() {
+			return new ComputerDTO(this);
 		}
 
 	}

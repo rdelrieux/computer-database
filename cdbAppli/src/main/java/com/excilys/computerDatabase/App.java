@@ -1,6 +1,7 @@
 package com.excilys.computerDatabase;
 
 
+import com.excilys.computerDatabase.back.dataBase.dao.CompanyDAO;
 import com.excilys.computerDatabase.back.dataBase.dao.ComputerDAO;
 import com.excilys.computerDatabase.configuration.RootConfig;
 import com.excilys.computerDatabase.front.cli.StartApplication;
@@ -28,9 +29,19 @@ static int[][] game ;
 
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);	 
 	
-		ComputerDAO dao = context.getBean(ComputerDAO.class);
-		dao.search(new Session()).stream().forEach(e -> System.out.println(e));
 		
+		
+		CompanyDAO daoCompany = context.getBean(CompanyDAO.class);
+		ComputerDAO daoComputer = context.getBean(ComputerDAO.class);
+		
+		Session s = new Session ();
+		String search = "Mac";
+		s.getPage().setNombreElementRequet(daoComputer.searchNombreElementRequet(search));
+		s.setSearch(search);
+		;
+		System.out.println( );
+
+		 daoComputer.search(s).stream().forEach(c-> System.out.println(c));
 		context.close();
 	}
 
@@ -38,7 +49,7 @@ static int[][] game ;
 
 	
 
-
+	
 
 	private static void app(ConfigurableApplicationContext context) {
 		StartApplication application = (StartApplication) context.getBean("startApplication");
