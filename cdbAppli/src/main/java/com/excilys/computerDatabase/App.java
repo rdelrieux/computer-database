@@ -8,8 +8,6 @@ import com.excilys.computerDatabase.front.cli.StartApplication;
 import com.excilys.computerDatabase.front.session.Session;
 import com.excilys.computerDatabase.logger.LoggerCdb;
 
-import java.util.function.Predicate;
-
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

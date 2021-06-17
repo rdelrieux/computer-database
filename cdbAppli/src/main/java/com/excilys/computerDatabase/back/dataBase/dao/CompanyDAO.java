@@ -54,7 +54,7 @@ public class CompanyDAO {
 
 		CriteriaQuery<CompanyEntity> criteriaQuery = critriaBuilder.createQuery(CompanyEntity.class);
 		Root<CompanyEntity> root = criteriaQuery.from(CompanyEntity.class);
-		criteriaQuery.select(root);
+		criteriaQuery.select(root).orderBy( critriaBuilder.asc(root.get("name")));
 
 		TypedQuery<CompanyEntity> query = this.entityManager.createQuery(criteriaQuery);
 		List<CompanyEntity> companyEntity = query.getResultList();

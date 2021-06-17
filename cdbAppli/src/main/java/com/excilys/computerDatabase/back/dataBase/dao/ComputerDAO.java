@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -16,6 +17,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.excilys.computerDatabase.back.dataBase.binding.dto.CompanyEntity;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerEntity;
 import com.excilys.computerDatabase.back.dataBase.binding.dto.ComputerEntityAdd;
@@ -58,17 +61,17 @@ public class ComputerDAO {
 		Join<ComputerEntity, CompanyEntity> rootCompany = rootComputer.join("company", JoinType.LEFT);
 		Predicate withComputerNameContainSearch = critriaBuilder.like(rootComputer.get("name"), "%"+search+"%");
 		Predicate withCompanyNameContainSearch = critriaBuilder.like(rootCompany.get("name"), "%"+search+"%");
-		
+
 		criteriaQuery.select(critriaBuilder.count( rootComputer))
-		.where(critriaBuilder.or(withComputerNameContainSearch,withCompanyNameContainSearch));
+		.where(critriaBuilder.or(withComputerNameContainSearch,withCompanyNameContainSearch,withCompanyNameContainSearch));
 		
 		return  entityManager.createQuery(criteriaQuery).getSingleResult();
+		
 	}
 
 
 	@Timed
 	public List<Computer> search(Session session) {
-		
 		CriteriaQuery<ComputerEntity> criteriaQuery = critriaBuilder.createQuery(ComputerEntity.class);	
 		Root<ComputerEntity> rootComputer = criteriaQuery.from(ComputerEntity.class);
 		Join<ComputerEntity, CompanyEntity> rootCompany = rootComputer.join("company", JoinType.LEFT);
@@ -138,28 +141,32 @@ public class ComputerDAO {
 	
 	
 	@Timed
+	@Transactional
 	public void updateComputer(Computer computer) {
-		CriteriaUpdate<ComputerEntity> criteriaUpdate = critriaBuilder.createCriteriaUpdate(ComputerEntity.class);
-		Root<ComputerEntity> root = criteriaUpdate.from(ComputerEntity.class);
+		
+		CriteriaUpdate<ComputerEntityAdd> criteriaUpdate = critriaBuilder.createCriteriaUpdate(ComputerEntityAdd.class);
+		Root<ComputerEntityAdd> root = criteriaUpdate.from(ComputerEntityAdd.class);
 		
 		criteriaUpdate.set("name", computer.getName());
 		criteriaUpdate.set("introduced", computer.getIntroduced());
 		criteriaUpdate.set("discontinued" , computer.getDiscontinued());
 		
 		if (computer.getCompany() != null) {
-			criteriaUpdate.set("company_id", computer.getCompany().getId());
+			criteriaUpdate.set("companyId", computer.getCompany().getId());
 		}else {
-			criteriaUpdate.set("company_id", null);
+			criteriaUpdate.set("companyId", null);
 		}
 		
 		criteriaUpdate.where(critriaBuilder.equal(root.get("id"), computer.getId()));
-
 		
 		this.entityManager.getTransaction().begin();
 		this.entityManager.createQuery(criteriaUpdate).executeUpdate();
+	
+		
 		this.entityManager.getTransaction().commit();
+	
 		
-		
+		this.entityManager.clear();
 
 	}
 	

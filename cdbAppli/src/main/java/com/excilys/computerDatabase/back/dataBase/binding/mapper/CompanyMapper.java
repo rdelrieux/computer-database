@@ -23,12 +23,7 @@ public class CompanyMapper   {
 						.collect(Collectors.toList());
 	}
 
-	public CompanyEntity mapToCompanyEntity(Company company) {
-		CompanyEntity companyEntity = new CompanyEntity();
-		companyEntity.setId(company.getId());
-		companyEntity.setName(company.getName());
-		return companyEntity;	
-	}
+
 
 
 	
