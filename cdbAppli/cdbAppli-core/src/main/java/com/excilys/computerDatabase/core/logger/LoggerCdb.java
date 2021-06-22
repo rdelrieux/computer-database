@@ -2,21 +2,11 @@ package com.excilys.computerDatabase.core.logger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class LoggerCdb {
-	private static LoggerCdb instance;
-
-	private LoggerCdb() {
-		
-	}
 	
-	public static LoggerCdb getInstance() {
-		if (instance == null) {
-			instance = new LoggerCdb();
-		}
-		return instance;
-	}
 	public static void logInfo(String name, String message) {
 		Logger logger = LogManager.getLogger(name);
 		logger.info( message);

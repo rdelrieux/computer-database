@@ -3,26 +3,29 @@ package com.excilys.computerDatabase.web.config;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.excilys.computerDatabase.core.config.RootConfig;
-import com.excilys.computerDatabase.core.logger.LoggerCdb;
-
+import com.excilys.computerDatabase.web.config.security.SecurityConfig;
 
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
+	
+	 
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {		
-		return new Class<?>[] { RootConfig.class };
+		return null;
 	}
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return  new Class<?>[] { WebConfig.class };
+		return  new Class<?>[] {RootConfig.class ,SecurityConfig.class, WebConfig.class  };
 	}
 
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
+	
+	  
 
 	
 }

@@ -34,7 +34,7 @@
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="search#" method="GET"
+					<form id="searchForm" action="search" method="GET"
 						class="form-inline">
 
 						<input type="search" id="searchbox" name="search"

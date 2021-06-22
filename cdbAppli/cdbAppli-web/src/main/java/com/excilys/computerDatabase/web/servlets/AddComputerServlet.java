@@ -78,7 +78,7 @@ public class AddComputerServlet {
 	}
 
 	@PostMapping(value = "/addComputer")
-	protected ModelAndView addComputer(@ModelAttribute("computer") @Valid ComputerDTOAdd computerDTOAdd,
+	public ModelAndView addComputer(@ModelAttribute("computer") @Valid ComputerDTOAdd computerDTOAdd,
 			BindingResult bindingResult) {
 		ModelAndView mv = new ModelAndView(VUE_ADD_COMPUTER_REDIRECT);
 		session.setComputerDTOAdd(computerDTOAdd);

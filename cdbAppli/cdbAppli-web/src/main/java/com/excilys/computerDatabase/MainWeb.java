@@ -14,7 +14,7 @@ public class MainWeb {
 	public static void main(String[] args) {
 		
 		LoggerCdb.logInfo("", "start app");
-		start();
+		//start();
 		
 	}
 	

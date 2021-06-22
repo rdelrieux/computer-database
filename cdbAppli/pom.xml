@@ -19,12 +19,13 @@
 
 		<spring.version>5.3.7</spring.version>
 
-		
+
+
 		<log4j.version>2.13.3</log4j.version>
 
 		<junit.version>5.4.2</junit.version>
 		<mockito-all.version>1.10.19</mockito-all.version>
-		
+
 
 	</properties>
 
@@ -56,6 +57,7 @@
 		</dependency>
 
 		
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-jcl</artifactId>
@@ -66,7 +68,7 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -79,7 +81,7 @@
 			<version>${mockito-all.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 
 	</dependencies>
 

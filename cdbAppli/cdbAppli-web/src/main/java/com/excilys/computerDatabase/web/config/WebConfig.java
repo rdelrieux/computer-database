@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -20,6 +20,9 @@ import com.excilys.computerDatabase.core.logger.LoggerCdb;
 
 @Configuration
 @ComponentScan(basePackages = { 
+		
+	
+		
 		"com.excilys.computerDatabase.web.session",
 		"com.excilys.computerDatabase.web.binding.mapper",
 		"com.excilys.computerDatabase.web.binding.validateur",
@@ -28,10 +31,11 @@ import com.excilys.computerDatabase.core.logger.LoggerCdb;
 		
 		
 })
-public class WebConfig extends DelegatingWebMvcConfiguration {
-	
 
-	
+public class WebConfig extends WebMvcConfigurationSupport {
+
+
+
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
