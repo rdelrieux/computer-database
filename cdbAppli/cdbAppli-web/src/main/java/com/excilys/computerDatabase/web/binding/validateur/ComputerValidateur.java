@@ -20,7 +20,6 @@ public class ComputerValidateur implements Validator{
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
 		return ComputerDTOAdd.class.equals(clazz) || ComputerDTOUpdate.class.equals(clazz);
 	}
 

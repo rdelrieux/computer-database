@@ -20,26 +20,26 @@ public class ComputerService {
 		this.computerDAO = computerDAO;
 	}
 
-	public List<Computer> searchComputer(Page page) {
-		return this.computerDAO.search(page);
+	public List<Computer> find(Page page) {
+		return this.computerDAO.find(page);
 	}
 
-	public long searchNombreElementRequet(String search) {
-		return this.computerDAO.searchNombreElementRequet(search);
+	public long count(String search) {
+		return this.computerDAO.count(search);
 	}
 
-	public Computer getComputer(int id) {
+	public Computer find(int id) {
 		return this.computerDAO.find(id);
 	}
-	public void addComputer(Computer computer) {
-		this.computerDAO.addComputer(computer);
+	public void create(Computer computer) {
+		this.computerDAO.create(computer);
 	}
 
-	public void updateComputer(Computer computer) {
-		this.computerDAO.updateComputer(computer);
+	public void update(Computer computer) {
+		this.computerDAO.update(computer);
 	}
 
-	public void deleteComputer(int id) {
+	public void delete(int id) {
 		this.computerDAO.delete(id);
 	}
 

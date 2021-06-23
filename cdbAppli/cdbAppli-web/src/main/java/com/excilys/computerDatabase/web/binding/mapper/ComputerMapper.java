@@ -11,7 +11,6 @@ import com.excilys.computerDatabase.core.model.Company;
 import com.excilys.computerDatabase.core.model.Computer;
 import com.excilys.computerDatabase.core.model.Computer.ComputerBuilder;
 import com.excilys.computerDatabase.web.binding.dto.ComputerDTO;
-import com.excilys.computerDatabase.web.binding.dto.ComputerDTO.ComputerDTOOutputBuilder;
 import com.excilys.computerDatabase.web.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.web.binding.dto.ComputerDTOUpdate;
 
@@ -34,18 +33,18 @@ public class ComputerMapper {
 
 	public ComputerDTO mapToComputerDTO(Computer computer) {
 
-		ComputerDTOOutputBuilder builder = new ComputerDTO.ComputerDTOOutputBuilder("" + computer.getId(),
-				computer.getName());
-
+		ComputerDTO builder = new ComputerDTO();
+		builder.setId(""+computer.getId());
+		builder.setName(computer.getName());
 		if (computer.getIntroduced() != null) {
-			builder.withIntroduced("" + computer.getIntroduced());
+			builder.setIntroduced("" + computer.getIntroduced());
 		}
 		if (computer.getDiscontinued() != null) {
-			builder.withDiscontinued("" + computer.getDiscontinued());
+			builder.setDiscontinued("" + computer.getDiscontinued());
 		}
-		builder.withCompanyName(this.companyMapper.mapToCompanyDTO(computer.getCompany()).getName());
+		builder.setCompanyName(this.companyMapper.mapToCompanyDTO(computer.getCompany()).getName());
 
-		return builder.build();
+		return builder;
 	}
 
 	public List<ComputerDTO> mapToListComputerDTO(List<Computer> listComputer) {

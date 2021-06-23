@@ -49,9 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	http
          .csrf().disable()
          .authorizeRequests()
-         .mvcMatchers("/").permitAll()
-         .mvcMatchers("/addComputer" , "/editComputer", "/delete").hasRole("ADMIN")
-         .mvcMatchers("/dashboard", "/search","/reset" ).authenticated()
+         .mvcMatchers("/" , "/api/**").permitAll()
+         .mvcMatchers("/addComputer/**" , "/editComputer/**", "/delete").hasRole("ADMIN")
+         .mvcMatchers("/dashboard/**", "/search","/reset" ).authenticated()
          .and()
          .formLogin()
          .loginPage("/login")

@@ -1,6 +1,8 @@
 package com.excilys.computerDatabase.web.binding.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class ComputerDTOUpdate {
 
 	private String id;

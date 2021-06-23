@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.servlets;
+package com.excilys.computerDatabase.web.controller.servlets;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +73,7 @@ public class AddComputerServlet {
 	}
 
 	private List<CompanyDTO> getListCompany() {
-		return this.companyService.getListCompany().stream().map(c -> this.companyMapper.mapToCompanyDTO(c))
+		return this.companyService.findAll().stream().map(c -> this.companyMapper.mapToCompanyDTO(c))
 				.collect(Collectors.toList());
 	}
 
@@ -87,7 +87,7 @@ public class AddComputerServlet {
 		computerValidateur.validate(computerDTOAdd, bindingResult);
 		if (!bindingResult.hasErrors()) {
 			try {
-				this.computerService.addComputer(this.computerMapper.mapToComputer(computerDTOAdd));
+				this.computerService.create(this.computerMapper.mapToComputer(computerDTOAdd));
 				this.session.setComputerDTOAdd(new ComputerDTOAdd());
 				return new ModelAndView(VUE_DASHBOARD_REDIRECT);
 

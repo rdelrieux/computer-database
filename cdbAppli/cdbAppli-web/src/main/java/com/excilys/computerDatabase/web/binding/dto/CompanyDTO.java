@@ -1,5 +1,8 @@
 package com.excilys.computerDatabase.web.binding.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class CompanyDTO {
 	
 	private String id ;

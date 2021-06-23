@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.servlets;
+package com.excilys.computerDatabase.web.controller.servlets;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +29,6 @@ import com.excilys.computerDatabase.web.session.Session;
 
 
 @Controller
-
 public class DashBoardServlet  {
 
 
@@ -49,6 +48,9 @@ public class DashBoardServlet  {
 		this.computerMapper = computerMapper;
 		this.session = session;
 	}
+	
+	
+	
 	
 	@GetMapping(value = {"/","/login"})
 	public String getIndex() {
@@ -138,8 +140,8 @@ public class DashBoardServlet  {
 	}
 
 	private List<ComputerDTO> getListComputer() {
-		this.session.getPage().setNombreElementRequet(this.computerService.searchNombreElementRequet(session.getPage().getSearch()));
-		return computerService.searchComputer(session.getPage()).stream().map(c -> this.computerMapper.mapToComputerDTO(c))
+		this.session.getPage().setNombreElementRequet(this.computerService.count(session.getPage().getSearch()));
+		return computerService.find(session.getPage()).stream().map(c -> this.computerMapper.mapToComputerDTO(c))
 				.collect(Collectors.toList());
 	}
 

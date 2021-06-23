@@ -26,7 +26,7 @@ public class MainWeb {
 		
 		Session s = new Session ();
 		String search = "Mac";
-		serviceCompany.getListCompany().forEach(c -> System.out.println(c));
+		serviceCompany.findAll().forEach(c -> System.out.println(c));
 		
 		System.out.println( );
 

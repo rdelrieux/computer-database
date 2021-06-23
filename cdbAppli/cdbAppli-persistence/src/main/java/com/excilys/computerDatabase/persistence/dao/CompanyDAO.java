@@ -103,7 +103,7 @@ public class CompanyDAO {
 	}
 
 	@Timed
-	public void addCompany(String name) {
+	public void create(String name) {
 		CompanyEntity companyAdd= new CompanyEntity();
 		companyAdd.setName(name);
 		this.entityManager.getTransaction().begin();
@@ -118,7 +118,7 @@ public class CompanyDAO {
 	
 		CriteriaDelete<ComputerEntity> criteriaDeleteComputer = critriaBuilder.createCriteriaDelete(ComputerEntity.class);
 		Root<ComputerEntity> rootComputer = criteriaDeleteComputer.from(ComputerEntity.class);
-		criteriaDeleteComputer.where(critriaBuilder.equal(rootComputer.get("copany_id"), id));
+		criteriaDeleteComputer.where(critriaBuilder.equal(rootComputer.get("company_id"), id));
 		
 		this.entityManager.getTransaction().begin();
 		this.entityManager.createQuery(criteriaDeleteComputer).executeUpdate();

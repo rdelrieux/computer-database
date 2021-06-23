@@ -53,7 +53,7 @@ public class ComputerDAO {
 
 
 	@Timed
-	public long searchNombreElementRequet(String search) {
+	public long count(String search) {
 		
 		CriteriaQuery<Long> criteriaQuery = critriaBuilder.createQuery(Long.class);
 		Root<ComputerEntity> rootComputer = criteriaQuery.from(ComputerEntity.class);
@@ -71,7 +71,7 @@ public class ComputerDAO {
 
 
 	@Timed
-	public List<Computer> search(Page page) {
+	public List<Computer> find(Page page) {
 		CriteriaQuery<ComputerEntity> criteriaQuery = critriaBuilder.createQuery(ComputerEntity.class);	
 		Root<ComputerEntity> rootComputer = criteriaQuery.from(ComputerEntity.class);
 		Join<ComputerEntity, CompanyEntity> rootCompany = rootComputer.join("company", JoinType.LEFT);
@@ -129,7 +129,7 @@ public class ComputerDAO {
 	}
 	
 	@Timed
-	public void addComputer(Computer computer) {
+	public void create(Computer computer) {
 		ComputerEntityAdd computerAdd = this.computerMapper.mapToComputerEntity(computer);
 		this.entityManager.getTransaction().begin();
 		this.entityManager.persist(computerAdd);
@@ -142,7 +142,7 @@ public class ComputerDAO {
 	
 	@Timed
 	@Transactional
-	public void updateComputer(Computer computer) {
+	public void update(Computer computer) {
 		
 		CriteriaUpdate<ComputerEntityAdd> criteriaUpdate = critriaBuilder.createCriteriaUpdate(ComputerEntityAdd.class);
 		Root<ComputerEntityAdd> root = criteriaUpdate.from(ComputerEntityAdd.class);
@@ -161,7 +161,6 @@ public class ComputerDAO {
 		
 		this.entityManager.getTransaction().begin();
 		this.entityManager.createQuery(criteriaUpdate).executeUpdate();
-	
 		
 		this.entityManager.getTransaction().commit();
 	

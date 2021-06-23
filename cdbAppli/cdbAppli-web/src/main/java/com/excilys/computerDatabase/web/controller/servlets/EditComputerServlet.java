@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.servlets;
+package com.excilys.computerDatabase.web.controller.servlets;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,7 +57,7 @@ public class EditComputerServlet  {
 	
 	@GetMapping(value = "/editComputer" , params = {"id"})
 	protected ModelAndView displayNewComputerUpdate(@RequestParam("id") int id) {
-		session.setComputerDTOUpdate( computerMapper.mapToComputerDTOUpdate(computerService.getComputer(id)) );
+		session.setComputerDTOUpdate( computerMapper.mapToComputerDTOUpdate(computerService.find(id)) );
 		return this.displayComputer();
 	}
 	
@@ -86,7 +86,7 @@ public class EditComputerServlet  {
 	}
 
 	private List<CompanyDTO> getListCompany() {
-		return this.companyService.getListCompany().stream().map(c -> this.companyMapper.mapToCompanyDTO(c))
+		return this.companyService.findAll().stream().map(c -> this.companyMapper.mapToCompanyDTO(c))
 				.collect(Collectors.toList());
 	}
 
@@ -101,7 +101,7 @@ public class EditComputerServlet  {
 		if (! bindingResult.hasErrors() ) {
 			session.setComputerDTOUpdate(computerDTOUpdate);
 			try {
-				this.computerService.updateComputer(this.computerMapper.mapToComputer(computerDTOUpdate));
+				this.computerService.update(this.computerMapper.mapToComputer(computerDTOUpdate));
 				return new ModelAndView(VUE_DASHBOARD_REDIRECT);
 				
 		 }catch ( DAOException e){

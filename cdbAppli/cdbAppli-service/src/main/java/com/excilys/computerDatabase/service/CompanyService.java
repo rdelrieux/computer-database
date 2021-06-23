@@ -15,27 +15,37 @@ public class CompanyService {
 	private CompanyDAO companyDao;
 	
 	
-	
 	public CompanyService(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
 	}
+	
+	public long countAll() {
+		return this.companyDao.countAll();
+	}
 
-	public List<Company> getListCompany() {
+	public List<Company> findAll() {
 		return this.companyDao.findAll();
 	}
 
-	public Company getCompany(String name) {
+	public Company find(String name) {
 		return this.companyDao.find(name);
 	}
 
-	public Company getCompany(int id) {
+	public Company find(int id) {
 		return this.companyDao.find(id);
 	}
 
-	public void deletCompany(int id) {
+	public void create(String name) {
+		this.companyDao.create(name);
+		
+	}
+	
+	public void delete(int id) {
 		this.companyDao.delete(id);
 		
 	}
+
+	
 
 
 
