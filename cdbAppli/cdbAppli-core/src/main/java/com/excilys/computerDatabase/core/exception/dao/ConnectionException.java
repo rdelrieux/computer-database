@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.exceptiondao;
+package com.excilys.computerDatabase.core.exception.dao;
 
 public class ConnectionException extends DAOException{
 	

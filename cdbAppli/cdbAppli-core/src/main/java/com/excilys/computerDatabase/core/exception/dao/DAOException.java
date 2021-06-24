@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.exceptiondao;
+package com.excilys.computerDatabase.core.exception.dao;
 
 public class DAOException extends RuntimeException {
 
@@ -7,6 +7,10 @@ public class DAOException extends RuntimeException {
 	
 	public DAOException (String message) {
 		super(message);
+	}
+	
+	public DAOException () {
+		super();
 	}
 
 }

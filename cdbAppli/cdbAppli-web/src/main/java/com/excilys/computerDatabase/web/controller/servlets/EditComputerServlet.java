@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.computerDatabase.core.exception.dao.DAOException;
 import com.excilys.computerDatabase.core.logger.LoggerCdb;
-import com.excilys.computerDatabase.persistence.exceptiondao.DAOException;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.web.binding.dto.CompanyDTO;

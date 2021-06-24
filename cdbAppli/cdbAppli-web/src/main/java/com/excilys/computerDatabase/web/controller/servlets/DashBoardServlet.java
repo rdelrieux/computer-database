@@ -5,23 +5,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
-import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.computerDatabase.core.exception.dao.DAOException;
 import com.excilys.computerDatabase.core.logger.LoggerCdb;
 import com.excilys.computerDatabase.core.page.Order;
 import com.excilys.computerDatabase.core.page.OrderBy;
-import com.excilys.computerDatabase.persistence.exceptiondao.DAOException;
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.web.binding.dto.ComputerDTO;
-import com.excilys.computerDatabase.web.binding.dto.ComputerDTOAdd;
 import com.excilys.computerDatabase.web.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.web.session.Session;
 

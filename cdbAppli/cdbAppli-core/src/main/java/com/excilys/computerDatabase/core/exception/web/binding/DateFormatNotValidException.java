@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.binding.exception;
+package com.excilys.computerDatabase.core.exception.web.binding;
 
 public class DateFormatNotValidException  extends ValidateurDTOException{
 	
