@@ -6,7 +6,8 @@
 	<parent>
 		<artifactId>cdbAppli</artifactId>
 		<groupId>com.excilys.computerDatabase</groupId>
-		<version>1.0-SNAPSHOT</version>
+				<version>1.0-SNAPSHOT</version>
+		
 	</parent>
 
 	<artifactId>cdbAppli-persistence</artifactId>
@@ -15,13 +16,7 @@
 	<url>http://www.example.com</url>
 
 	<properties>
-		<mysql-connector-java.version>8.0.23</mysql-connector-java.version>
-		<hikari.version>3.4.5</hikari.version>
-		<slf4j.version>1.7.30</slf4j.version>
-		<hibernate.version>5.5.2.Final</hibernate.version>
 		
-		<h2database.version>1.4.198</h2database.version>
-		<mybatis.version>3.4.5</mybatis.version>
 
 	</properties>
 
@@ -29,53 +24,52 @@
 		<dependency>
 			<groupId>com.excilys.computerDatabase</groupId>
 			<artifactId>cdbAppli-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		
 		
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector-java.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>${hikari.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>7.0.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>${hibernate.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>${h2database.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-			<version>${mybatis.version}</version>
-			<scope>test</scope>
 		</dependency>
 		
 	</dependencies>

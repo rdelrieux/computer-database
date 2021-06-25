@@ -47,17 +47,16 @@ public class DashBoardServlet  {
 	
 	
 	
-	
 	@GetMapping(value = {"/","/login"})
 	public String getIndex() {
 		return "login"; 
 	}
-	
+	/*
 	@PostMapping("/login")
 	public String login() {
 		return VUE_DASHBOARD_REDIRECT ; 
 	}
-	
+	*/
 	@GetMapping("/403")
 	public String accessDenied() {
 	    return "403";

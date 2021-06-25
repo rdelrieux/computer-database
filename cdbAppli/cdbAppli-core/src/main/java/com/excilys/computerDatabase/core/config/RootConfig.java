@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages = { 
 		"com.excilys.computerDatabase.core.logger",
+		"com.excilys.computerDatabase.core.jwt",
 		
 		"com.excilys.computerDatabase.persistence.config",
 

@@ -14,12 +14,17 @@ public class MainWeb {
 	public static void main(String[] args) {
 		
 		LoggerCdb.logInfo("", "start app");
-		//start();
+		//start();s
 		
 	}
 	
 	private static void start() {
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);	 
+		
+		//refacto pom dependency
+		// security database + encodage 
+		// security config using annotation 
+		// lambda ::
 		
 		ComputerService serviceComputer = context.getBean(ComputerService.class);
 		CompanyService serviceCompany = context.getBean(CompanyService.class);
@@ -31,6 +36,9 @@ public class MainWeb {
 		System.out.println( );
 
 		context.close();
+		
+		
+		
 	}
 	
 	

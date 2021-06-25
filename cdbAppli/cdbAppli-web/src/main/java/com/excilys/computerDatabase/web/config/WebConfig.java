@@ -26,6 +26,7 @@ import com.excilys.computerDatabase.core.logger.LoggerCdb;
 		"com.excilys.computerDatabase.web.session",
 		"com.excilys.computerDatabase.web.binding.mapper",
 		"com.excilys.computerDatabase.web.binding.validateur",
+		"com.excilys.computerDatabase.web.config.security.filter",
 		"com.excilys.computerDatabase.web.controller"
 		
 		
