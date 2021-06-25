@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,17 +34,19 @@ public class CompanyAPI {
 		this.companyMapper = companyMapper;
 	}
 
+	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/companies", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	// @GetMapping(produces = { "application/xml","application/json"})
 	public List<CompanyDTO> getAll() {
 		return companyMapper.mapToCompanyDTO(companyService.findAll());
 	}
 
+	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/companies/count")
 	public long countAll() {
 		return companyService.countAll();
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@GetMapping(value = "/company/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public CompanyDTO find(@PathVariable int id) {
@@ -56,12 +59,13 @@ public class CompanyAPI {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@GetMapping(value = "/company/{name}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public CompanyDTO find(@PathVariable String name) {
 		try {
-			throw new DAOException();
-			//return companyMapper.mapToCompanyDTO(companyService.find(name));
+			
+			return companyMapper.mapToCompanyDTO(companyService.find(name));
 			
 		} catch (CompanyNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
@@ -69,6 +73,7 @@ public class CompanyAPI {
 		
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@PostMapping(value = "/company", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody CompanyDTO companyDTO) {
 			
@@ -76,6 +81,7 @@ public class CompanyAPI {
 		
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@DeleteMapping(value = "/company")
 	public void delete(@RequestBody CompanyDTO companyDTO) {
 		companyService.delete(Integer.valueOf(companyDTO.getId()));

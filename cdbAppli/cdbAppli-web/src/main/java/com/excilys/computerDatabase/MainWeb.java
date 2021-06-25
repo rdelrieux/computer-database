@@ -21,10 +21,15 @@ public class MainWeb {
 	private static void start() {
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);	 
 		
-		//refacto pom dependency
+		//@PreAuthorize("hasAuthority('Admin')")  
+		//@PreAuthorize("hasAuthority('User')")  
+		//@PreAuthorize("permitAll()")  
+		//@PreAuthorize("isAuthenticated()")  
+		
+		
 		// security database + encodage 
-		// security config using annotation 
 		// lambda ::
+		//responce entity vs requesbody
 		
 		ComputerService serviceComputer = context.getBean(ComputerService.class);
 		CompanyService serviceCompany = context.getBean(CompanyService.class);

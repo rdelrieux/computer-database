@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,21 +42,25 @@ public class ComputerApi {
 		this.validateur = validateur;
 	}
 
+	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/computers/count/{search}")
 	public long count(@PathVariable String search) {
 		return computerService.count(search);
 	}
 
+	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/computers/count")
 	public long count() {
 		return computerService.count("");
 	}
 
+	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/computers")
 	public List<ComputerDTO> count(@RequestBody Page page) {
 		return computerMapper.mapToListComputerDTO(computerService.find(page));
 	}
 
+	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/computer/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ComputerDTO find(@PathVariable int id) {
@@ -66,6 +71,7 @@ public class ComputerApi {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@PostMapping(value = "/computer", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody @Valid ComputerDTOAdd computerDTOAdd, BindingResult bindingResult) {
 
@@ -80,6 +86,7 @@ public class ComputerApi {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@PutMapping(value = "/computer", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void update(@RequestBody @Valid ComputerDTOUpdate computerDTOUpdate, BindingResult bindingResult) {
 
@@ -92,6 +99,7 @@ public class ComputerApi {
 
 	}
 
+	@PreAuthorize("hasAuthority('Admin')") 
 	@DeleteMapping(value = "/computer", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@RequestBody ComputerDTO computerDTO) {
 		computerService.delete(Integer.valueOf(computerDTO.getId()));
