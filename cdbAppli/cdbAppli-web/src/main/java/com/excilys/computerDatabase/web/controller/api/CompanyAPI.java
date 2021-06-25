@@ -37,7 +37,6 @@ public class CompanyAPI {
 	@PreAuthorize("hasAuthority('User')")
 	@GetMapping(value = "/companies", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public List<CompanyDTO> getAll() {
-		System.out.println("Attention c'est un autre syso boloss Company getAll()");
 		return companyMapper.mapToCompanyDTO(companyService.findAll());
 	}
 
