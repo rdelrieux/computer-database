@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.core.model.Company;
-import com.excilys.computerDatabase.persistence.binding.dto.CompanyEntity;
+import com.excilys.computerDatabase.persistence.binding.dto.core.CompanyEntity;
 
 
 

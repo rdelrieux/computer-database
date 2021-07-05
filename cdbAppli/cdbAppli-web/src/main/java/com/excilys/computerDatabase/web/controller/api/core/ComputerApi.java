@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.controller.api;
+package com.excilys.computerDatabase.web.controller.api.core;
 
 import java.util.List;
 
@@ -42,25 +42,25 @@ public class ComputerApi {
 		this.validateur = validateur;
 	}
 
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(value = "/computers/count/{search}")
 	public long count(@PathVariable String search) {
 		return computerService.count(search);
 	}
 
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(value = "/computers/count")
 	public long count() {
 		return computerService.count("");
 	}
 
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(value = "/computers")
 	public List<ComputerDTO> count(@RequestBody Page page) {
 		return computerMapper.mapToListComputerDTO(computerService.find(page));
 	}
 
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(value = "/computer/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ComputerDTO find(@PathVariable int id) {
@@ -71,7 +71,7 @@ public class ComputerApi {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@PostMapping(value = "/computer", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody @Valid ComputerDTOAdd computerDTOAdd, BindingResult bindingResult) {
 
@@ -86,7 +86,7 @@ public class ComputerApi {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@PutMapping(value = "/computer", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void update(@RequestBody @Valid ComputerDTOUpdate computerDTOUpdate, BindingResult bindingResult) {
 
@@ -99,7 +99,7 @@ public class ComputerApi {
 
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@DeleteMapping(value = "/computer", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@RequestBody ComputerDTO computerDTO) {
 		computerService.delete(Integer.valueOf(computerDTO.getId()));

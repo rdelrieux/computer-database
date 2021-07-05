@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.core.model.Computer;
 import com.excilys.computerDatabase.core.page.Page;
-import com.excilys.computerDatabase.persistence.dao.ComputerDAO;
+import com.excilys.computerDatabase.persistence.dao.core.ComputerDAO;
 
 
 

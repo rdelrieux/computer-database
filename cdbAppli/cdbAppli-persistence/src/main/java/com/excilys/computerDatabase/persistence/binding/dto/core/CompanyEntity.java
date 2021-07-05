@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.binding.dto;
+package com.excilys.computerDatabase.persistence.binding.dto.core;
 
 import java.io.Serializable;
 

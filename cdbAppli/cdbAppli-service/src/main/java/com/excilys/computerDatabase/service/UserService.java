@@ -8,7 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.excilys.computerDatabase.persistence.dao.UserDAO;
+import com.excilys.computerDatabase.core.logger.LoggerCdb;
+import com.excilys.computerDatabase.persistence.dao.security.UserDAO;
 
 
 

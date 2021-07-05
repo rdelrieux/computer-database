@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerDatabase.core.model.Company;
-import com.excilys.computerDatabase.persistence.dao.CompanyDAO;
+import com.excilys.computerDatabase.persistence.dao.core.CompanyDAO;
 
 
 @Service

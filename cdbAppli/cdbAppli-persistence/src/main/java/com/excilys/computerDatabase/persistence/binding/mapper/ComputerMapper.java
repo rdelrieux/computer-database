@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.computerDatabase.core.model.Computer;
 import com.excilys.computerDatabase.core.model.Computer.ComputerBuilder;
-import com.excilys.computerDatabase.persistence.binding.dto.ComputerEntity;
-import com.excilys.computerDatabase.persistence.binding.dto.ComputerEntityAdd;
+import com.excilys.computerDatabase.persistence.binding.dto.core.ComputerEntity;
+import com.excilys.computerDatabase.persistence.binding.dto.core.ComputerEntityAdd;
 
 
 

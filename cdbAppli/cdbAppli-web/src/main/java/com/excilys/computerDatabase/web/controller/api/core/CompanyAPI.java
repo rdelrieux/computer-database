@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.controller.api;
+package com.excilys.computerDatabase.web.controller.api.core;
 
 import java.util.List;
 
@@ -34,19 +34,19 @@ public class CompanyAPI {
 		this.companyMapper = companyMapper;
 	}
 
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(value = "/companies", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public List<CompanyDTO> getAll() {
 		return companyMapper.mapToCompanyDTO(companyService.findAll());
 	}
 
-	@PreAuthorize("hasAuthority('User')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping(value = "/companies/count")
 	public long countAll() {
 		return companyService.countAll();
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@GetMapping(value = "/company/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public CompanyDTO find(@PathVariable int id) {
@@ -59,7 +59,7 @@ public class CompanyAPI {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@GetMapping(value = "/company/{name}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public CompanyDTO find(@PathVariable String name) {
@@ -73,7 +73,7 @@ public class CompanyAPI {
 		
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@PostMapping(value = "/company", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody CompanyDTO companyDTO) {
 			
@@ -81,7 +81,7 @@ public class CompanyAPI {
 		
 	}
 
-	@PreAuthorize("hasAuthority('Admin')") 
+	@PreAuthorize("hasAuthority('ADMIN')") 
 	@DeleteMapping(value = "/company")
 	public void delete(@RequestBody CompanyDTO companyDTO) {
 		companyService.delete(Integer.valueOf(companyDTO.getId()));

@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.controller.api;
+package com.excilys.computerDatabase.web.controller.api.security;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +29,6 @@ public class UserAPI {
 	private JwtUtil jwtUtil; 
 	
 	
-	
 	public UserAPI(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil) {
 		super();
 		this.authenticationManager = authenticationManager;
@@ -44,11 +43,12 @@ public class UserAPI {
 	public ResponseEntity<?> createAuthentificationToken(@RequestBody AuthenticationRequest authenticationRequest ) throws Exception{
 
 		try {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken( authenticationRequest.getUsername(),authenticationRequest.getPassword()) );
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken( authenticationRequest.getUsername(),authenticationRequest.getPassword()) );
 		
 		}catch(BadCredentialsException e) {
 			LoggerCdb.logInfo(UserAPI.class.toString() , e);
 			throw new AuthenticationException();	
+			
 		}
 	
 		final UserDetails userDetail = userService.loadUserByUsername(authenticationRequest.getUsername());

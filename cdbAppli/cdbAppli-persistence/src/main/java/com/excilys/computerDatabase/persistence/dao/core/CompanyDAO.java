@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.dao.core;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import com.excilys.computerDatabase.core.exception.dao.CompanyNotFoundException;
 import com.excilys.computerDatabase.core.exception.dao.DAOException;
 import com.excilys.computerDatabase.core.logger.LoggerCdb;
 import com.excilys.computerDatabase.core.model.Company;
-import com.excilys.computerDatabase.persistence.binding.dto.CompanyEntity;
-import com.excilys.computerDatabase.persistence.binding.dto.ComputerEntity;
+import com.excilys.computerDatabase.persistence.binding.dto.core.CompanyEntity;
+import com.excilys.computerDatabase.persistence.binding.dto.core.ComputerEntity;
 import com.excilys.computerDatabase.persistence.binding.mapper.CompanyMapper;
 import com.excilys.computerDatabase.persistence.loggertime.Timed;
 

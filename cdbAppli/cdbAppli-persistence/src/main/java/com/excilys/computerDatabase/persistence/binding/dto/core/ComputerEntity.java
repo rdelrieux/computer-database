@@ -1,34 +1,32 @@
-package com.excilys.computerDatabase.persistence.binding.dto;
+package com.excilys.computerDatabase.persistence.binding.dto.core;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="computer")
 @SuppressWarnings("serial")
-public class ComputerEntityAdd implements Serializable {
+public class ComputerEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	
 	private String name;
-	
 	private LocalDate introduced;
-	
 	private LocalDate discontinued;
 	
-	@Column(name="company_id")
-	private Integer companyId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "company_id", referencedColumnName="id")
+	private CompanyEntity company;
 
 	
+
 	public Integer getId() {
 		return id;
 	}
@@ -45,6 +43,14 @@ public class ComputerEntityAdd implements Serializable {
 		this.name = name;
 	}
 
+	public CompanyEntity getCompany() {
+		return company;
+	}
+
+	public void setCompany(CompanyEntity company) {
+		this.company = company;
+	}
+	
 	public LocalDate getIntroduced() {
 		return introduced;
 	}
@@ -61,18 +67,10 @@ public class ComputerEntityAdd implements Serializable {
 		this.discontinued = discontinued;
 	}
 
-	public Integer getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
-	}
-	
 	@Override
 	public String toString() {
 		return "ComputerEntity [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
-				+ discontinued + ", company=" + companyId + "]";
+				+ discontinued + ", company=" + company + "]";
 	}
 
 

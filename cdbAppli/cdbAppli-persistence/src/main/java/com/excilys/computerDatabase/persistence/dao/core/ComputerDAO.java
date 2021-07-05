@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.persistence.dao;
+package com.excilys.computerDatabase.persistence.dao.core;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +25,9 @@ import com.excilys.computerDatabase.core.model.Computer;
 import com.excilys.computerDatabase.core.page.Order;
 import com.excilys.computerDatabase.core.page.OrderBy;
 import com.excilys.computerDatabase.core.page.Page;
-import com.excilys.computerDatabase.persistence.binding.dto.CompanyEntity;
-import com.excilys.computerDatabase.persistence.binding.dto.ComputerEntity;
-import com.excilys.computerDatabase.persistence.binding.dto.ComputerEntityAdd;
+import com.excilys.computerDatabase.persistence.binding.dto.core.CompanyEntity;
+import com.excilys.computerDatabase.persistence.binding.dto.core.ComputerEntity;
+import com.excilys.computerDatabase.persistence.binding.dto.core.ComputerEntityAdd;
 import com.excilys.computerDatabase.persistence.binding.mapper.ComputerMapper;
 import com.excilys.computerDatabase.persistence.loggertime.Timed;
 
@@ -84,11 +84,6 @@ public class ComputerDAO {
 			Predicate withCompanyNameContainSearch = critriaBuilder.like(rootCompany.get("name"),
 					"%" + page.getSearch() + "%");
 
-			// Predicate withIntroducedContainSearch =
-			// critriaBuilder.like(rootComputer.get("introduced"),
-			// "%"+session.getSearch()+"%");
-			// Predicate withDiscontinuedContainSearch =
-			// critriaBuilder.like(root.get("discontinued"), "%"+session.getSearch()+"%");
 
 			criteriaQuery.select(rootComputer)
 					.where(critriaBuilder.or(withComputerNameContainSearch, withCompanyNameContainSearch));

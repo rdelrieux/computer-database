@@ -1,4 +1,4 @@
-package com.excilys.computerDatabase.web.controller.api;
+package com.excilys.computerDatabase.web.controller.api.core;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

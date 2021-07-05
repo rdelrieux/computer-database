@@ -2,9 +2,11 @@ package com.excilys.computerDatabase;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.excilys.computerDatabase.core.config.RootConfig;
 import com.excilys.computerDatabase.core.logger.LoggerCdb;
+import com.excilys.computerDatabase.core.security.Role;
 import com.excilys.computerDatabase.service.CompanyService;
 import com.excilys.computerDatabase.service.ComputerService;
 import com.excilys.computerDatabase.web.session.Session;
@@ -14,6 +16,9 @@ public class MainWeb {
 	public static void main(String[] args) {
 		
 		LoggerCdb.logInfo("", "start app");
+		
+		System.out.println( Role.ADMIN );
+		
 		//start();s
 		
 	}
